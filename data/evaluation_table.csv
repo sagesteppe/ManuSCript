@@ -1,0 +1,11 @@
+"","Metric","Value"
+"1","Accuracy (Training)",83.75
+"2","Accuracy (Test)",84
+"3","Recall",81.03
+"4","True Neg. Rate",86.97
+"5","Precision",88.04
+"6","F-Score",0.84
+"7","AUC",0.92
+"8","Concordance",0.92
+"9","Discordance",0.08
+"10","Tied",0
