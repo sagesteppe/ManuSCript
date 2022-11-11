@@ -18,20 +18,18 @@ header-includes:
 - \usepackage{lineno}
 - \linenumbers
 ---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
+```
 
 ```{r Required Libraries, message=F, warning=F, results='hide', echo = F}
 library(here)
 library(tidyverse)
 library(bookdown)
 library(knitr)
-library(kableExtra)
-```
+suppressWarnings(library(kableExtra))
 
-```{r, eval = F, echo = F}
-set_here('../')
-
-citation('usdm')
-print(citation('iNEXT'), bibtex=TRUE)
+#print(citation('spdep'), bibtex=TRUE)
 ```
 
 # INTRODUCTION
@@ -48,14 +46,14 @@ The inability to reliably identify plants to the level of species often leaves o
 # METHODS
 
 ## Study System
-Observations and sample collection was conducted at The Rocky Mountain Biological Laboratory (RMBL; 38°57.5" N, 106°59.3" W (WGS 84), 2900 m.a.s.l.), Colorado, USA (see...*APPENDIX 1* for site information). Pollinator observations of *Bombus* Latreille spp. (Apidae Latreille) were conducted from June - August of 2015. This area is characterised by high-montane/subalpine Parkland vegetation communities.
+Observations and sample collection was conducted at The Rocky Mountain Biological Laboratory (RMBL; 38°57.5" N, 106°59.3" W (WGS 84), 2900 m.a.s.l.), Gunnison County, Colorado, USA (see...*APPENDIX 1* for site information). Pollinator observations of *Bombus* Latreille spp. (Apidae Latreille) were conducted from June - August of 2015. The six study sites are in areas characterised by high-montane/subalpine Parkland vegetation communities.
 
 ### Spatial Analyses
-To develop an ecologically relevant list of vascular plant species , with expected biotic pollination, which may be present at the study sites all records adjacent to the field site were downloaded from BIEN (@bien2022), and these taxa had Species Distribution Models generated to infer their suitability. This list of species served as a reference for which species to include in the Kraken2 database. 
+To develop an ecologically relevant list of vascular plant species, with expected biotic pollination, which may be present at the study sites all records adjacent to the field site were downloaded from BIEN (@bien2022), and these taxa had Species Distribution Models generated to infer their suitability. This list of species served as a reference for which species to include in the genomic sequence databases. 
 
 In order to minimise the number of species for which SDM’s were to be generated, BIEN was queried at a distance of up to 100km from our field site and all plant species records were downloaded. In order to estimate the stochasticity of collections, this dataset was bootstrap re-sampled 250 times, with 90% of samples selected, to create a testing dataset. The median of the logistic regression assessing the probability of occurrence of a species record as a function of distance from the study area was used as a threshold distance to include species for distribution modelling.
 
-Species had all records from BIEN within a 50km border of the Omernik level 3 ecoregion which the site is located in (21. Southern Rockies), downloaded (n = 23,919), (@omernik1987ecoregions). These records were split into two sets, one for generating machine learning models, and the other for GLM and GAM models. The set for generating GLM and GAM records was thinned to reduce spatial autocorrelation in the dataset. To both datasets an additional 4029 plots collected from a random stratification of 19% of the land cover in the area of analysis were searched to create true absences (BLM CITATION- need appropriate format for journal). To achieve a larger absence dataset 1000 pseudo-absence records were generated for each taxon, each of which was greater than 10km from an occurrence record. For ML models, these pseudo-absences were reduced so that the number of presence to absence records were 1:1; to achieve this, absence records inside of 10% of the mean sample value, of the presence records, for any predictor were removed.
+Species had all records from BIEN within a 50km border of the Omernik level 3 ecoregion which the site is located in (No. 21' Southern Rockies'), downloaded (n = 23,919), (@omernik1987ecoregions). These records were split into two, initially identical, sets, one for generating machine learning models, and the other for Generalised Linear (GLM) and Generalized Additive Models (GAM). The set for generating GLM and GAM records was thinned to reduce spatial autocorrelation in the dataset, as measured by Morans Index (@moran1950notes, @spdep). To both datasets an additional 4029 plots collected from a random stratification of 19% of the land cover in the area of analysis were searched to create true absences (BLM CITATION- need appropriate format for journal). To achieve a larger absence dataset 1000 pseudo-absence records were generated for each taxon, each of which was greater than 10km from an occurrence record. For ML models, these pseudo-absences were reduced so that the number of presence to absence records were 1:1; to achieve this, absence records inside of 10% of the mean sample value, of the presence records, for any predictor were removed.
 
 Species abiotic niche predictors were 26 variables at 30m resolution, for linear regression models these predictors underwent both vifstep (theta = 10, max observations = 12,500) and vifcor (theta = 0.7, max observations = 12,500), and collinear features were removed leaving 16 variables (@usdm2014) (*APPENDIX 6*). 
 
@@ -113,10 +111,6 @@ Kraken2 was able to identify the species richness of pollen samples ($\bar{x}$ =
 
 ## Spatial Analyses
 
-```{r Results for distance species search, echo = F, message = F, warning = F}
-citation("caret")
-```
-
 ```{r Results for SA Modelling, echo = F, message = F, warning = F}
 
 files <- list.files('/hdd/MS_SDM_RMBL/SDMS_RMBL/results/maps', pattern = 'tif$')
@@ -133,12 +127,12 @@ rm(files, ml, linear)
 
 ```{r Results for SA Logistic Regression Metrics, echo = F, message = F, warning = F}
 
-logR_dat <- read.csv('/hdd/yun master/MEE_manuscript/data/PA_records_logistic_regression.csv')[,2:4] %>% 
+logR_dat <- read.csv('../data/PA_records_logistic_regression.csv')[,2:4] %>% 
   filter(occurrence == 0) 
 # summary(logR_dat$n)
 # sum(logR_dat$n)
 
-dat <- read.csv('/hdd/yun master/MEE_manuscript/data/evaluation_table.csv')[,2:3]
+dat <- read.csv('../data/evaluation_table.csv')[,2:3]
 data.frame(Metric  = dat[1:5,1],
                    Value   = dat[1:5,2],
                    Metric1 = dat[6:10,1],
@@ -151,8 +145,8 @@ data.frame(Metric  = dat[1:5,1],
 ```
 
 ```{r Results for SA Logistic Regression Contingency table, echo = F, message = F, warning = F}
-read.csv('/hdd/yun master/MEE_manuscript/data/Pa_conting_table.csv') %>% 
-    knitr::kable(caption = "SDN evaulation contingency table",
+read.csv('../data/Pa_conting_table.csv') %>% 
+    knitr::kable(caption = "SDM evaluation contingency table",
     col.names = c('', ' Absence ', '  Presence  ', ' Absence ', ' Presence '), align = "lrrrr",
     booktabs = T) %>%
     add_header_above(c(" " = 1, "Training" = 2, "Testing" = 2))
