@@ -55,19 +55,13 @@ In order to minimise the number of species for which SDM’s were to be generate
 
 Species had all records from BIEN within a 50km border of the Omernik level 3 ecoregion which the site is located in (No. 21' Southern Rockies'), downloaded (n = 23,919), (@omernik1987ecoregions). These records were split into two, initially identical, sets, one for generating machine learning models, and the other for Generalised Linear (GLM) and Generalized Additive Models (GAM). The set for generating GLM and GAM records was thinned to reduce spatial autocorrelation in the dataset, as measured by Morans Index (@moran1950notes, @spdep). To both datasets an additional 4029 plots collected from a random stratification of 19% of the land cover in the area of analysis were searched to create true absences (BLM CITATION- need appropriate format for journal). To achieve a larger absence dataset 1000 pseudo-absence records were generated for each taxon, each of which was greater than 10km from an occurrence record. For ML models, these pseudo-absences were reduced so that the number of presence to absence records were 1:1; to achieve this, absence records inside of 10% of the mean sample value, of the presence records, for any predictor were removed.
 
-Species abiotic niche predictors were 26 variables at 30m resolution, for linear regression models these predictors underwent both vifstep (theta = 10, max observations = 12,500) and vifcor (theta = 0.7, max observations = 12,500), and collinear features were removed leaving 16 variables (@usdm2014) (*APPENDIX 6*). 
+Species abiotic niche predictors were 26 variables at 30m resolution, six related to climate,  five soil, four topographic, four related to cloud cover, with the remaining ... (@wilson2016remotely, @wang2016locally, @hengl2017soilgrids250m, @robinson2014earthenv) (*APPENDIX 6*). For linear regression models these predictors underwent both vifstep (theta = 10, max observations = 12,500) and vifcor (theta = 0.7, max observations = 12,500), and collinear features were removed leaving 16 variables (@usdm2014). 
 
 Modelling: Random Forest and Boosted Regression Trees, were sub sampled with 30% test and two replicates each before weighted ensemble based on True Skill Statistics (tss) (@sdmPackage). Generalised linear models (GLM) and Generalised additive models (GAM) with 30% sub sampling and three replicates each were also ensembled using the tss (@sdmPackage). The results of these models were extracted to a polygon feature derived from a minimum-spanning tree which encompasses the study area, and species from either ensemble with greater than 50% habitat suitability were considered present for further purposes (@prim1957minimum). To evaluate these results GBIF (n = 61789) records which had not been assimilated to the BIEN database yet were evaluated using logistic regression (GBIF citation).  
 
 535 species were modelled using Generalized Linear Models and Generalized Additive Models. 534 species were modelled using Random Forest and Boosted Regression Trees. *Of the species modelled % were accurately classified as being present at the field station, while % were accurately classified as being absent from the field station* TABLE XX* for more results.*
 
 To evaluate the accuracy of the Species distribution models, additional presence records from GBIF (n = 61789), and AIM (n = 12730) were used as test and training sets (n = 74,519) (CITE AIM AND GBIF). Additional novel absence records were generated from the AIM dataset to create a dataset where each species has balanced presence and absences. 11 or more paired presence and absence records were required for this testing, resulting in 334 species being included in the logistic regression (median = 110.0, $\bar{x}$ = 223.1, max = 1568 record pairs used) with a 70% test split (@caret). 
-
-## Morphological Pollen identification
-To develop a reference library of  pollen grains which may be present in corbiculae loads, an image reference collection of fuchsin-jelly stained (@beattie1971technique) slides was assembled from slides previously prepared by the authors (n = 21), and other researchers (n = 38) (@brosi2013single). Using 5 years of observational data on *Bombus* Queen Bee foraging at these studies sites (Ogilvie unpublished), as well as the Vascular Plant Checklist (FRASER BUCK 2007), an additional 62 voucher slides were prepared and imaged at 400x (Leica DMLB, Leica MC170 HD Camera, Leica Application Suite V. 4.13.0) from non accessioned herbarium collections to supplement the number of species and clades covered (Appendix 3).  
-  In order to determine which plant taxa were distinguishable via light microscopy, and to develop a dichotomous key to pollen morphotypes, Divisive Hierarchical Clustering techniques were used. Ten readily discernible categorical traits were collected from each specimen in the image collection. These traits were transformed using Gower distances, and clustered using Divisive Hierarchical clustering techniques (@cluster2022). Using the cluster dendrogram, elbow plot, and heatmaps (@fpc2022), of these results morphological groups of pollen which could not be resolved via microscopy were delineated, and a dichotomous key was prepared (APPENDIX NO.). This key was then used to identify the pollen grains sampled from corbiculae loads to morphotypes in a consistent manner. 
-  To prepare the pollen slides from corbiculae, all corbiculae loads were broken apart and rolled using dissection needlepoints to increase heterogeneity of samples. Cerca 0.5mm2 of pollen was placed onto a ~4mm2 fuchsin jelly cube (@beattie1971technique) atop a graticulated microscope slide, with 20 transects and 20 rows (400 quadrats) (EMS, Hartfield, PA). The jelly was  melted until pollen grains were homogeneously spread across the microscope slide. Slides were sealed with Canada Balsam (Rublev Colours, Willits, CA); all samples are noted in *APPENDIX 3*.
-  To identify the pollen present in corbiculae loads, light microscopy at 400x (Zeiss Axioscope A1) was used. In initial sampling in three transects, each pollen grain was identified to morphotype and counted; an additional two transects were scanned for morphotypes unique to that slide, if either transect contained an unique morphotype than all grains in that transect were also identified and counted. Subsequent to the first round of sampling, non-parametric Species Richness Rarefaction curves (@vegans2022), and non-parametric Species Diversity rarefaction curves were used to assess the completeness of sampling (@inextArticle, @inextPackage). Slides not approaching the asymptote of the rarefaction curve were then re-sampled, and analysed iteratively for up to a total of seven transects *APPENDIX 2*. 
 
 ## Molecular Lab Work
 ### Reference Plant Library Generation
@@ -97,9 +91,15 @@ A custom Kraken2 database was created by downloading representative species of e
 ### Identification of Sequence Matching Loci
 A local NCBI database was built using the same processed novel and downloaded sequences (@camacho2009blast). 
 
+## Morphological Pollen identification
+To develop a reference library of  pollen grains which may be present in corbiculae loads, an image reference collection of fuchsin-jelly stained (@beattie1971technique) slides was assembled from slides previously prepared by the authors (n = 21), and other researchers (n = 38) (@brosi2013single). Using 5 years of observational data on *Bombus* Queen Bee foraging at these studies sites (Ogilvie unpublished), as well as the Vascular Plant Checklist (FRASER BUCK 2007), an additional 62 voucher slides were prepared and imaged at 400x (Leica DMLB, Leica MC170 HD Camera, Leica Application Suite V. 4.13.0) from non accessioned herbarium collections to supplement the number of species and clades covered (Appendix 3).  
+  In order to determine which plant taxa were distinguishable via light microscopy, and to develop a dichotomous key to pollen morphotypes, Divisive Hierarchical Clustering techniques were used. Ten readily discernible categorical traits were collected from each specimen in the image collection. These traits were transformed using Gower distances, and clustered using Divisive Hierarchical clustering techniques (@cluster2022). Using the cluster dendrogram, elbow plot, and heatmaps (@fpc2022), of these results morphological groups of pollen which could not be resolved via microscopy were delineated, and a dichotomous key was prepared (APPENDIX NO.). This key was then used to identify the pollen grains sampled from corbiculae loads to morphotypes in a consistent manner. 
+  To prepare the pollen slides from corbiculae, all corbiculae loads were broken apart and rolled using dissection needlepoints to increase heterogeneity of samples. Cerca 0.5mm2 of pollen was placed onto a ~4mm2 fuchsin jelly cube (@beattie1971technique) atop a graticulated microscope slide, with 20 transects and 20 rows (400 quadrats) (EMS, Hartfield, PA). The jelly was  melted until pollen grains were homogeneously spread across the microscope slide. Slides were sealed with Canada Balsam (Rublev Colours, Willits, CA); all samples are noted in *APPENDIX 3*.
+  To identify the pollen present in corbiculae loads, light microscopy at 400x (Zeiss Axioscope A1) was used. In initial sampling in three transects, each pollen grain was identified to morphotype and counted; an additional two transects were scanned for morphotypes unique to that slide, if either transect contained an unique morphotype than all grains in that transect were also identified and counted. Subsequent to the first round of sampling, non-parametric Species Richness Rarefaction curves (@vegans2022), and non-parametric Species Diversity rarefaction curves were used to assess the completeness of sampling (@inextArticle, @inextPackage). Slides not approaching the asymptote of the rarefaction curve were then re-sampled, and analysed iteratively for up to a total of seven transects *APPENDIX 2*. 
+
 ### Temporal Analyses
 
-To estimate the duration of dates in which plant species were flowering Weibull estimates of all spatially modelled taxa were developed (@belitz2020accuracy). Only BIEN records which occurred in the Omernik Level 4 Ecoregions within 15km of the study area (n = 5, or conditionally 6 if enough records not be found in the nearest 5), and which were from herbarium records were included. To remove temporally irrelevant herbarium records, i.e. material collected during times which flowering is impossible at the study area due to snow cover, the SnowUS dataset (@iler2021conceptual, @tran2019cloud) from 2000-2017 was analyzed for the first three days of contiguous snow absence, and the first three days of contiguous snow cover in Fall. Herbarium records after the 3rd quantile for melt, and the 1st quantile for snow cover of these metrics were removed. Species with > 10 records had their weibull distributions estimated for the date when 10% of individuals had begun flowering, when 50% were flowering, and when 90% of individuals had flowered. 
+To estimate the duration of dates in which plant species were flowering Weibull estimates of all spatially modelled taxa were developed (@belitz2020accuracy, @pearse2017statistical). Only BIEN records which occurred in the Omernik Level 4 Ecoregions within 15km of the study area (n = 5, or conditionally 6 if enough records not be found in the nearest 5), and which were from herbarium records were included. To remove temporally irrelevant herbarium records, i.e. material collected during times which flowering is impossible at the study area due to snow cover, the SnowUS dataset (@iler2021conceptual, @tran2019cloud) from 2000-2017 was analyzed for the first three days of contiguous snow absence, and the first three days of contiguous snow cover in Fall. Herbarium records after the 3rd quantile for melt, and the 1st quantile for snow cover of these metrics were removed. Species with > 10 records had their weibull distributions estimated for the date when 10% of individuals had begun flowering, when 50% were flowering, and when 90% of individuals had flowered.
 
 # Results
 
@@ -168,7 +168,6 @@ Of the 554 vascular plants with biotic pollination syndromes, the 493 ML ensembl
 
 Of the 117 plant species identified to the species level across the spatial extents of all plots and duration of queen bee activity, the ML ensembles predicted the presence of 105 (89.7%) of them, and LM ensembles 102 (87.2). Of the missing species two (1.7%) are Orchids, six (5.1%) are non-native, and one (0.85%) is of contested taxonomic standing, all of which are restricted from the initial query database,
 
-
 ### Temporal Analyses
 
 The first date of modelled snow melt in the Gothic area (n = 17, mean = 137.9, median = 135, 3rd quantile = 151), and the first date of a consistent winter snow base (n = 17, mean = 299.9, median = 300, 1st quantile = 291)... 332 species with more than 10 records in the focal level 4 ecoregions ($\bar{x}$ = 35.01657, median = 35, max = 96) had weibull estimates calculated, an additional 56 species with enough contributing records from the 'Sedimentary Mid-Elevation Forests', a large ecoregion in general just beneath the elevation bands occupied by the five ecoregions around the study area had weibull estimates also calculated ($\bar{x}$ = 13.86885, median = 13, max = 24).
@@ -209,3 +208,32 @@ In regards to better understanding the foraging preferences of *Bombus* feeding 
 
 # References
 
+Layer                   Description                            Source
+----    ----------------------------------------------  ---------------------
+1.             Mean annual cloudiness - MODIS            Wilson et al. 2016
+2.           Cloudiness seasonality 1 - MODIS            Wilson et al. 2016 
+3.           Cloudiness seasonality 2 - MODIS            Wilson et al. 2016 
+4.           Cloudiness seasonality 3 - MODIS            Wilson et al. 2016
+5.          Beginning of the frost-free period               Wang et al.
+6.             Climatic moisture deficit                     Wang et al.
+7.             Degree-days above 5C from                     Wang et al.
+8.             Mean annual precipitation                     Wang et al.
+9.          Mean annual precipitation as snow                Wang et al.
+10.             Temperature seasonality                      Wang et al.
+11.       2015 Percent Grass/Herbaceous cover - MODIS         (MOD44B)
+12.      2015 Percent Tree cover from Landsat 7/8              (GLCF)
+13.       Soil probability of bedrock (R Horizon)             SoilGrids
+14.         Soil organic carbon (Tonnes / ha)  
+15.              Surface soil pH in H2O 
+16.             Surface soil percent sand 
+17.                    Soil USDA class                        SoilGrids
+18.                Topographic elevation                    EarthEnv DEM
+19.          Topographic elevation, moving window.
+20.            Topographic percent slope                    EarthEnv DEM 
+21.            Topographic wetness index                    EarthEnv DEM 
+22.        Topographic aspect from EarthEnv DEM
+23.      Annual potential solar radiation computed             r.sun.
+24.       Estimated actual (w/-cloud) solar radiation
+25.       Log-transformed distance to surface water   Global Surface Water Explorer
+26.             Percent surface water from            Global Surface Water Explorer 
+----    ----------------------------------------------  ---------------------
