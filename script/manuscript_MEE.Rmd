@@ -1,14 +1,15 @@
 ---
 title: Plant Metagenomic Barcoding of Pollen Loads Offers Insights on the Foraging
   Patterns of Queen Bumble Bees in the Southern Rocky Mountains, U.S.A.
-author: |
+author: "|"
   | Reed Clark Benkendorf^[Correspondence: reedbenkendorf2021@u.northwestern.edu] $^1$$^,$$^2$, Jane E. Ogilvie $^3$, Emily J. Woodworth $^1$$^,$$^2$, Sophie Taddeo $^1$$^,$$^2$, Paul J. CaraDonna $^1$$^,$$^2$$^,$$^3$, Jeremie B. Fant $^1$$^,$$^2$ | $^1$Chicago Botanic Garden, 1000 Lake Cook Road, Glencoe, Illinois 60022 USA,  $^2$Plant Biology and Conservation, Northwestern University, Evanston, IL 60208, USA, $^3$ Rocky Mountain Biological Laboratory, P.O. Box 519, Crested Butte, CO 81224, USA
 abstract: |
-  an abstract will be written to fill this space.
+  an abstract will be written to fill this space. it will have from 4-6 numbered sections.
 output:
   pdf_document: default
   toc: no
-csl: ../citations/methods-in-ecology-and-evolution.csl
+  word_document: default
+csl: "../citations/methods-in-ecology-and-evolution.csl"
 bibliography: ../citations/citations.bib
 link-citations: yes
 fig_caption: yes
@@ -16,10 +17,9 @@ header-includes:
 - \usepackage{endfloat}
 - \usepackage{setspace}\doublespacing
 - \usepackage{lineno}
-- \linenumbers # cannot co-exist with two columns. 
-#classoption: 
-#- twocolumn #this makes everything take up two columns, cannot exist with line numbers
+- \linenumbers
 ---
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
 ```
@@ -37,16 +37,19 @@ suppressWarnings(library(kableExtra))
 # 1 | INTRODUCTION
 
 The inability to reliably identify plants to the level of species often leaves our understanding of ecosystem function and interactions wanting. Current methods to ameliorate this situation include: ignoring these ecologically relevant levels of detail, revisiting plots as diagnostic material becomes temporally available, assistance from taxonomic specialists, or the use of barcoding or other molecular techniques. These approaches are untenable in light of the benefits offered by: species in several morphologically difficult genera which serve as bioindicators, preferred partners in ecological interactions, as well as an increasing lack of taxonomic experts (CITE). Many genera, especially with the formalized advent of integrative taxonomy, have species which are well defined based upon ecological and behavioral rather than morphological properties, the identification of these taxa in degraded areas or without their mutualistic partners is fraught with difficulty. Hindering an understanding of the breadth of habitat which some species occupy, and the interactions they have with other species. 
+
   The identification of many plant species to terminal taxon is an essential component of nearly all land management programs, where many species in the same genus  (e.g. Sagebrush - *Artemisia* L., Willows - *Salix* L., and Sedges - *Carex* L.) serve as bioindicators (respectively for 'rangelands', streams, and wetlands), as well as in academic research (@Gage2013HistoricalRO, AIM). This endeavour is often mired by lack of diagnostic characters (e.g. flowers, fruits, or roots),  and increasingly the description of cryptic species (@janzen2017nuclear, @oliver2009cryptic). Solutions to this problem are wanting, certain programmes have relied increasingly upon revisiting field sites to identify material using morphological or chemical approaches, whereas academic research has often used high copy number plastid genes as barcodes (Rosentreter et al. 2021, MORE MORE). However, both approaches have significant downsides, the former resource intensive at the landscape scale - and often does not work, while the latter seldom works due to a lack of variability in the currently available barcodes (@liu2014identification).
+  
   Recently barcoding, and metabarcoding, have shown considerable promise in all Kingdoms of life. For example …. . With plants the identification of members of certain clades has been quite successful, whereas with others results have been elusive (@liu2014identification), most applications lay along this spectrum (CITE). Particular challenges with the utilization of high-copy number sequences are associated with their rates of divergence.... and... Herein we have resolved major components of the problems of identifying plant material without diagnostic morphological character states using the Angiosperms353 (A353) Hyb-Seq probes (@johnson2019universal), and custom species sequence databases derived via species distribution modelling, and temporal filtering.
   
   Our foundation for increasing the quality of metabarcoding results in plants is reducing the number of possible plant species candidates by generating user selected sequence databases relevant to the spatial extent of the study region. While there are numerous possible approaches for this process, we achieve the selection of possible plant candidate species using digital collections gleaned from herbaria, (typically Government) survey work, and citizen science (e.g. iNaturalist), from a domain exceeding the study area. To these candidate species modelling approaches, such as logistic regression, may be used to identify distances under which taxa warrant further exploration. To these candidate species, we generate species distribution models (SDM's), which indicate the probability of suitable habitat in a domain, and base the inclusion of these taxa, or representative congeners, upon these results. This approach has the additional benefit of greatly reducing the size of a sequence database, which allows for the usage of genomic size data on personal computers. Moreover, as most next-generation sequence data is deposited as raw-sequence reads, from a processing perspective, it is essential to reduce the candidate species via an approach as such.
+  
   Currently the largest plant systematic endeavor ever undertaken, the Kew Plant and Fungal Tree of Life (PAFTOL), is approaching completion (@baker2021PAFTOL). This dataset will contain Hyb-Seq data from at least one species representing each genus in the plant kingdom using the popular A353 probes (@baker2021exploring), resulting in over 14,000 represented species. These publically available data serve to provide a taxonomically comprehensive backbone for plant metabarcoding. Data from the 10kP project, which seeks to develop reference genomes from a phylogenetically diverse suite of plants will contribute many more records upon it's intended completion, now slated to be by 2030, similar projects which seek to sequence high amounts of genomes in regions e.g. the 'Darwin Tree of Life' are being undertaken which will contribute data for applicable to enormous spatial domains (@cheng2018tenkp, @darwin2022project, @lewin2022biogenome).
   
-  *A brief consideration and example on the inclusion of the temporal dimension of plant flowering, which we suspect will be of importance in sub-tropical, and tropical ecosystems - and others with high seasonality in flowering, is also discussed.* 
-  We show that by combining both candidate plant species, and representative sequence data, with only a small amount of new reference sequencing, one is capable of generating ecologically realistic, and biologically relevant results. To test these assertions we utilize a long-term observational study of Bumble Bees, the most important genus of pollinators in the temperate, and one with consistently concerning conservation assessments (@cameron2020global, @goulson2008decline). By generating sequence data from corbiculae, pollen baskets, we seek to determine whether this approach is viable, and if the foraging record of pollen matches the record derived from observations.  **bee stuff here**
+  Considerable amounts of species interactions are expressed along time (@caradonna2021seeing). For the tropics the flowering periods of many plant species display high seasonality, and given the elevated rates of species richness relative to the temperate, this axis may provide an essential filter for identifying material in many metagenomic samples (@janzen1967synchronization, @Newstrom1994ANC). While many pollination interactions are formed and dissolved along the temporal axis in the temperate regions (@caradonna2017interaction), the overall shorter extent of the active growing season in these systems results in the presence of few to any natural breaks in these systems which subjugates the utility of these to perform as filters of post-processing results, rather than distinct species assemblage for database generation. Nonetheless, we work through a process which seems applicable to the tropics to utilize the temporal dimension for classifying sequencing results. 
   
-  
+  We apply these metagenomic and informatics approaches to determine whether the foraging record of Queen Bumble Bee's is consistent across direct observations and the pollen record, an incongruency in several floral visitation networks (@barker2021pollen, @zhao2019topology, @alarcon2010congruence). The two foraging phases of the Queen Bumble Bee life cycle is essential to 1) increase their weight before diapause, 2) increase their ovary weights while establishing their recently found nests, both of these time periods represent potential demographic bottlenecks in bumble bee populations (@sarro2022bumble). Bumblebees are one of the only groups of insects with unequivocal quantitative evidence for numerous populations declines, while simultaneously serving as the most effective pollinators in temperate montane ecosystems (@cameron2020global, @goulson2008decline, @williams1982distribution, @colla2012assessing, @bergman1996micrometeorological, @bingham1998efficient). These montane ecosystems represent some of the most ecologically resilient and resistant systems in the temperate and offer unparalleled potential as refugial areas for multiple dimensions of biodiversity under climate change. 
+
 # 2 | METHODS
 
 ## Study System & Field Work

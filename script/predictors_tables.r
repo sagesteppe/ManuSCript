@@ -1,7 +1,7 @@
 
 Layer                   Description                            Source
 ----    ----------------------------------------------  ---------------------
-  1.             Mean annual cloudiness - MODIS            Wilson et al. 2016
+1.             Mean annual cloudiness - MODIS            Wilson et al. 2016
 2.           Cloudiness seasonality 1 - MODIS            Wilson et al. 2016 
 3.           Cloudiness seasonality 2 - MODIS            Wilson et al. 2016 
 4.           Cloudiness seasonality 3 - MODIS            Wilson et al. 2016
