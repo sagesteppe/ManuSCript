@@ -1,18 +1,19 @@
 ---
 title: Plant Metagenomic Barcoding of Pollen Loads Offers Insights on the Foraging
   Patterns of Queen Bumble Bees in the Southern Rocky Mountains, U.S.A.
-author: "|"
-  | Reed Clark Benkendorf^[Correspondence: reedbenkendorf2021@u.northwestern.edu] $^1$$^,$$^2$, Jane E. Ogilvie $^3$, Emily J. Woodworth $^1$$^,$$^2$, Sophie Taddeo $^1$$^,$$^2$, Paul J. CaraDonna $^1$$^,$$^2$$^,$$^3$, Jeremie B. Fant $^1$$^,$$^2$ | $^1$Chicago Botanic Garden, 1000 Lake Cook Road, Glencoe, Illinois 60022 USA,  $^2$Plant Biology and Conservation, Northwestern University, Evanston, IL 60208, USA, $^3$ Rocky Mountain Biological Laboratory, P.O. Box 519, Crested Butte, CO 81224, USA
+author: |
+  Reed Clark Benkendorf^[Correspondence: reedbenkendorf2021@u.northwestern.edu] $^1$$^,$$^2$, Jane E. Ogilvie $^3$, Emily J. Woodworth $^1$$^,$$^2$, Sophie Taddeo $^1$$^,$$^2$, Paul J. CaraDonna $^1$$^,$$^2$$^,$$^3$, Jeremie B. Fant $^1$$^,$$^2$ | $^1$Chicago Botanic Garden, 1000 Lake Cook Road, Glencoe, Illinois 60022 USA,  $^2$Plant Biology and Conservation, Northwestern University, Evanston, IL 60208, USA, $^3$ Rocky Mountain Biological Laboratory, P.O. Box 519, Crested Butte, CO 81224, USA
 abstract: |
   an abstract will be written to fill this space. it will have from 4-6 numbered sections.
 output:
-  pdf_document: default
-  toc: no
   word_document: default
+  toc: no
+  pdf_document: default
 csl: "../citations/methods-in-ecology-and-evolution.csl"
 bibliography: ../citations/citations.bib
 link-citations: yes
 fig_caption: yes
+always_allow_html: true
 header-includes:
 - \usepackage{endfloat}
 - \usepackage{setspace}\doublespacing
