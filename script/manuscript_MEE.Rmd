@@ -186,6 +186,8 @@ At the six study plots, of the 117 plant species identified to the species level
 
 ## 3.3 | Metabarcoding Pollen identification
 
+XX corbiculae loads had DNA extracted and underwent hyb-seq, a total of XX corbiculae samples were sequenced, XX reads were recovered from sequencing. After trimming XX seqs remained. XX reads were matched using Kraken, of the reads classified by Kraken XX reads were matched using Bracken, of the reads classified by Kraken XX reads were matched using BLAST. The number of reads per sequence varied widely (min = , $\bar{x}$, max = ), the number of loci recovered per sample ranged from (min = , max = ), and the number of reads from loci also ranged widely (). 
+
 Kraken2 was able to identify the species richness of pollen samples ($\bar{x}$ = , min = , max = ). Bracken was able to estimate the relative abundance of pollen grains in each sample (max % of any species, $\bar{x}$ % of all species, min % trace amounts detected). BLAST, the most thorough sequence alignment algorithm, 
 
 ## 3.4 | Temporal Analyses
