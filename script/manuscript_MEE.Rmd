@@ -6,9 +6,9 @@ author: |
 abstract: |
   an abstract will be written to fill this space. it will have from 4-6 numbered sections.
 output:
-  word_document: default
-  toc: no
   pdf_document: default
+  toc: no
+  word_document: default
 csl: "../citations/methods-in-ecology-and-evolution.csl"
 bibliography: ../citations/citations.bib
 link-citations: yes
@@ -73,7 +73,7 @@ Species abiotic niche predictors were 26 variables at 30m resolution, six relate
 
 Modelling: Random Forest and Boosted Regression Trees, were sub sampled with 30% test and two replicates each before weighted ensemble based on True Skill Statistics (tss) (@sdmPackage). Generalised linear models (GLM) and Generalised additive models (GAM) with 30% sub sampling and three replicates each were also ensembled using the tss (@sdmPackage). The results of these models were extracted to a polygon feature derived from a minimum-spanning tree which encompasses the study area, and species from either ensemble with greater than 50% habitat suitability were considered present for further purposes (@prim1957minimum).
 
-535 species were modelled using Generalized Linear Models and Generalized Additive Models. 534 species were modelled using Random Forest and Boosted Regression Trees.  To evaluate the accuracy of the species distribution models, additional presence records from GBIF (n = 61,789), and AIM (n = 12,730) were used as test and training sets (n = 74,519) for logistic regression (CITE AIM AND GBIF). Additional novel absence records were generated from the AIM dataset to create a dataset where each species has balanced presence and absences. 11 or more paired presence and absence records were required for this testing, resulting in 334 species being included in the logistic regression (median = 110.0, $\bar{x}$ = 223.1, max = 1568 record pairs used) with a 70% test split (@caret). 
+535 species were modelled using Generalized Linear Models and Generalized Additive Models. 534 species were modelled using Random Forest and Boosted Regression Trees.  To evaluate the accuracy of the species distribution models, additional presence records from GBIF (n = 61,789), and AIM (n = 12,730) were used as test and training sets (n = 74,519) for logistic regression (CITE AIM AND GBIF). Additional novel absence records were generated from the AIM dataset to create a dataset where each species has balanced presence and absences. 11 or more paired presence and absence records were required for this testing, resulting in 334 species being included in the logistic regression (Mdn = 110.0, $\bar{x}$ = 223.1, max = 1568 record pairs used) with a 70% test split (@caret). 
 
 ## 2.2 | Molecular Lab Work
 
@@ -122,6 +122,8 @@ To develop a reference library of  pollen grains which may be present in corbicu
 ### 2.3 | Temporal Analyses
 
 To estimate the duration of dates in which plant species were flowering weibull estimates of several phenologica lparameters all spatially modelled taxa were developed (@belitz2020accuracy, @pearse2017statistical). Only BIEN records which occurred in the Omernik Level 4 Ecoregions within 15km of the study area (n = 5, or conditionally 6 if enough records not be found in the nearest 5), and which were from herbarium records were included. To remove temporally irrelevant herbarium records, i.e. material collected during times which flowering is impossible at the study area due to snow cover, the SnowUS dataset (@iler2021conceptual, @tran2019cloud) from 2000-2017 was analyzed for the first three days of contiguous snow absence, and the first three days of contiguous snow cover in Fall. Herbarium records after the 3rd quantile for melt, and the 1st quantile for snow cover of these metrics were removed. Species with > 10 records had their weibull distributions generated for the date when 10% of individuals had begun flowering, when 50% were flowering, and when 90% of individuals had flowered.
+
+### 2.4 | Floral Observations
 
 # 3 | RESULTS
 
@@ -188,13 +190,63 @@ Kraken2 was able to identify the species richness of pollen samples ($\bar{x}$ =
 
 ## 3.4 | Temporal Analyses
 
-The first date of modelled snow melt in the Gothic area (n = 17, $\bar{x}$ = 137.9, median = 135, 3rd quantile = 151), and the first date of a consistent winter snow base (n = 17, $\bar{x}$ = 299.9, median = 300, 1st quantile = 291) from 2000-2017, were used as delimiters for the inclusions of herbarium records in modelling. Of the 500 species predicted likely present in the area via logistic regression, 332 species (64.4%) with more than 10 records in the focal level 4 ecoregions ($\bar{x}$ = 35.01657, median = 35, max = 96) had weibull estimates calculated, an additional 56 species (11.2%) with enough contributing records from the 'Sedimentary Mid-Elevation Forests', a large ecoregion in general just beneath the elevation bands occupied by the five ecoregions around the study area had weibull estimates also calculated ($\bar{x}$ = 13.86885, median = 13, max = 24).
+The first date of modeled snow melt in the Gothic area (n = 17, $\bar{x}$ = 137.9, Mdn = 135, 3rd quantile = 151), and the first date of a consistent winter snow base (n = 17, $\bar{x}$ = 299.9, Mdn = 300, 1st quantile = 291) from 2000-2017, were used as delimiters for the inclusions of herbarium records in modelling. Of the 500 species predicted likely present in the area via logistic regression, 332 species (64.4%) with more than 10 records in the focal level 4 ecoregions ($\bar{x}$ = 35.01657, Mdn = 35, max = 96) had weibull estimates calculated, an additional 56 species (11.2%) with enough contributing records from the 'Sedimentary Mid-Elevation Forests', a large ecoregion in general just beneath the elevation bands occupied by the five ecoregions around the study area had weibull estimates also calculated ($\bar{x}$ = 13.86885, Mdn = 13, max = 24).
 
-Only 58 of these 388 species (n = 34.56897, median n = 31) were able to be compared to ground truth data from long term (1970 ? - 2016 ?) datasets.
+Only 58 of these 388 species (n = 34.56897, Mdn n = 31) were able to be compared to ground truth data from long term (1970 ? - 2016 ?) datasets.
 
-```{r phenology estimates, echo=FALSE, fig.cap="A caption", out.width = '75%'}
+```{r phenology estimates, echo=F, fig.cap="A caption", out.width = '75%'}
 knitr::include_graphics("../graphics/plots/phenology_estimates_10_90.png")
 # these are the tenth and nintey  percent non-parametric confidence intervals. 
+```
+
+## 3.5 | Floral Observations ? 
+
+```{r Floral Obs Results, echo = F, warning = F}
+
+files <- list.files('../data', pattern = 'csv')
+
+flr_ranks <- read.csv(
+  file.path('../data',  files[grep('flower_ranks', files)] )) %>% 
+  select(site, doy, week, tot.obs.length, habitat, plant.species:abun.rank)
+obs_time <- read.csv(
+  file.path('../data', '/', files[grep('queen_observations', files)]) ) %>% 
+  select(site, week, tot.obs.length) %>% 
+  distinct(site, week, .keep_all = T)
+
+bee_obs <- read.csv(
+  file.path('../data', files[grep('queen_observations', files)]) ) %>% 
+  filter(caste == 'q') %>% 
+  mutate(species = gsub('\\..*$', '', species)) %>% 
+  select(site, doy, week, tot.obs.length, species, plant.species,
+         resource.coll:pollen.collected, fl.switch.1:fl.switch.2.resource.coll) %>% 
+  mutate(across(resource.coll:fl.switch.2.resource.coll, ~ na_if(.x, ''))) %>% 
+  pivot_longer(c(plant.species, fl.switch.1, fl.switch.2), names_to = 'observation', values_to = 'plant.species') %>% 
+  drop_na(plant.species) %>% 
+  group_by(site, week, species, plant.species) %>% 
+  count(name = 'interactions') %>% 
+  left_join(., obs_time) %>% 
+  mutate(period = case_when(
+    week %in% 3:5 ~ 'Early',
+    week %in% 6:8 ~ 'Mid',
+    week %in% 9:11 ~ 'Late'
+  ))
+
+s <- toString(format(as.Date(min(flr_ranks$doy), origin = "2016-01-01"), "%B %d")) # start obs
+e <- toString(format(as.Date(max(flr_ranks$doy), origin = "2016-01-01"), "%B %d")) # end obs
+
+t_b_wk <- bee_obs %>%  group_by(site, week, species) %>%  tally(interactions) 
+t_b_b <- bee_obs %>%  group_by(species) %>%  tally(interactions) %>%  filter(species != 'unknown') 
+t_b_wk_pl <- bee_obs %>%  group_by(site, week, plant.species) %>%  tally(interactions) 
+t_b_pl <- bee_obs %>%  group_by(plant.species) %>%  filter(species != 'unknown') %>%  tally(interactions) 
+t_spp_i <- bee_obs %>%  group_by(species) %>%  filter(species != 'unknown') %>%  distinct(plant.species) %>% 
+  count()
+
+```
+
+The six sites were surveyed for a total of `r toString(sum(obs_time$tot.obs.length)/60)` hours from `r s`-`r e`. A total of `r toString(sum(bee_obs$interactions))` queen-pollen foraging interactions were observed (range per bee species by week min = `r toString(min(t_b_wk$n))`, $\bar{x}$  = `r toString(round(mean(t_b_wk$n), 2))`, Mdn = `r toString(median(t_b_wk$n))`, max = `r toString(max(t_b_wk$n))`), with a range of total observed interactions per bee species across this time period (min = `r toString(min(t_b_b$n))`, $\bar{x}$  = `r toString(round(mean(t_b_b$n), 2))`, Mdn = `r toString(median(t_b_b$n))`, max = `r toString(max(t_b_b$n))`). Plants varied widely in the number of interactions which they partook in with each species of bee (range per plant species by week min = `r toString(min(t_b_wk_pl$n))`, $\bar{x}$  = `r toString(round(mean(t_b_wk_pl$n), 2))`, Mdn = `r toString(median(t_b_wk_pl$n))`, max = `r toString(max(t_b_wk_pl$n))`), with a range of total observed interactions per plant species over this time period (min = `r toString(min(t_b_pl$n))`, $\bar{x}$  = `r toString(round(mean(t_b_pl$n), 2))`, Mdn = `r toString(median(t_b_pl$n))`, max = `r toString(max(t_b_pl$n))`). The number of plant species which bees were observed interacting with varied more narrowly (min = `r toString(min(t_spp_i$n))`, $\bar{x}$  = `r toString(round(mean(t_spp_i$n), 2))`, Mdn = `r toString(median(t_spp_i$n))`, max = `r toString(max(t_spp_i$n))`).
+
+```{r echo = F}
+rm(bee_obs, flr_ranks, obs_time, t_b_b, t_b_wk, t_b_pl, t_b_wk_pl, e, s, files, t_spp_i)
 ```
 
 # 4 | DISCUSSION
