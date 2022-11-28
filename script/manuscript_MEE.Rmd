@@ -61,7 +61,7 @@ Observations and sample collection was conducted at The Rocky Mountain Biologica
 
 #### 2.1.1 Candidate Species
 
-To develop an ecologically relevant list of vascular plant species, with expected biotic pollination, which may be present at the study sites all records adjacent to the field site were downloaded from the Botanical Information and Ecology Network 'BIEN' (@bien2022), and these taxa had species distribution Dodels (SDMs) generated to predict their suitability. The predicted plant species served as a reference for which species to include in the genomic sequence databases. 
+To develop an ecologically relevant list of vascular plant species, with expected biotic pollination, which may be present at the study sites all records adjacent to the field site were downloaded from the Botanical Information and Ecology Network 'BIEN' (@bien2022), and these taxa had Species Distribution Models (SDMs) generated to predict their suitability. The predicted plant species served as a reference for which species to include in the genomic sequence databases. 
 
 In order to minimise the number of species for which SDM’s were to be generated, BIEN was queried at a distance of up to 100km from our field site and all plant species records were downloaded. In order to emulate the perceived stochasticity of collections, this dataset was bootstrap re-sampled 250 times, with 90% of samples selected, to create a testing dataset. The median of the logistic regression assessing the probability of occurrence of a species record as a function of distance from the study area was used as a threshold distance, under which, to include species as candidates for distribution modelling.
 
@@ -186,7 +186,7 @@ At the six study plots, of the 117 plant species identified to the species level
 
 ## 3.3 | Metabarcoding Pollen identification
 
-XX corbiculae loads had DNA extracted and underwent hyb-seq, a total of XX corbiculae samples were sequenced, XX reads were recovered from sequencing. After trimming XX seqs remained. XX reads were matched using Kraken, of the reads classified by Kraken XX reads were matched using Bracken, of the reads classified by Kraken XX reads were matched using BLAST. The number of reads per sequence varied widely (min = , $\bar{x}$, max = ), the number of loci recovered per sample ranged from (min = , max = ), and the number of reads from loci also ranged widely (). 
+XX corbiculae loads had DNA extracted and underwent hyb-seq, a total of XX corbiculae samples were sequenced, XX reads were recovered from sequencing. After trimming XX seqs remained. XX reads were matched using Kraken, of the reads classified by Kraken XX reads were matched using Bracken, of the reads classified by Kraken XX reads were matched using BLAST. The number of reads per sequence varied widely (min = , $\bar{x}$, max = ), the number of loci recovered per sample ranged from (min = , max = ), and the number of reads from loci also ranged widely () **APPENDIX X**. 
 
 Kraken2 was able to identify the species richness of pollen samples ($\bar{x}$ = , min = , max = ). Bracken was able to estimate the relative abundance of pollen grains in each sample (max % of any species, $\bar{x}$ % of all species, min % trace amounts detected). BLAST, the most thorough sequence alignment algorithm...
 
@@ -326,3 +326,14 @@ In regards to better understanding the foraging preferences of *Bombus* feeding 
 # References
 
 # Supporting 
+
+
+
+
+
+```{r APPENDIX NUMBER LOCI WITH READS USED IN MATCHING}
+
+knitr::include_graphics('../graphics/plots/Percent_loci_matched_by_sample.png')
+
+```
+
