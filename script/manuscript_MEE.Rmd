@@ -188,7 +188,7 @@ At the six study plots, of the 117 plant species identified to the species level
 
 XX corbiculae loads had DNA extracted and underwent hyb-seq, a total of XX corbiculae samples were sequenced, XX reads were recovered from sequencing. After trimming XX seqs remained. XX reads were matched using Kraken, of the reads classified by Kraken XX reads were matched using Bracken, of the reads classified by Kraken XX reads were matched using BLAST. The number of reads per sequence varied widely (min = , $\bar{x}$, max = ), the number of loci recovered per sample ranged from (min = , max = ), and the number of reads from loci also ranged widely (). 
 
-Kraken2 was able to identify the species richness of pollen samples ($\bar{x}$ = , min = , max = ). Bracken was able to estimate the relative abundance of pollen grains in each sample (max % of any species, $\bar{x}$ % of all species, min % trace amounts detected). BLAST, the most thorough sequence alignment algorithm, 
+Kraken2 was able to identify the species richness of pollen samples ($\bar{x}$ = , min = , max = ). Bracken was able to estimate the relative abundance of pollen grains in each sample (max % of any species, $\bar{x}$ % of all species, min % trace amounts detected). BLAST, the most thorough sequence alignment algorithm...
 
 ## 3.4 | Temporal Analyses
 
@@ -201,7 +201,7 @@ knitr::include_graphics("../graphics/plots/phenology_estimates_10_90.png")
 # these are the tenth and nintey  percent non-parametric confidence intervals. 
 ```
 
-## 3.5 | Floral Observations ? 
+## 3.5 | Floral Observations 
 
 ```{r Floral Obs Results, echo = F, warning = F}
 
@@ -249,6 +249,47 @@ The six sites were surveyed for a total of `r toString(sum(obs_time$tot.obs.leng
 
 ```{r echo = F}
 rm(bee_obs, flr_ranks, obs_time, t_b_b, t_b_wk, t_b_pl, t_b_wk_pl, e, s, files, t_spp_i)
+```
+
+
+```{r Most used resources by species, echo = F}
+
+corb <- read.csv('../data/Corbiculae_collections.csv', header = F) %>% 
+  mutate(sample.id = as.numeric(str_extract(V1, '[0-9]{1,2}')),
+         species = str_extract(V1, 'Bombus [^ ]+'),
+         caste = str_trim(str_extract(V1, '[:space:][q|w][:space:]'))) %>% 
+  filter(caste == 'q') %>% 
+  select(-V1, -caste)
+
+blst <- read.csv('../data/classified_blast.csv') %>% 
+  distinct(sample.id)
+
+blst <- read.csv('../data/classified_blast.csv') %>% 
+  mutate(across(where(is.character), ~ replace_na(., 'UNKNOWN'))) %>% 
+  arrange(sample.id, -Prcnt_seqs) %>% 
+  inner_join(., corb, by = 'sample.id') 
+  
+blst_cnt <- blst %>% 
+  distinct(sample.id, .keep_all = T) %>% 
+  count(species)
+
+tb <- blst %>% 
+  left_join(., blst_cnt, by = 'species') %>% 
+  group_by(species, name) %>% 
+  mutate(Mu_Seqs = sum(Prcnt_seqs)/n)  %>% 
+  distinct(species, name, .keep_all = T)
+
+tb %>% 
+  filter(species == 'Bombus appositus') %>% 
+  ungroup() %>% 
+  mutate(total = sum(Mu_Seqs))
+
+
+obs <- read.csv('../data/yearEndInteractionsObservations.csv')[,2:5] %>% 
+  group_by(species) %>% 
+  arrange(species, -bySpp) %>% 
+  slice_head(n = 10)
+
 ```
 
 # 4 | DISCUSSION
