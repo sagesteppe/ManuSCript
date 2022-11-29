@@ -182,7 +182,7 @@ At the six study plots, of the 117 plant species identified to the species level
 
 ## 3.2 | Microscopic Pollen identification
 
-**Using the fuchsin jelly preparation and light microscopic analyses of grains and scoring of 12 character states resulted in the establishment of XX morphotypes which grains could be reliably classified into. *APPENDIX 7* **. XX Samples were counted and based on rarefaction had over % of expected morphotypes found. The relative abundance of pollen grains in each sample (max % of any species, mean % of all species, min % trace amounts detected).
+Using the fuchsin jelly preparation and light microscopic analyses of grains and scoring of 10 character states resulted in the establishment of 28 morphotypes which grains could be reliably classified into. *APPENDIX 7*. 60 Samples were counted and based on rarefaction **had over % of expected morphotypes found**, all samples had expected morphotype diversity reach the asymptote *APPENDIX 8*. The relative abundance of pollen grains in each sample (max % of any species, mean % of all species, min % trace amounts detected). 
 
 ## 3.3 | Metabarcoding Pollen identification
 
@@ -252,7 +252,7 @@ rm(bee_obs, flr_ranks, obs_time, t_b_b, t_b_wk, t_b_pl, t_b_wk_pl, e, s, files, 
 ```
 
 
-```{r Most used resources by species, echo = F}
+```{r Most used resources by species, eval = F}
 
 corb <- read.csv('../data/Corbiculae_collections.csv', header = F) %>% 
   mutate(sample.id = as.numeric(str_extract(V1, '[0-9]{1,2}')),
@@ -331,9 +331,17 @@ In regards to better understanding the foraging preferences of *Bombus* feeding 
 
 
 
-```{r APPENDIX NUMBER LOCI WITH READS USED IN MATCHING}
-
+```{r APPENDIX NUMBER LOCI WITH READS USED IN MATCHING, echo = F, fig.height=2.7, fig.width=9}
 knitr::include_graphics('../graphics/plots/Percent_loci_matched_by_sample.png')
-
 ```
 
+
+```{r APPENDIX NUMBER RMBL Pollen Key, echo = F, fig.height=2.7, fig.width=9}
+knitr::include_graphics('../graphics/assorted/RMBL_pollen_key.pdf')
+```
+
+
+```{r APPENDIX MORPHOTYPE RICHNESS AND ABUNDANCE, echo= F, fig.height=2.7, fig.width=9}
+knitr::include_graphics('../graphics/plots/species_richness_rarefaction.png')
+knitr::include_graphics('../graphics/plots/SppAbundance.png')
+```
