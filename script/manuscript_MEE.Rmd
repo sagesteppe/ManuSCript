@@ -182,7 +182,7 @@ At the six study plots, of the 117 plant species identified to the species level
 
 ## 3.2 | Microscopic Pollen identification
 
-Using the fuchsin jelly preparation and light microscopic analyses of grains and scoring of 10 character states resulted in the establishment of 28 morphotypes which grains could be reliably classified into. *APPENDIX 7*. 60 Samples were counted and based on rarefaction **had over % of expected morphotypes found**, all samples had expected morphotype diversity reach the asymptote *APPENDIX 8*. The relative abundance of pollen grains in each sample (max % of any species, mean % of all species, min % trace amounts detected). 
+Using the fuchsin jelly preparation and light microscopic analyses of grains and scoring of 10 character states resulted in the establishment of 28 morphotypes which grains could be reliably classified into. *APPENDIX 7*. 60 Samples were counted and based on rarefaction **had over % of expected morphotypes found** (morphotype richness, mean = 4.5, median = 4, min = 1, max = 9), all samples had expected morphotype diversity reach the asymptote *APPENDIX 8*. The number of counted pollen grains in each sample range from (mean = 2788.685, median = 1453, max = 16293). 
 
 ## 3.3 | Metabarcoding Pollen identification
 
@@ -326,8 +326,6 @@ In regards to better understanding the foraging preferences of *Bombus* feeding 
 # References
 
 # Supporting 
-
-
 
 
 
