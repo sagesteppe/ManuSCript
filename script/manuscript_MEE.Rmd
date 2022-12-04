@@ -4,7 +4,7 @@ title: Plant Metagenomic Barcoding of Pollen Loads Offers Insights on the Foragi
 author: |
   Reed Clark Benkendorf^[Correspondence: reedbenkendorf2021@u.northwestern.edu] $^1$$^,$$^2$, Jane E. Ogilvie $^3$, Emily J. Woodworth $^1$$^,$$^2$, Sophie Taddeo $^1$$^,$$^2$, Paul J. CaraDonna $^1$$^,$$^2$$^,$$^3$, Jeremie B. Fant $^1$$^,$$^2$ | $^1$Chicago Botanic Garden, 1000 Lake Cook Road, Glencoe, Illinois 60022 USA,  $^2$Plant Biology and Conservation, Northwestern University, Evanston, IL 60208, USA, $^3$ Rocky Mountain Biological Laboratory, P.O. Box 519, Crested Butte, CO 81224, USA
 abstract: |
-  an abstract will be written to fill this space. it will have from 4-6 numbered sections.
+  an abstract will be written to fill this space. it will have from 4-6 numbered sections. like 1) A very broad overall identifying organisms is hard and we dont have time. 2) to try and figure this out we used whoa molecular stuff and holy shit amounts of computing 3) Our results showed we were able to do some cool things 4) you should try this out, because it was pretty cool and helped us perform natural history on steroids.
 output:
   pdf_document: default
   toc: no
@@ -41,9 +41,9 @@ The inability to reliably identify plants to the level of species often leaves o
 
   The identification of many plant species to terminal taxon is an essential component of nearly all land management programs, where many species in the same genus  (e.g. Sagebrush - *Artemisia* L., Willows - *Salix* L., and Sedges - *Carex* L.) serve as bioindicators (respectively for 'rangelands', streams, and wetlands), as well as in academic research (@Gage2013HistoricalRO, AIM). This endeavour is often mired by lack of diagnostic characters (e.g. flowers, fruits, roots or combinations thereof),  and increasingly the description of cryptic species (@janzen2017nuclear, @oliver2009cryptic). Solutions to this problem are wanting, certain programmes have relied increasingly upon revisiting field sites to identify material using morphological or chemical approaches, whereas academic research has often used high copy number plastid genes as barcodes (Rosentreter et al. 2021, MORE MORE). However, both approaches have significant downsides, the former resource intensive at the landscape scale - and often does not work, while the latter seldom works due to a lack of variability in the currently available barcodes (@liu2014identification).
   
-  Recently barcoding, and metabarcoding, have shown considerable promise in all Kingdoms of life. For example …. . With plants the identification of members of certain clades has been quite successful, whereas with others results have been elusive (@liu2014identification, @china2011comparative), with most applications laying along this spectrum (@li2015plant, @kress2007two, @cbol2009dna). Particular challenges with the utilization of high-copy number sequences are associated with their rates of divergence, gene tree conflict, and hybridization (@coissac2016barcodes, @fazekas2009plant) Herein we have resolved major components of the problems of identifying plant material without diagnostic morphological character states using the Angiosperms353 (A353) Hyb-Seq probes (@johnson2019universal), and custom species sequence databases derived via species distribution modelling, and temporal filtering.
+  Recently barcoding, and metabarcoding, have shown considerable promise in all Kingdoms of life. For example …. . With plants the identification of members of certain clades has been quite successful, whereas with others results have been elusive (@liu2014identification, @china2011comparative), while most applications laying along this spectrum (@li2015plant, @kress2007two, @cbol2009dna). Particular challenges with the utilization of high-copy number sequences are associated with their rates of divergence, gene tree conflict, and hybridization (@coissac2016barcodes, @fazekas2009plant) Herein we have resolved major components of the problems of identifying plant material without diagnostic morphological character states using the Angiosperms353 (A353) Hyb-Seq probes (@johnson2019universal), and custom species sequence databases derived via species distribution modelling, and temporal filtering.
   
-  Our foundation for increasing the quality of metabarcoding results in plants is reducing the number of possible plant species candidates by generating user selected sequence databases relevant to the spatial extent of the study region. While there are numerous possible approaches for this process, we achieve the selection of possible plant candidate species using digital collections gleaned from herbaria, (typically Government) survey work, and citizen science (e.g. iNaturalist), from a domain exceeding the study area. To these candidate species modelling approaches, such as logistic regression, may be used to identify distances under which taxa warrant further exploration. To these candidate species, we generate species distribution models (SDM's), which indicate the probability of suitable habitat in a domain, and base the inclusion of these taxa, or representative congeners, upon these results. This approach has the additional benefit of greatly reducing the size of a sequence database, which allows for the usage of genomic size data on personal computers. Moreover, as most next-generation sequence data is deposited as raw-sequence reads, from a processing perspective, it is essential to reduce the candidate species via an approach as such.
+  Our foundation for increasing the quality of metabarcoding results in plants is reducing the number of possible plant species candidates by generating user selected sequence databases relevant to the spatial extent of the study region. While there are numerous possible approaches for this process, we achieve the selection of possible plant candidate species using digital collections gleaned from herbaria, survey work, and citizen science (e.g. iNaturalist), from a domain exceeding the study area. To these candidate species, modelling approaches - such as logistic regression, may be used to identify distances under which taxa warrant further exploration. To these candidate species, we generate species distribution models (SDM's), which indicate the probability of suitable habitat in a domain, and base the inclusion of these taxa, or representative congeners, upon these results. This approach has the additional benefit of greatly reducing the size of a sequence database, which allows for the usage of genomic size data on personal computers. Moreover, as most next-generation sequence data is deposited as raw-sequence reads, from a processing perspective, it is essential to reduce the candidate species via an approach as such.
   
   Currently the largest plant systematic endeavor ever undertaken, the Kew Plant and Fungal Tree of Life (PAFTOL), is approaching completion (@baker2021PAFTOL). This dataset will contain Hyb-Seq data from at least one species representing each genus in the plant kingdom using the popular A353 probes (@baker2021exploring), resulting in over 14,000 represented species. These publicly available data serve to provide a taxonomically comprehensive backbone for plant metabarcoding. Data from the 10kP project, which seeks to develop reference genomes from a phylogenetically diverse suite of plants will contribute many more records upon it's intended completion, now slated to be by 2030, similar projects which seek to sequence high amounts of genomes in regions e.g. the 'Darwin Tree of Life' are being undertaken which will contribute data for applicable to enormous spatial domains (@cheng2018tenkp, @darwin2022project, @lewin2022biogenome).
   
@@ -197,9 +197,27 @@ Using the fuchsin jelly preparation and light microscopic analyses of grains and
 
 ## 3.3 | Metabarcoding Pollen identification
 
+```{sh Get number of raw reads for metagenome samples, eval = F}
+
+cd ~/sequenceData/Original_zip
+files=$(find -type f -name "[0-9][0-9]_S[0-9]*_paired.fastq.gz")
+
+# seqs per each sample , need divide by 4 on import
+wc -l  $files > '/hdd/yun master/MEE_manuscript/data/raw_reads_metagenome_seq.txt'
+```
+
 ```{r eval = F}
-toseq <- read.csv('../data/Benkendorf_combos_fixed.csv') |> 
-  filter(!str_detect(extract_id, '[aA-zZ]')) %>% nrow()
+
+raw_seqs <- read.delim('../data/raw_reads_metagenome_seq.txt', header = F) %>% 
+  mutate(V1 = str_trim(V1)) %>% 
+  separate(V1, c('seq', 'sampleFR'), sep = ' ') %>% 
+  mutate(seq = round(as.numeric(seq)/4),
+         sample = str_extract(sampleFR, '.*L002_')) %>% 
+  filter(sampleFR != 'total') %>% 
+  group_by(sample) %>% 
+  mutate(totalReads = sum(seq)) %>% 
+  distinct(totalReads) %>% 
+  pull(totalReads)
 
 krak <- read.csv('../data/kraken_proc_reads.csv')
 brack <- read.csv('../data/bracken_proc_reads.csv')
@@ -207,13 +225,12 @@ blast <- read.csv('../data/blast_proc_reads.csv')
 ```
 
 
-XX corbiculae loads had DNA extracted and underwent hyb-seq, a total of `r toString(toseq)` corbiculae samples were sequenced, XX reads were recovered from sequencing. After trimming XX sequences remained. `r toString(sum(krak[krak$Classified == 'C',]$n))` reads were matched using Kraken, of the reads classified by Kraken `r toString(sum(brack$reads))` reads were matched using Bracken, of the reads classified by Kraken `r toString(sum(blast$Total_seqs))` reads were matched using BLAST. The number of reads per sequence varied widely (min = , $\bar{x}$, max = ), the number of loci recovered per sample ranged from (min = , max = ), and the number of reads from loci also ranged widely () **APPENDIX X**. 
+54 corbiculae loads had DNA extracted and underwent hyb-seq, a total of `r toString(length(raw_seqs))` corbiculae samples were sequenced, `r toString(sum(raw_seqs))` reads were recovered from sequencing. The number of reads per sequence varied widely (min = `r toString(min(raw_seqs))`, $\bar{x}$ = `r toString(mean(raw_seqs))`, Mdn = `r toString(median(raw_seqs))`, max = `r toString(max(raw_seqs))`), the number of loci recovered per sample ranged from (min = , max = ), and the number of reads from loci also ranged widely () **APPENDIX X**.. After trimming XX sequences remained. `r toString(sum(krak[krak$Classified == 'C',]$n))` reads were matched using Kraken, of the reads classified by Kraken `r toString(sum(brack$reads))` reads were matched using Bracken, of the reads classified by Kraken `r toString(sum(blast$Total_seqs))` reads were matched using BLAST.  
 
-Kraken2 was able to identify the species richness of pollen samples ($\bar{x}$ = , min = , max = ). Bracken was able to estimate the relative abundance of pollen grains in each sample (max % of any species, $\bar{x}$ % of all species, min % trace amounts detected). BLAST, the most thorough sequence alignment algorithm...
-
+Based upon subjective review of the three classifiers, BLAST was chosen as the classification method which yielded the most probable results, and it's values were used for all analyses. 
 
 ```{r, eval = F}
-rm(toseq)
+rm(toseq, krak, brack, blast)
 ```
 
 ## 3.4 | Temporal Analyses
@@ -350,6 +367,11 @@ In regards to better understanding the foraging preferences of *Bombus* feeding 
 **DATA AVAILABILITY STATEMENT** The queries required to download all data used in this project are located in... All novel sequencing data are located at NCBI... 
 
 **ORCID**
+
+Paul CaraDonna https://orcid.org/0000-0003-3517-9090
+Jeremie Fant https://orcid.org/0000-0001-9276-1111
+Jane Ogilvie https://orcid.org/0000-0001-8546-0417
+Sophie Taddeo https://orcid.org/0000-0002-7789-1417
 
 # References
 
