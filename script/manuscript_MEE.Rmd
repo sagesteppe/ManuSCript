@@ -101,7 +101,7 @@ Libraries were pooled and enriched with the Angiosperms 353 probe kit V.4 (Arbor
 ###  2.2.5 | Computational Processes and Analyses. 
 ####  2.2.5.1 | Reference Library Data Processing
 
-Sequences were processed using Trimmomatic, which removed sequence adapters, clipped the first 3 bp, discarding reads less than 36 bp, and removing reads if their average PHRED score dropped beneath 20 over a window of 5 bp (@bolger2014trimmomatic). Contigs were generated using HybPiper using target files created by M353 (@johnson2016hybpiper, @mclay2021new). 
+Sequences were processed using Trimmomatic, which removed sequence adapters, clipped the first 3 bp, discarding reads less than 36 bp, and removing reads if their average PHRED score dropped beneath 20 over a window of 5 bp (@bolger2014trimmomatic, @tange_2022_6377950). Contigs were generated using HybPiper using target files created by M353 (@johnson2016hybpiper, @mclay2021new). 
 
 #### 2.2.5.2 | Sequence Identification
 
@@ -193,19 +193,34 @@ d <- c('Salix', 'Boechera')
 ```
 
 
-Using the fuchsin jelly preparation and light microscopic analyses of grains and scoring of 10 character states resulted in the establishment of 28 morphotypes which grains could be reliably classified into. *APPENDIX 7*. 60 Samples were counted and based on rarefaction **had over % of expected morphotypes found** (morphotype richness, mean = 4.5, median = 4, min = 1, max = 9), all samples had expected morphotype diversity reach the asymptote *APPENDIX 8*. The number of counted pollen grains in each sample range from (mean = 2788.685, median = 1453, max = 16293). 
+Using the fuchsin jelly preparation and light microscopic analyses of grains and scoring of 10 character states resulted in the establishment of 28 morphotypes which grains could be classified into. *APPENDIX 7*. 60 samples were counted and based on rarefaction **had over % of expected morphotypes found** (morphotype richness, mean = 4.5, median = 4, min = 1, max = 9), all samples had expected morphotype diversity reach the asymptote *APPENDIX 8*. The number of counted pollen grains in each sample range from ($\bar{x}$ = 2788.685, median = 1453, max = 16,293). 
 
 ## 3.3 | Metabarcoding Pollen identification
 
-XX corbiculae loads had DNA extracted and underwent hyb-seq, a total of XX corbiculae samples were sequenced, XX reads were recovered from sequencing. After trimming XX seqs remained. XX reads were matched using Kraken, of the reads classified by Kraken XX reads were matched using Bracken, of the reads classified by Kraken XX reads were matched using BLAST. The number of reads per sequence varied widely (min = , $\bar{x}$, max = ), the number of loci recovered per sample ranged from (min = , max = ), and the number of reads from loci also ranged widely () **APPENDIX X**. 
+```{r eval = F}
+toseq <- read.csv('../data/Benkendorf_combos_fixed.csv') |> 
+  filter(!str_detect(extract_id, '[aA-zZ]')) %>% nrow()
+
+krak <- read.csv('../data/kraken_proc_reads.csv')
+brack <- read.csv('../data/bracken_proc_reads.csv')
+blast <- read.csv('../data/blast_proc_reads.csv')
+```
+
+
+XX corbiculae loads had DNA extracted and underwent hyb-seq, a total of `r toString(toseq)` corbiculae samples were sequenced, XX reads were recovered from sequencing. After trimming XX sequences remained. `r toString(sum(krak[krak$Classified == 'C',]$n))` reads were matched using Kraken, of the reads classified by Kraken `r toString(sum(brack$reads))` reads were matched using Bracken, of the reads classified by Kraken `r toString(sum(blast$Total_seqs))` reads were matched using BLAST. The number of reads per sequence varied widely (min = , $\bar{x}$, max = ), the number of loci recovered per sample ranged from (min = , max = ), and the number of reads from loci also ranged widely () **APPENDIX X**. 
 
 Kraken2 was able to identify the species richness of pollen samples ($\bar{x}$ = , min = , max = ). Bracken was able to estimate the relative abundance of pollen grains in each sample (max % of any species, $\bar{x}$ % of all species, min % trace amounts detected). BLAST, the most thorough sequence alignment algorithm...
+
+
+```{r, eval = F}
+rm(toseq)
+```
 
 ## 3.4 | Temporal Analyses
 
 The first date of modeled snow melt in the Gothic area (n = 17, $\bar{x}$ = 137.9, Mdn = 135, 3rd quantile = 151), and the first date of a consistent winter snow base (n = 17, $\bar{x}$ = 299.9, Mdn = 300, 1st quantile = 291) from 2000-2017, were used as delimiters for the inclusions of herbarium records in modelling. Of the 500 species predicted likely present in the area via logistic regression, 332 species (64.4%) with more than 10 records in the focal level 4 ecoregions ($\bar{x}$ = 35.01657, Mdn = 35, max = 96) had weibull estimates calculated, an additional 56 species (11.2%) with enough contributing records from the 'Sedimentary Mid-Elevation Forests', a large ecoregion in general just beneath the elevation bands occupied by the five ecoregions around the study area had weibull estimates also calculated ($\bar{x}$ = 13.86885, Mdn = 13, max = 24).
 
-Only 58 of these 388 species (n = 34.56897, Mdn = 31) were able to be compared to ground truth data from long term (1970 ? - 2016 ?) datasets.
+Only 58 of these 388 species (n = 34.56897, Mdn = 31) were able to be compared to ground truth data from long term (1974–2012) datasets.
 
 ```{r phenology estimates, echo=F, fig.cap="A caption", out.width = '75%'}
 knitr::include_graphics("../graphics/plots/phenology_estimates_10_90.png")
@@ -257,6 +272,8 @@ t_spp_i <- bee_obs %>%  group_by(species) %>%  filter(species != 'unknown') %>% 
 ```
 
 The six sites were surveyed for a total of `r toString(sum(obs_time$tot.obs.length)/60)` hours from `r s`-`r e`. A total of `r toString(sum(bee_obs$interactions))` queen-pollen foraging interactions were observed (range per bee species by week min = `r toString(min(t_b_wk$n))`, $\bar{x}$  = `r toString(round(mean(t_b_wk$n), 2))`, Mdn = `r toString(median(t_b_wk$n))`, max = `r toString(max(t_b_wk$n))`), with a range of total observed interactions per bee species across this time period (min = `r toString(min(t_b_b$n))`, $\bar{x}$  = `r toString(round(mean(t_b_b$n), 2))`, Mdn = `r toString(median(t_b_b$n))`, max = `r toString(max(t_b_b$n))`). Plants varied widely in the number of interactions which they partook in with each species of bee (range per plant species by week min = `r toString(min(t_b_wk_pl$n))`, $\bar{x}$  = `r toString(round(mean(t_b_wk_pl$n), 2))`, Mdn = `r toString(median(t_b_wk_pl$n))`, max = `r toString(max(t_b_wk_pl$n))`), with a range of total observed interactions per plant species over this time period (min = `r toString(min(t_b_pl$n))`, $\bar{x}$  = `r toString(round(mean(t_b_pl$n), 2))`, Mdn = `r toString(median(t_b_pl$n))`, max = `r toString(max(t_b_pl$n))`). The number of plant species which bees were observed interacting with varied more narrowly (min = `r toString(min(t_spp_i$n))`, $\bar{x}$  = `r toString(round(mean(t_spp_i$n), 2))`, Mdn = `r toString(median(t_spp_i$n))`, max = `r toString(max(t_spp_i$n))`).
+
+A total of 66 corbiculae loads were collected from Bees, 64 of them from Queens. 
 
 ```{r echo = F}
 rm(bee_obs, flr_ranks, obs_time, t_b_b, t_b_wk, t_b_pl, t_b_wk_pl, e, s, files, t_spp_i)
@@ -318,7 +335,7 @@ Future Directions:
 
 While at the time of writing this there are limited A353 sequence data, the Plant and Fungal Trees of Life (PAFTOL) project, which is sequencing at least a species of each genera in the plant Kingdom will produce sequence data from over 14,000 species. Given the extant publicly available genomic data, we conservatively estimate that upon completion of PAFTOL there will be no fewer than 15,500 species (4.4% of all ca. 350,000 plant species) for which sequence data of a majority of these loci exist (@govaerts2021world). Accordingly, projects in the near future may increase the number of metagenomics samples while decreasing the need to create their own plant sequence reference libraries. 
   As a result of PAFTOL the first ever comprehensive phylogenetic hypotheses of all plant genera will be presented. In tandem with an increased number of digitised and geo-referenced herbarium specimens, and monitoring programs in natural areas, we believe that geo-informatics, and phylogenetic inference will increase the ability of researchers applying this technique to identifying sequence reads. 
-  While our approach emphasises the use of this metagenomic technique for the purpose of identifying pollen, I argue the template and resources we provide here make this approach a suitable candidate for many plant metagenomic tasks. While we did not have the resources to explore the possibility of characterising infraspecific characteristics, preliminary results from others (Wenzell et al. in prep., Loke et al. in prep) indicate a possibility for these probes to also collect data at the level of populations and individuals. **
+  While our approach emphasises the use of this metagenomic technique for the purpose of identifying pollen, I argue the template and resources we provide here make this approach a suitable candidate for many plant metagenomic tasks. While we did not have the resources to explore the possibility of characterising infraspecific characteristics, preliminary results from others (@wenzell2021incomplete, Loke et al. in prep) indicate a possibility for these probes to also collect data at the level of populations and individuals. **
   
 In regards to better understanding the foraging preferences of *Bombus* feeding in subalpine ecosystems. **JANE AND PAUL SET UP FOR NEAR FUTURE RESULTS?**
 
@@ -336,11 +353,32 @@ In regards to better understanding the foraging preferences of *Bombus* feeding 
 
 # References
 
+
+
+
+
+
+
+
+
 # Supporting 
 
 
 
-```{r APPENDIX NUMBER LOCI WITH READS USED IN MATCHING, echo = F, fig.height=2.7, fig.width=9}
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r APPENDIX NUMBER LOCI WITH READS USED IN MATCHING, echo = F}
 knitr::include_graphics('../graphics/plots/Percent_loci_matched_by_sample.png')
 ```
 
@@ -349,6 +387,36 @@ knitr::include_graphics('../graphics/plots/Percent_loci_matched_by_sample.png')
 knitr::include_graphics('../graphics/assorted/RMBL_pollen_key.pdf')
 ```
 
+
+Layer                   Description                            Source
+----    ----------------------------------------------  ---------------------
+1.             Mean annual cloudiness - MODIS            Wilson et al. 2016
+2.           Cloudiness seasonality 1 - MODIS            Wilson et al. 2016 
+3.           Cloudiness seasonality 2 - MODIS            Wilson et al. 2016 
+4.           Cloudiness seasonality 3 - MODIS            Wilson et al. 2016
+5.          Beginning of the frost-free period               Wang et al.
+6.             Climatic moisture deficit                     Wang et al.
+7.             Degree-days above 5C from                     Wang et al.
+8.             Mean annual precipitation                     Wang et al.
+9.          Mean annual precipitation as snow                Wang et al.
+10.             Temperature seasonality                      Wang et al.
+11.       2015 Percent Grass/Herbaceous cover - MODIS         (MOD44B)
+12.      2015 Percent Tree cover from Landsat 7/8              (GLCF)
+13.       Soil probability of bedrock (R Horizon)             SoilGrids
+14.         Soil organic carbon (Tonnes / ha)                 SoilGrids
+15.              Surface soil pH in H2O                       SoilGrids
+16.             Surface soil percent sand                     SoilGrids
+17.                   Soil USDA class                         SoilGrids
+18.                Topographic elevation                    EarthEnv DEM
+19.          Topographic elevation, moving window.          EarthEnv DEM
+20.            Topographic percent slope                    EarthEnv DEM 
+21.            Topographic wetness index                    EarthEnv DEM 
+22.             Topographic aspect from                     EarthEnv DEM
+23.      Annual potential solar radiation computed             r.sun
+24.       Estimated actual (w/-cloud) solar radiation  r.sun / Wilson et al. 2016
+25.       Log-transformed distance to surface water   Global Surface Water Explorer
+26.             Percent surface water                 Global Surface Water Explorer 
+----    ----------------------------------------------  ---------------------
 
 ```{r APPENDIX MORPHOTYPE RICHNESS AND ABUNDANCE, echo= F, fig.height=2.7, fig.width=9}
 knitr::include_graphics('../graphics/plots/species_richness_rarefaction.png')
