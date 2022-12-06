@@ -1,3 +1,11 @@
+    171982 ./9_S98_L002_R1_001_paired.fastq.gz
+    209173 ./6_S95_L002_R1_001_paired.fastq.gz
+    213328 ./6_S95_L002_R2_001_paired.fastq.gz
+    177029 ./9_S98_L002_R2_001_paired.fastq.gz
+     47312 ./3_S117_L002_R1_001_paired.fastq.gz
+    424882 ./4_S93_L002_R2_001_paired.fastq.gz
+    413044 ./4_S93_L002_R1_001_paired.fastq.gz
+     47943 ./3_S117_L002_R2_001_paired.fastq.gz
     270517 ./56_S139_L002_R1_001_paired.fastq.gz
     142855 ./25_S104_L002_R2_001_paired.fastq.gz
     285886 ./12_S119_L002_R1_001_paired.fastq.gz
@@ -78,4 +86,4 @@
    1005096 ./31_S124_L002_R1_001_paired.fastq.gz
     736930 ./41_S126_L002_R2_001_paired.fastq.gz
     233500 ./19_S122_L002_R1_001_paired.fastq.gz
-  29304691 total
+  31009384 total

@@ -1,10 +1,17 @@
 ---
-title: Plant Metagenomic Barcoding of Pollen Loads Offers Insights on the Foraging
-  Patterns of Queen Bumble Bees in the Southern Rocky Mountains, U.S.A.
+title: Metagenomic Barcoding of Pollen Loads Offers Insights on the Foraging
+  Patterns of Queen Bumble Bees
 author: |
   Reed Clark Benkendorf^[Correspondence: reedbenkendorf2021@u.northwestern.edu] $^1$$^,$$^2$, Jane E. Ogilvie $^3$, Emily J. Woodworth $^1$$^,$$^2$, Sophie Taddeo $^1$$^,$$^2$, Paul J. CaraDonna $^1$$^,$$^2$$^,$$^3$, Jeremie B. Fant $^1$$^,$$^2$ | $^1$Chicago Botanic Garden, 1000 Lake Cook Road, Glencoe, Illinois 60022 USA,  $^2$Plant Biology and Conservation, Northwestern University, Evanston, IL 60208, USA, $^3$ Rocky Mountain Biological Laboratory, P.O. Box 519, Crested Butte, CO 81224, USA
 abstract: |
-  an abstract will be written to fill this space. it will have from 4-6 numbered sections. like 1) A very broad overall identifying organisms is hard and we dont have time. 2) to try and figure this out we used whoa molecular stuff and holy shit amounts of computing 3) Our results showed we were able to do some cool things 4) you should try this out, because it was pretty cool and helped us perform natural history on steroids.
+  .    
+  1) DNA Barcoding has been remarkably successful in nearly all kingdoms of life and has allowed for the rapid analysis of ecological assemblies. Successful DNA barcoding in the plant kingdom has been more difficult than other kingdoms. Due to this understanding plants in ecological contexts and understandings of their synecology in some instances may begin to lag behind other kingdoms.  
+  2) Here we utilize hyb-seq, museum studies, and species distribution modelling, to detect the plant species present in pollen loads collected from Queen Bumble Bees.  
+  3) We show that hyb-seq using the Angiosperms 353 probes offers significant promise to metagenomic approaches in real world scenarios.  
+  4) We conclude that these probes offer promise for the identification of plant tissue in both single sample, and metasample contexts.  
+    
+  **KEYWORDS**    
+   DNA barcodes, Plantae, metagenomics, molecular barcoding, species distribution modelling, Angiosperms353, bombus, queen foraging.
 output:
   pdf_document: default
   toc: no
@@ -31,7 +38,7 @@ library(tidyverse)
 library(bookdown)
 library(knitr)
 suppressWarnings(library(kableExtra))
-
+pNumC <- function(...) prettyNum(...,big.mark = ',')
 #print(citation('spdep'), bibtex=TRUE)
 ```
 
@@ -77,7 +84,7 @@ Modelling: Random Forest and Boosted Regression Trees, were sub sampled with 30%
 
 ## 2.2 | Molecular Lab Work
 
-All lab work was carried out at The Daniel F. and Ada L. Rice Plant Conservation Science Center at the Chicago Botanic Garden, Glencoe, Illinois. 
+All lab work was carried out at The Daniel F. and Ada L. Rice Plant Conservation Science Center at the Chicago Botanic Garden, Glencoe, Illinois, U.S.A. 
 
 #### 2.2.1 | Reference Plant Library Generation
 
@@ -85,11 +92,11 @@ Using 5 years of observational data on *Bombus* Queen Bee foraging at these stud
 
 #### 2.2.2 | Plant Genomic DNA Extraction
 
-Plant genomic DNA was isolated from ~ 1 cm2 of leaf tissue from silica-gel dried or herbarium material using a modified cetyltrimethylammonium (CTAB) protocol (@doylesCTAB) that included  two chloroform washes. DNA was quantified using a Nanodrop 2000 (Thermo Fisher Scientific, Waltham, Massachusetts, USA) and Qubit fluorometer (Thermo Fisher Scientific).
+Plant genomic DNA was isolated from ~ 1 cm^2^ of leaf tissue from silica-gel dried or herbarium material using a modified cetyltrimethylammonium (CTAB) protocol (@doylesCTAB) that included two chloroform washes. DNA was quantified using a Nanodrop 2000 (Thermo Fisher Scientific, Waltham, Massachusetts, USA) and Qubit fluorometer (Thermo Fisher Scientific).
 
 #### 2.2.3 | Pollen Genomic DNA Extraction
 
-Pollen genomic DNA was extracted from corbiculae using a CTAB based protocol modified from Lahlamgiahi et al. and Guertler et al. (2014, 2014). A SDS extraction buffer (350µL , 100mM Tris-HCl, 50 mM EDTA, 50 mM NaCl, 10% SDS v/v., pH 7.5) was added followed by vortexing to allow dissolution of corbiculae. Pollen grains were then macerated with Kontes Pellet Pestles, and the tip of these washed with 130 µL of the SDS extraction buffer, samples were then incubated for 1 hour at 30°C. This was followed by the addition of 10% CTAB solution (450ul, of 20 mM Tris-Cl pH. 8.0, 1.4 M NaCl, 10 mM EDTA pH 7.5, 10% CTAB, 5% PVP, ~85% Deionized water) and RNAse (10 uL of 10 mg/mL) and samples were incubated for 40 minutes at 37°C, on heat block (Multi-Blok, Thermo Fisher Scientific, Waltham Massachusetts) set to 40°C. After 20 minutes incubation, Proteinase K (15 µL of 20mg/ml) and  DTT (12.5 µL of 1M in water) were added, and the samples were further incubated at 60°c for 1 hour. Samples were then incubated overnight at 40°C. 500 µL of Phenol-Chloroform-Isoamyl alcohol (25:24:1) were added, vortexed, and centrifuged at 10,000 rpm for 10 minutes and the aqueous phase was pipetted to a 1.5 ml centrifuge tube.
+Pollen genomic DNA was extracted from corbiculae using a CTAB based protocol modified from Lahlamgiahi et al. and Guertler et al. (2014, 2014). A SDS extraction buffer (350µL , 100mM Tris-HCl, 50 mM EDTA, 50 mM NaCl, 10% SDS v/v., pH 7.5) was added followed by vortexing to allow dissolution of corbiculae. Pollen grains were then macerated with Kontes Pellet Pestles, and the tip of these washed with 130 µL of the SDS extraction buffer, samples were then incubated for 1 hour at 30°C. This was followed by the addition of 10% CTAB solution (450ul, of 20 mM Tris-Cl pH. 8.0, 1.4 M NaCl, 10 mM EDTA pH 7.5, 10% CTAB, 5% PVP, ~85% Deionized water) and RNAse (10 uL of 10 mg/mL) and samples were incubated for 40 minutes at 37°^C^, on heat block (Multi-Blok, Thermo Fisher Scientific, Waltham Massachusetts) set to 40°C. After 20 minutes incubation, Proteinase K (15 µL of 20mg/ml) and  DTT (12.5 µL of 1M in water) were added, and the samples were further incubated at 60°c for 1 hour. Samples were then incubated overnight at 40°^C^. 500 µL of Phenol-Chloroform-Isoamyl alcohol (25:24:1) were added, vortexed, and centrifuged at 10,000 rpm for 10 minutes and the aqueous phase was pipetted to a 1.5 ml centrifuge tube.
 
 To precipitate the DNA, chilled Isopropyl alcohol & 3 mM Sodium acetate (5:1) equivalent to 2/3 of the volume of sample were added, with 1 hour of chilling at -20°C, followed by 10 minutes of centrifuging at 13,000 rpm. The supernatant was pipetted to a new 1.5 ml centrifuge tube, and 70% EtOH (400 µL) were added before chilling at -20°C for 20 minutes followed by centrifugation at 13,000 rpm for 10 minutes. Both tubes were then washed with  75% EtOH (400 µL), inverted, centrifuged at 13,000 rpm for 4 minutes, and the solution discarded, then washed with 95% EtOH (400 µL) , inverted, centrifuged at 13,000 rpm for 4 minutes, and the solution discarded. Pellets were dried at room temperature overnight before resuspension in Nuclease free H2O.  Extractions were assessed using a Nanodrop 2000 (Thermo Fisher Scientific) and Qubit fluorometer (Thermo Fisher Scientific). DNA extracts were then cleaned using 2:1 v./v. Sera-Mag beads (Cytiva, Little Chalfont, UK) to solute following the manufacturer's protocol, eluted in 0.5x TE, and the eluent allowed to reduce by half volume in ambient conditions. DNA was quantified using a Qubit fluorometer. 
 
@@ -172,13 +179,13 @@ read.csv('../data/Pa_conting_table.csv') %>%
 rm(logR_dat, dat)
 ```
 
-The median (25.009 km) of the logistic regression assessing the probability of occurrence of a species record as a function of distance from the study area was used as a threshold distance to include species for distribution modelling. A 2-sample test for equality of proportions with continuity correction (X-squared = 13.254, df = 1, p-value = 0.000136, **95% CI 0.04-1.00  ?** ) was used to test whether more of the records located in the broad ecological sites present at the field station, between the distance of the median (25.009 km) to the third quantile (ca 43.830 km) of the regression distance, where true presences at the field station. Including these records would have resulted in modelling an additional 222 species distributions of which 30 are true presences, we declined to model these taxa.  
+The median (25.009 km) of the logistic regression assessing the probability of occurrence of a species record as a function of distance from the study area was used as a threshold distance to include species for distribution modelling. A 2-sample test for equality of proportions with continuity correction (X-squared = 13.254, df = 1, p-value = 0.000136, 95% CI 0.04-1.00) was used to test whether more of the records located in the broad ecological sites present at the field station, between the distance of the median (25.009 km) to the third quantile (ca 43.830 km) of the regression distance, where true presences at the field station. Including these records would have resulted in modelling an additional 222 species distributions of which 30 are true presences these taxa were not modelled.  
 
 Across the entire spatial domain of modelling all ensembled models (n = 968) had an accuracy of 0.84 (95% CI 0.8356 - 0.8443), kappa 0.68, p-value < 0.001, sensitivity = 0.80, specificity = 0.87.
 
-At the field site, of the 554 vascular plants with biotic pollination syndromes, the 493 ML ensembles accurately predicted the presence of 362 (65.3%), incorrectly predicted the presence of 64 (11.6%), incorrectly predicted 34 true presences (6.1%) as being absent, and correctly predicted the true absence of 33 (6.0%). The balanced accuracy of the ensembled models is 0.627 (Sensitivity = 0.340, Specificity 0.914), a P VALUE IS NOT REPORTED AS THE VALUES WERE MANUALLY PARSED INTO CLASSES BASED ON SUITABILITY PER UNIT AREA.  Of the Of the 554 vascular plants with biotic pollination syndromes, the 475 LM ensembles accurately predicted the presence of 286 (51.6%), incorrectly predicted the presence of 41 (14.3%), incorrectly predicted 93 true presences (16.8%) as being absent, and correctly predicted the true absence of 55 (9.9%). The balanced accuracy of the ensembled models is 0.664 (Sensitivity = 0.573, Specificity 0.754), a P VALUE IS NOT REPORTED AS THE VALUES WERE MANUALLY PARSED INTO CLASSES BASED ON SUITABILITY PER UNIT AREA. Of the 554 vascular plants with biotic pollination syndromes in the flora 13 (2.3%) were in the Orchid family and 41 (7.4%) are non-natives, both of which are restricted from the database, and can only reduce the number of true predicted presences by roughly 10%. 
+At the field site, of the 554 vascular plants with biotic pollination syndromes, the 493 ML ensembles accurately predicted the presence of 362 (65.3%), incorrectly predicted the presence of 64 (11.6%), incorrectly predicted 34 true presences (6.1%) as being absent, and correctly predicted the true absence of 33 (6.0%). The balanced accuracy of the ensembled models is 0.627 (Sensitivity = 0.340, Specificity 0.914).  Of the Of the 554 vascular plants with biotic pollination syndromes, the 475 LM ensembles accurately predicted the presence of 286 (51.6%), incorrectly predicted the presence of 41 (14.3%), incorrectly predicted 93 true presences (16.8%) as being absent, and correctly predicted the true absence of 55 (9.9%). The balanced accuracy of the ensembled models is 0.664 (Sensitivity = 0.573, Specificity 0.754). Of the 554 vascular plants with biotic pollination syndromes in the flora 13 (2.3%) were in the Orchid family and 41 (7.4%) are non-natives, both of which are restricted from the database, and can only reduce the number of true predicted presences by roughly 10%. 
 
-At the six study plots, of the 117 plant species identified to the species level across the spatial extents of all plots and duration of queen bee activity, the ML ensembles predicted the presence of 105 (89.7%) of them, and LM ensembles 102 (87.2). Of the missing species two (1.7%) are Orchids, six (5.1%) are non-native, and one (0.85%) is of contested taxonomic standing, all of which (7.65%) are restricted from the initial query database. 
+At the six study plots, of the 117 plant species identified to the species level across the spatial extents of all plots and duration of queen bee activity, the ML ensembles predicted the presence of 105 (89.7%) of them, and LM ensembles 102 (87.2%). Of the missing species two (1.7%) are Orchids, six (5.1%) are non-native, and one (0.85%) is of contested taxonomic standing, all of which (7.65%) are restricted from the initial query database. 
 
 ## 3.2 | Microscopic Pollen identification
 ```{r, echo = F}
@@ -193,20 +200,26 @@ d <- c('Salix', 'Boechera')
 ```
 
 
-Using the fuchsin jelly preparation and light microscopic analyses of grains and scoring of 10 character states resulted in the establishment of 28 morphotypes which grains could be classified into. *APPENDIX 7*. 60 samples were counted and based on rarefaction **had over % of expected morphotypes found** (morphotype richness, mean = 4.5, median = 4, min = 1, max = 9), all samples had expected morphotype diversity reach the asymptote *APPENDIX 8*. The number of counted pollen grains in each sample range from ($\bar{x}$ = 2788.685, median = 1453, max = 16,293). 
+Using the fuchsin jelly preparation and light microscopic analyses of grains and scoring of 10 character states resulted in the establishment of 28 morphotypes which grains could be classified into. *APPENDIX 7*. 60 samples were counted and based on rarefaction **had over % of expected morphotypes found** (morphotype richness, $\bar{x}$ = 4.5, Mdn = 4, min = 1, max = 9), all samples had expected morphotype diversity reach the asymptote *APPENDIX 8*. The number of counted pollen grains in each sample range from (*MIN* - 16,293, $\bar{x}$ = 2788.685, Mdn = 1453). 
 
 ## 3.3 | Metabarcoding Pollen identification
 
-```{sh Get number of raw reads for metagenome samples, eval = F}
+```{sh Get number of raw and trimmed reads for metagenome samples, eval = F, echo = F}
 
 cd ~/sequenceData/Original_zip
-files=$(find -type f -name "[0-9][0-9]_S[0-9]*_paired.fastq.gz")
-
+files=$(find -type f -name "[0-9]_S[0-9]*_paired.fastq.gz") # doesnt support {2}
+files1=$(find -type f -name '[0-9][0-9]_S[0-9]*_paired.fastq.gz')
+files="${files} ${files1}"
+echo $files
 # seqs per each sample , need divide by 4 on import
 wc -l  $files > '/hdd/yun master/MEE_manuscript/data/raw_reads_metagenome_seq.txt'
+
+cd ../trimmed_metagenomic
+files=$(find  -maxdepth 1 -name '*gz')
+wc -l  $files  > '/hdd/yun master/MEE_manuscript/data/trimmed_reads_metagenome_seq.txt'
 ```
 
-```{r eval = F}
+```{r sequence numbers, echo = F}
 
 raw_seqs <- read.delim('../data/raw_reads_metagenome_seq.txt', header = F) %>% 
   mutate(V1 = str_trim(V1)) %>% 
@@ -219,25 +232,45 @@ raw_seqs <- read.delim('../data/raw_reads_metagenome_seq.txt', header = F) %>%
   distinct(totalReads) %>% 
   pull(totalReads)
 
+trimmed_seqs <- read.delim('../data/trimmed_reads_metagenome_seq.txt', header = F) %>% 
+  mutate(V1 = str_trim(V1)) %>% 
+  separate(V1, c('seq', 'sampleFR'), sep = ' ') %>% 
+  mutate(seq = round(as.numeric(seq)/4),
+         sample = str_extract(sampleFR, '.*paired')) %>% 
+  filter(sampleFR != 'total') %>% 
+  group_by(sample) %>% 
+  mutate(totalReads = sum(seq)) %>% 
+  distinct(totalReads) %>% 
+  pull(totalReads)
+
 krak <- read.csv('../data/kraken_proc_reads.csv')
 brack <- read.csv('../data/bracken_proc_reads.csv')
 blast <- read.csv('../data/blast_proc_reads.csv')
+loci <- read.csv('../data/reads_per_loci.csv') %>% group_by(Sample)
+  
+no_loci <- loci %>% group_by(Sample) %>% count(name = 'no_loci')
+no_reads <- loci %>% group_by(loci) %>% summarize(readsLoci = sum(n))
+
+rm(prettyNum)
 ```
 
+54 corbiculae loads had DNA extracted and underwent various steps towards hyb-seq, in the end a total of `r toString(length(raw_seqs))` corbiculae samples were sequenced, `r pNumC(sum(raw_seqs))` reads were recovered from sequencing. The number of reads per sequence varied widely (range = `r pNumC(min(raw_seqs))` - `r pNumC(max(raw_seqs))`, $\bar{x}$ = `r pNumC(round(mean(raw_seqs),1))`, Mdn = `r pNumC(median(raw_seqs))`). Of the possible 353 loci, the number which were recovered from each sample, and informative to BLAST were range = `r toString(min(no_loci$no_loci))` - `r toString(max(no_loci$no_loci))`, $\bar{x}$ = `r toString(round(mean(no_loci$no_loci), 1))`, Mdn = `r toString(median(no_loci$no_loci))`. The number of reads per loci from across all samples had a range of `r min(no_reads$readsLoci)` - `r pNumC(max(no_reads$readsLoci))`, $\bar{x}$ = `r pNumC(round(mean(no_reads$readsLoci), 1))`, Mdn = `r pNumC(median(no_reads$readsLoci))`.
 
-54 corbiculae loads had DNA extracted and underwent hyb-seq, a total of `r toString(length(raw_seqs))` corbiculae samples were sequenced, `r toString(sum(raw_seqs))` reads were recovered from sequencing. The number of reads per sequence varied widely (min = `r toString(min(raw_seqs))`, $\bar{x}$ = `r toString(mean(raw_seqs))`, Mdn = `r toString(median(raw_seqs))`, max = `r toString(max(raw_seqs))`), the number of loci recovered per sample ranged from (min = , max = ), and the number of reads from loci also ranged widely () **APPENDIX X**.. After trimming XX sequences remained. `r toString(sum(krak[krak$Classified == 'C',]$n))` reads were matched using Kraken, of the reads classified by Kraken `r toString(sum(brack$reads))` reads were matched using Bracken, of the reads classified by Kraken `r toString(sum(blast$Total_seqs))` reads were matched using BLAST.  
+**APPENDIX X**.
 
-Based upon subjective review of the three classifiers, BLAST was chosen as the classification method which yielded the most probable results, and it's values were used for all analyses. 
+After trimming `r pNumC(sum(trimmed_seqs))` sequences remained. `r pNumC(sum(krak[krak$Classified == 'C',]$n))` reads were matched using Kraken, of the reads classified by Kraken `r pNumC(sum(brack$reads))` reads were matched using Bracken, of the reads classified by Kraken `r pNumC(sum(blast$Total_seqs))` reads were matched using BLAST.  
 
-```{r, eval = F}
-rm(toseq, krak, brack, blast)
+Based upon subjective review of the three classifiers, BLAST was chosen as the classification method which yielded the most probable results, and it's values were used for all subsequent analyses. 
+
+```{r, eval = F, echo = F}
+rm(toseq, krak, brack, blast, loci, no_loci)
 ```
 
 ## 3.4 | Temporal Analyses
 
-The first date of modeled snow melt in the Gothic area (n = 17, $\bar{x}$ = 137.9, Mdn = 135, 3rd quantile = 151), and the first date of a consistent winter snow base (n = 17, $\bar{x}$ = 299.9, Mdn = 300, 1st quantile = 291) from 2000-2017, were used as delimiters for the inclusions of herbarium records in modelling. Of the 500 species predicted likely present in the area via logistic regression, 332 species (64.4%) with more than 10 records in the focal level 4 ecoregions ($\bar{x}$ = 35.01657, Mdn = 35, max = 96) had weibull estimates calculated, an additional 56 species (11.2%) with enough contributing records from the 'Sedimentary Mid-Elevation Forests', a large ecoregion in general just beneath the elevation bands occupied by the five ecoregions around the study area had weibull estimates also calculated ($\bar{x}$ = 13.86885, Mdn = 13, max = 24).
+The first date of modeled snow melt in the Gothic area (n = 17, $\bar{x}$ = 137.9, Mdn = 135, 3rd quantile = 151), and the first date of a consistent winter snow base (n = 17, $\bar{x}$ = 299.9, Mdn = 300, 1st quantile = 291) from 2000-2017, were used as delimiters for the inclusions of herbarium records in modelling. Of the **500** species predicted likely present in the area via logistic regression, 332 species (64.4%) with more than 10 records in the focal level 4 ecoregions ($\bar{x}$ = 35.01657, Mdn = 35, max = 96) had weibull estimates calculated, an additional 56 species (11.2%) with enough contributing records from the 'Sedimentary Mid-Elevation Forests', a large ecoregion in general just beneath the elevation bands occupied by the five ecoregions around the study area had weibull estimates also calculated ($\bar{x}$ = 13.86885, Mdn = 13, max = 24).
 
-Only 58 of these 388 species (n = 34.56897, Mdn = 31) were able to be compared to ground truth data from long term (1974–2012) datasets.
+Only 58 of these 388 species (n = 34.56897, Mdn = 31) were able to be compared to ground truth data from the long term (1974–2012) dataset. Of these species relatively high accord was observed between the long-term ground truthed dataset, and the modelled species. 
 
 ```{r phenology estimates, echo=F, fig.cap="A caption", out.width = '75%'}
 knitr::include_graphics("../graphics/plots/phenology_estimates_10_90.png")
@@ -288,7 +321,7 @@ t_spp_i <- bee_obs %>%  group_by(species) %>%  filter(species != 'unknown') %>% 
 
 ```
 
-The six sites were surveyed for a total of `r toString(sum(obs_time$tot.obs.length)/60)` hours from `r s`-`r e`. A total of `r toString(sum(bee_obs$interactions))` queen-pollen foraging interactions were observed (range per bee species by week min = `r toString(min(t_b_wk$n))`, $\bar{x}$  = `r toString(round(mean(t_b_wk$n), 2))`, Mdn = `r toString(median(t_b_wk$n))`, max = `r toString(max(t_b_wk$n))`), with a range of total observed interactions per bee species across this time period (min = `r toString(min(t_b_b$n))`, $\bar{x}$  = `r toString(round(mean(t_b_b$n), 2))`, Mdn = `r toString(median(t_b_b$n))`, max = `r toString(max(t_b_b$n))`). Plants varied widely in the number of interactions which they partook in with each species of bee (range per plant species by week min = `r toString(min(t_b_wk_pl$n))`, $\bar{x}$  = `r toString(round(mean(t_b_wk_pl$n), 2))`, Mdn = `r toString(median(t_b_wk_pl$n))`, max = `r toString(max(t_b_wk_pl$n))`), with a range of total observed interactions per plant species over this time period (min = `r toString(min(t_b_pl$n))`, $\bar{x}$  = `r toString(round(mean(t_b_pl$n), 2))`, Mdn = `r toString(median(t_b_pl$n))`, max = `r toString(max(t_b_pl$n))`). The number of plant species which bees were observed interacting with varied more narrowly (min = `r toString(min(t_spp_i$n))`, $\bar{x}$  = `r toString(round(mean(t_spp_i$n), 2))`, Mdn = `r toString(median(t_spp_i$n))`, max = `r toString(max(t_spp_i$n))`).
+The six sites were surveyed for a total of `r toString(sum(obs_time$tot.obs.length)/60)` hours from `r s`-`r e`. A total of `r toString(sum(bee_obs$interactions))` queen-pollen foraging interactions were observed (range per bee species by week range = `r toString(min(t_b_wk$n))` - `r toString(max(t_b_wk$n))`, $\bar{x}$  = `r toString(round(mean(t_b_wk$n), 2))`, Mdn = `r toString(median(t_b_wk$n))`), with a range of total observed interactions per bee species across this time period (min = `r toString(min(t_b_b$n))`, $\bar{x}$  = `r toString(round(mean(t_b_b$n), 2))`, Mdn = `r toString(median(t_b_b$n))`, max = `r toString(max(t_b_b$n))`). Plants varied widely in the number of interactions which they partook in with each species of bee (range per plant species by week min = `r toString(min(t_b_wk_pl$n))` - `r toString(max(t_b_wk_pl$n))`, $\bar{x}$  = `r toString(round(mean(t_b_wk_pl$n), 2))`, Mdn = `r toString(median(t_b_wk_pl$n))`), with a range of total observed interactions per plant species over this time period (min = `r toString(min(t_b_pl$n))`, $\bar{x}$  = `r toString(round(mean(t_b_pl$n), 2))`, Mdn = `r toString(median(t_b_pl$n))`, max = `r toString(max(t_b_pl$n))`). The number of plant species which bees were observed interacting with varied more narrowly (range = `r toString(min(t_spp_i$n))` - `r toString(max(t_spp_i$n))`, $\bar{x}$  = `r toString(round(mean(t_spp_i$n), 2))`, Mdn = `r toString(median(t_spp_i$n))`).
 
 A total of 66 corbiculae loads were collected from Bees, 64 of them from Queens. 
 
@@ -328,7 +361,6 @@ tb %>%
   filter(species == 'Bombus appositus') %>% 
   ungroup() %>% 
   mutate(total = sum(Mu_Seqs))
-
 
 obs <- read.csv('../data/yearEndInteractionsObservations.csv')[,2:5] %>% 
   group_by(species) %>% 
@@ -405,7 +437,7 @@ knitr::include_graphics('../graphics/plots/Percent_loci_matched_by_sample.png')
 ```
 
 
-```{r APPENDIX NUMBER RMBL Pollen Key, echo = F, fig.height=2.7, fig.width=9}
+```{r APPENDIX NUMBER RMBL Pollen Key, echo = F}
 knitr::include_graphics('../graphics/assorted/RMBL_pollen_key.pdf')
 ```
 
@@ -440,7 +472,7 @@ Layer                   Description                            Source
 26.             Percent surface water                 Global Surface Water Explorer 
 ----    ----------------------------------------------  ---------------------
 
-```{r APPENDIX MORPHOTYPE RICHNESS AND ABUNDANCE, echo= F, fig.height=2.7, fig.width=9}
+```{r APPENDIX MORPHOTYPE RICHNESS AND ABUNDANCE, echo= F}
 knitr::include_graphics('../graphics/plots/species_richness_rarefaction.png')
 knitr::include_graphics('../graphics/plots/SppAbundance.png')
 ```
