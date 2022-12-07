@@ -1,0 +1,5 @@
+pdftk manuscript_MEE.pdf cat 1-12 output print.pdf
+pdftk specimens_table.pdf burst output specimen_tables-%d.pdf
+pdftk RMBL_pollen_key.pdf burst output RMBL_pollen_key-%d.pdf
+
+

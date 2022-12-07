@@ -1,0 +1,25 @@
+InfoBegin
+InfoKey: Creator
+InfoValue: Writer
+InfoBegin
+InfoKey: CreationDate
+InfoValue: D:20221128190612-07&apos;00&apos;
+InfoBegin
+InfoKey: Producer
+InfoValue: LibreOffice 6.4
+InfoBegin
+InfoKey: Author
+InfoValue: Reed Benkendorf
+PdfID0: 348768659b662a2343c378787a3d44c2
+PdfID1: 348768659b662a2343c378787a3d44c2
+NumberOfPages: 2
+PageMediaBegin
+PageMediaNumber: 1
+PageMediaRotation: 0
+PageMediaRect: 0 0 612 792
+PageMediaDimensions: 612 792
+PageMediaBegin
+PageMediaNumber: 2
+PageMediaRotation: 0
+PageMediaRect: 0 0 612 792
+PageMediaDimensions: 612 792

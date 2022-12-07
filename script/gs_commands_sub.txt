@@ -1,1 +1,0 @@
-pdftk manuscript_MEE.pdf cat 1-12 output print.pdf
