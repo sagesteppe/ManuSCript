@@ -1,5 +1,7 @@
 pdftk manuscript_MEE.pdf cat 1-12 output print.pdf
 pdftk specimens_table.pdf burst output specimen_tables-%d.pdf
 pdftk RMBL_pollen_key.pdf burst output RMBL_pollen_key-%d.pdf
-
-
+pdftk kraken_db_spp_table.pdf burst output kraken_db_spp_table-%d.pdf
+pdftk pollen_slide_table.pdf cat 2-end output pollen_slide_table_reduced.pdf
+pdftk pollen_slide_table_reduced.pdf burst output pollen_slide_table_reduced-%d.pdf
+rm pollen_slide_table.pdf

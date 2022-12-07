@@ -405,35 +405,33 @@ Sophie Taddeo https://orcid.org/0000-0002-7789-1417
 
 # References
 
-
-
-
-
-
-
-
-
 # Supporting 
 
 \newpage
 
-```{r APPENDIX NUMBER LOCI WITH READS USED IN MATCHING, echo = F}
+Appendix XX - Reads Per Loci
+
+```{r READS PER LOCI, echo = F}
 knitr::include_graphics('../graphics/plots/Percent_loci_matched_by_sample.png')
 ```
 
 \newpage
 
-```{r APPENDIX NUMBER RMBL Pollen Key 1, echo = F}
+Appendix XX - Pollen Key
+
+```{r Pollen Key 1, echo = F}
 knitr::include_graphics('../graphics/assorted/RMBL_pollen_key-1.pdf')
 ```
 
 \newpage
 
-```{r APPENDIX NUMBER RMBL Pollen Key 2, echo = F}
+```{r Pollen Key 2, echo = F}
 knitr::include_graphics('../graphics/assorted/RMBL_pollen_key-2.pdf')
 ```
 
 \newpage
+
+Appendix XX - Species Distribution Models Predictors
 
 Layer                   Description                            Source
 ----    ----------------------------------------------  ---------------------
@@ -467,26 +465,82 @@ Layer                   Description                            Source
 
 \newpage
 
-```{r APPENDIX MORPHOTYPE RICHNESS AND ABUNDANCE, echo= F}
+APPENDIX XX - Pollen Morphotype Richness Rarefaction Curves
+
+```{r Morphotype Richness, echo= F}
 knitr::include_graphics('../graphics/plots/species_richness_rarefaction.png')
 ```
 
 \newpage
 
-```{r, echo = F, out.width = '25%'}
+Appendix XX - Pollen Morphotype Abundance Rarefaction Curves
+
+```{r Morphotype Abundance, echo = F, out.width = '25%'}
 knitr::include_graphics('../graphics/plots/SppAbundance.png')
 ```
 
 \newpage
 
-```{r Voucher Reference Specimen tables 1, echo = F}
+Appendix XX - Molecular Reference Specimen Table
+
+```{r Voucher Reference Specimen table 1, echo = F}
 knitr::include_graphics('../graphics/tables/specimen_tables-1.pdf')
 ```
 
 \newpage
 
-```{r Voucher Reference Specimen tables 2, echo = F}
+```{r Voucher Reference Specimen table 2, echo = F}
 knitr::include_graphics('../graphics/tables/specimen_tables-2.pdf')
 ```
 
 \newpage
+
+Appendix XX - All Species in the Sequence Databases 
+
+```{r Seq DB 1, echo = F}
+knitr::include_graphics('../graphics/assorted/kraken_db_spp_table-1.pdf')
+```
+
+\newpage
+
+```{r Seq DB 2, echo = F}
+knitr::include_graphics('../graphics/assorted/kraken_db_spp_table-2.pdf')
+```
+
+\newpage
+
+```{r Seq DB 3, echo = F}
+knitr::include_graphics('../graphics/assorted/kraken_db_spp_table-3.pdf')
+```
+
+\newpage
+
+```{r Seq DB 4, echo = F}
+knitr::include_graphics('../graphics/assorted/kraken_db_spp_table-4.pdf')
+```
+
+\newpage
+
+Appendix XX - All Pollen Reference Slides Used to Establish Morphotypes
+
+```{r Pollen Reference Slides 1, echo = F}
+knitr::include_graphics('../graphics/assorted/pollen_slide_table_reduced-1.pdf')
+```
+
+\newpage
+
+```{r Pollen Reference Slides 2, echo = F}
+knitr::include_graphics('../graphics/assorted/pollen_slide_table_reduced-2.pdf')
+```
+
+\newpage
+
+```{r Pollen Reference Slides 3, echo = F}
+knitr::include_graphics('../graphics/assorted/pollen_slide_table_reduced-3.pdf')
+```
+
+\newpage
+
+
+
+

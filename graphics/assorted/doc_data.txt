@@ -1,25 +1,35 @@
 InfoBegin
+InfoKey: ModDate
+InfoValue: D:20221206205931-07&apos;00&apos;
+InfoBegin
 InfoKey: Creator
-InfoValue: Writer
+InfoValue: pdftk-java 3.0.9
 InfoBegin
 InfoKey: CreationDate
-InfoValue: D:20221128190612-07&apos;00&apos;
+InfoValue: D:20221206205931-07&apos;00&apos;
 InfoBegin
 InfoKey: Producer
-InfoValue: LibreOffice 6.4
-InfoBegin
-InfoKey: Author
-InfoValue: Reed Benkendorf
-PdfID0: 348768659b662a2343c378787a3d44c2
-PdfID1: 348768659b662a2343c378787a3d44c2
-NumberOfPages: 2
+InfoValue: itext-paulo-155 (itextpdf.sf.net-lowagie.com)
+PdfID0: c3329db350ee561d6446825ebc083315
+PdfID1: 51a04cb8674cc094886a2f7619c339a5
+NumberOfPages: 4
 PageMediaBegin
 PageMediaNumber: 1
-PageMediaRotation: 0
+PageMediaRotation: 90
 PageMediaRect: 0 0 612 792
 PageMediaDimensions: 612 792
 PageMediaBegin
 PageMediaNumber: 2
+PageMediaRotation: 90
+PageMediaRect: 0 0 612 792
+PageMediaDimensions: 612 792
+PageMediaBegin
+PageMediaNumber: 3
+PageMediaRotation: 90
+PageMediaRect: 0 0 612 792
+PageMediaDimensions: 612 792
+PageMediaBegin
+PageMediaNumber: 4
 PageMediaRotation: 0
 PageMediaRect: 0 0 612 792
 PageMediaDimensions: 612 792
