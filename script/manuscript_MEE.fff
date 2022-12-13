@@ -1,3 +1,8 @@
 \begin{figure}
+\includegraphics[width=0.65\linewidth]{../graphics/plots/rmbl_draft_tree} \caption{A caption}\label{fig:Sequence and Morphological Vouchers}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
 \includegraphics[width=0.75\linewidth]{../graphics/plots/phenology_estimates_10_90} \caption{A caption}\label{fig:phenology estimates}
 \end{figure}

@@ -12,9 +12,9 @@ abstract: |
   5) We conclude that these probes offer promise for the identification of plant tissue in both single sample, and metasample contexts.
     
 output:
-  pdf_document: default
-  toc: no
   word_document: default
+  toc: no
+  pdf_document: default
 csl: "../citations/methods-in-ecology-and-evolution.csl"
 bibliography: ../citations/citations.bib
 link-citations: yes
@@ -47,15 +47,15 @@ The inability to reliably identify plants to the level of species often leaves o
 
   The identification of many plant species to terminal taxon is an essential component of nearly all land management programs, where many species in the same genus  (e.g. Sagebrush - *Artemisia* L., Willows - *Salix* L., and Sedges - *Carex* L.) serve as bioindicators (respectively for 'rangelands', streams, and wetlands), as well as in academic research (@Gage2013HistoricalRO, AIM). This endeavour is often mired by lack of diagnostic characters (e.g. flowers, fruits, roots or combinations thereof),  and increasingly the description of cryptic species (@janzen2017nuclear, @oliver2009cryptic). Solutions to this problem are wanting, certain programmes have relied increasingly upon revisiting field sites to identify material using morphological or chemical approaches, whereas academic research has often used high copy number plastid genes as barcodes (Rosentreter et al. 2021, MORE MORE). However, both approaches have significant downsides, the former resource intensive at the landscape scale - and often does not work, while the latter seldom works due to a lack of variability in the currently available barcodes (@liu2014identification).
   
-  Recently barcoding (the identification of a sample from a single organism – e.g. a piece of leaf), and metabarcoding (the identification of a sample containing a mix of organisms – e.g. soil), have shown considerable promise in all Kingdoms of life (@ruppert2019past). With plants the identification of members of certain clades using barcoding has been quite successful (REF), whereas with others results have been elusive (@liu2014identification, @china2011comparative, @coissac2012bioinformatic), however metabarcoding incurs additional challenges to those which  exist for the currently implemented barcodes (@li2015plant, @kress2007two, @cbol2009dna, @coissac2012bioinformatic). Particular challenges with barcodes include the utilization of high-copy number sequences are associated with their rates of divergence, gene tree conflict, and hybridization (@coissac2016barcodes, @fazekas2009plant). Particular challenges with the utilization of high-copy number sequences are associated with their rates of divergence, gene tree conflict, and hybridization (@coissac2016barcodes).
+  Recently barcoding (the identification of a sample from a single organism *e.g.* a piece of leaf), and metabarcoding (the identification of a sample containing a mix of organisms *e.g.* soil), have shown considerable promise in all Kingdoms of life (@ruppert2019past). With plants the identification of members of certain clades using barcoding has been quite successful (REF), whereas with other clades results have been elusive (@liu2014identification, @china2011comparative, @coissac2012bioinformatic), however metabarcoding incurs additional challenges to those which  exist for the currently implemented barcodes (@li2015plant, @kress2007two, @cbol2009dna, @coissac2012bioinformatic). Particular challenges with barcodes include the utilization of high-copy number sequences are associated with their rates of divergence, gene tree conflict, and hybridization (@coissac2016barcodes, @fazekas2009plant). Particular challenges with the utilization of high-copy number sequences are associated with their rates of divergence, gene tree conflict, and hybridization (@coissac2016barcodes).
   
   Currently the largest plant systematic endeavor ever undertaken, the Kew Plant and Fungal Tree of Life (PAFTOL), is approaching completion (@baker2021PAFTOL). This dataset will contain Hyb-Seq data from at least one species representing each genus in the plant kingdom using the popular A353 probes (@baker2021PAFTOL), resulting in over 14,000 represented species. These publicly available data serve to provide a taxonomically comprehensive backbone for plant metabarcoding. Data from the 10kP project, which seeks to develop reference genomes from a phylogenetically diverse suite of plants will contribute many more records upon it’s intended completion, now slated to be by 2030, similar projects which seek to sequence high amounts of genomes in regions e.g. the ‘Darwin Tree of Life’ are being undertaken which will contribute data  applicable to enormous spatial domains (@cheng2018tenkp, @darwin2022project, @lewin2022biogenome). These data will promote the ability to apply metabarcoding to resolve a diversity of questions relevant to theoretical and applied ecology (cite). However, the application of metabarcoding still face challenges relating to the enormity of the genomic datasets and the computational power required to process sequence data. Herein we have resolved major components of the problems of identifying plant material without diagnostic morphological character states using the Angiosperms353 (A353) Hyb-Seq probes (@johnson2019universal), and custom species sequence databases derived via species distribution modelling, and temporal filtering.
   
   To increase the quality of metabarcoding results in plants, we suggest reducing the number of possible plant species candidates by generating user selected sequence databases relevant to the the study region and its ecological characteristics (CITE !?). To achieve this goal, we first create a list of candidate species using digital collections gleaned from herbaria, survey work, and citizen science (e.g. iNaturalist), from a region exceeding the study area. To these candidate species, modelling approaches - such as logistic regression, may be used to identify taxa which warrant further exploration e.g. modelling to determine their possibility of presence in metabarcoding samples. We then use species distribution models to create potential distribution maps for the candidate species to limit the impact of spatial and taxonomic biases in the species list and account for spatial variations in niche availability throughout the study area. Species distribution models (SDM’s) examine the ecological conditions associated with known occurrence of a species to identify where else in the study area might suitable habitats be found. This approach has the additional benefit of greatly reducing the size of a sequence database, which allows for the usage of genomic size data on personal computers. This can also significantly reduce processing time, particularly as as most next-generation sequence data is deposited as raw-sequence reads.
   
-  Considerable amounts of species interactions vary along time (@caradonna2021seeing). For the tropics, contrasts in the flowering periods of many plant species, can provide an additional filter for identifying material in many metagenomic samples (@janzen1967synchronization, @Newstrom1994ANC). In temperate regions, pollination interactions also vary temporally (@caradonna2017interaction), the overall shorter extent of the active growing season in these systems results in the presence of few to any natural breaks in these systems which subjugates the utility of these to perform as filters of post-processing results, rather than distinct species assemblage for database generation. Nonetheless, we work through a process which seems applicable to the tropics to utilize the temporal dimension for classifying sequencing results. 
+  Considerable amounts of species interactions vary along time (@caradonna2021seeing). For the tropics and subtropics, contrasts in the flowering periods of many plant species, can provide an additional filter for identifying material in many metagenomic samples (@janzen1967synchronization, @Newstrom1994ANC). In temperate regions, pollination interactions also vary temporally (@caradonna2017interaction), however the overall shorter extent of the active growing season in these systems results in the presence of few to any natural breaks in these systems which reduces the utility of these to operate as filters in the post-processing of sequence matches. Nonetheless, we work through a process which seems applicable to the tropics and subtropics to utilize the temporal dimension for classifying sequencing results. 
   
-  We apply these metagenomic and informatics approaches to determine whether the foraging record of Queen Bumble Bee's is consistent across direct observations and the pollen record, an incongruency in several floral visitation networks (@barker2021pollen, @zhao2019topology, @alarcon2010congruence). The two foraging phases of the Queen Bumble Bee life cycle is essential to 1) increase their weight before diapause, 2) increase their ovary weights while establishing their recently found nests, both of these time periods represent potential demographic bottlenecks in bumble bee populations (@sarro2022bumble). Bumblebees are one of the only groups of insects with unequivocal quantitative evidence for numerous populations declines, while simultaneously serving as the most effective pollinators in temperate montane ecosystems (@cameron2020global, @goulson2008decline, @williams1982distribution, @colla2012assessing, @bergman1996micrometeorological, @bingham1998efficient). These montane ecosystems represent some of the most ecologically resilient and resistant systems in the temperate and offer unparalleled potential as refugial areas for multiple dimensions of biodiversity under climate change. 
+  We apply these metagenomic and informatics approaches to determine whether the foraging record of Queen Bumble Bee's is consistent across direct observations and the pollen record, an incongruency in several floral visitation networks involving smaller bodied fauna (@barker2021pollen, @zhao2019topology, @alarcon2010congruence). The two foraging phases of the Queen Bumble Bee life cycle is essential to 1) increase their weight before diapause, 2) increase their ovary weights while establishing their recently found nests, both of these time periods represent potential demographic bottlenecks in bumble bee populations (@sarro2022bumble). Bumblebees are one of the only groups of insects with unequivocal quantitative evidence for numerous populations declines, while simultaneously serving as the most effective pollinators in temperate montane ecosystems (@cameron2020global, @goulson2008decline, @williams1982distribution, @colla2012assessing, @bergman1996micrometeorological, @bingham1998efficient). *Heterogeneous montane ecosystems simultaneously represent one of the most ecologically resilient areas in the temperate and oftentimes offer the sole potential refugia for multiple dimensions of biodiversity under climate change, whilst experiencing the most abrupt changes in mean annual temperature (CITE). An immediate understanding of how to manage previously overlooked keystone insect species, such as bumble bees, is essential if these refugial ecosystemn services are to be utilized while maintaining their current species richness.*
 
 # 2 | METHODS
 
@@ -203,6 +203,12 @@ d <- c('Salix', 'Boechera')
 
 Using the fuchsin jelly preparation and light microscopic analyses of grains and scoring of 10 character states resulted in the establishment of 28 morphotypes which grains could be classified into. *APPENDIX 7*. 60 samples were counted and based on rarefaction **had over % of expected morphotypes found** (morphotype richness, $\bar{x}$ = 4.5, Mdn = 4, min = 1, max = 9), all samples had expected morphotype diversity reach the asymptote *APPENDIX 8*. The number of counted pollen grains in each sample range from (*MIN* - 16,293, $\bar{x}$ = 2788.685, Mdn = 1453). 
 
+```{r Sequence and Morphological Vouchers, out.width = "65%", echo = F,  fig.cap="A caption"}
+knitr::include_graphics("../graphics/plots/rmbl_draft_tree.png")
+```
+
+*note this figure is draft mode, i reached out to C.H. Cole to get the official APG colors so we are gonna colour edges with that, I have also drawn phylo pics for almost all the labelled order and need to add them in !*
+
 ## 3.3 | Metabarcoding Pollen identification
 
 ```{sh Get number of raw and trimmed reads for metagenome samples, eval = F, echo = F}
@@ -267,7 +273,7 @@ rm(toseq, krak, brack, blast, loci, no_loci)
 
 ## 3.4 | Temporal Analyses
 
-The first date of modeled snow melt in the Gothic area (n = 17, $\bar{x}$ = 137.9, Mdn = 135, 3rd quantile = 151), and the first date of a consistent winter snow base (n = 17, $\bar{x}$ = 299.9, Mdn = 300, 1st quantile = 291) from 2000-2017, were used as delimiters for the inclusions of herbarium records in modelling. Of the **500** species predicted likely present in the area via logistic regression, 332 species (64.4%) with more than 10 records in the focal level 4 ecoregions ($\bar{x}$ = 35.01657, Mdn = 35, max = 96) had weibull estimates calculated, an additional 56 species (11.2%) with enough contributing records from the 'Sedimentary Mid-Elevation Forests', a large ecoregion in general just beneath the elevation bands occupied by the five ecoregions around the study area had weibull estimates also calculated ($\bar{x}$ = 13.86885, Mdn = 13, max = 24).
+The first date of modeled snow melt in the Gothic area (n = 17, $\bar{x}$ = 137.9, Mdn = 135, 3rd quantile = 151), and the first date of a consistent winter snow base (n = 17, $\bar{x}$ = 299.9, Mdn = 300, 1st quantile = 291) from 2000-2017, were used as delimiters for the inclusions of herbarium records in modelling. Of the **500** species predicted likely present in the area via logistic regression, 332 species (64.4%) with more than 10 records in the focal level 4 ecoregions ($\bar{x}$ = 35.01657, Mdn = 35, max = 96) had weibull estimates calculated, an additional 56 species (11.2%) with enough contributing records from the "Sedimentary Mid-Elevation Forests", a large ecoregion in general just beneath the elevation bands occupied by the five ecoregions around the study area had weibull estimates also calculated ($\bar{x}$ = 13.86885, Mdn = 13, max = 24).
 
 Only 58 of these 388 species (n = 34.56897, Mdn = 31) were able to be compared to plot based observational data from the long term (1974–2012) dataset. Of these species relatively high accord was observed between the long-term ground truthed dataset, and the modelled species. There was very strong evidence that the weibull estimates were positively associated with the observed onset (r^2^ = 0.72, p < 0.0001, tau = 0.61) and peak (r^2^ = 0.70, p < 0.0001, tau = 0.65) of flowering, and that the number of herbarium samples had a moderate effect on the estimates (p = 0.004 and p = 0.034 respectively). There was very strong evidence that the weibull estimates had a positive association with the observed cessation of flowering (r^2^ =  0.4339,  p < 0.0001, tau = 0.489), however their was no evidence that sample size had an effect (p = 0.349). There was moderate evidence that the weibull estimates, with an effect of sample size, had a weak positive association with the observed duration of flowering (p = 0.0401, r^2^ = 0.07, tau = 0.17).
 
@@ -420,20 +426,6 @@ knitr::include_graphics('../graphics/plots/Percent_loci_matched_by_sample.png')
 
 \newpage
 
-Appendix XX - Pollen Key
-
-```{r Pollen Key 1, echo = F}
-knitr::include_graphics('../graphics/assorted/RMBL_pollen_key-1.pdf')
-```
-
-\newpage
-
-```{r Pollen Key 2, echo = F}
-knitr::include_graphics('../graphics/assorted/RMBL_pollen_key-2.pdf')
-```
-
-\newpage
-
 Appendix XX - Species Distribution Models Predictors
 
 Layer                   Description                            Source
@@ -492,6 +484,8 @@ knitr::include_graphics('../graphics/tables/specimen_tables-1.pdf')
 
 \newpage
 
+Appendix XX - Molecular Reference Specimen Table (con't)
+
 ```{r Voucher Reference Specimen table 2, echo = F}
 knitr::include_graphics('../graphics/tables/specimen_tables-2.pdf')
 ```
@@ -506,17 +500,23 @@ knitr::include_graphics('../graphics/assorted/kraken_db_spp_table-1.pdf')
 
 \newpage
 
+Appendix XX - All Species in the Sequence Databases (con't)
+
 ```{r Seq DB 2, echo = F}
 knitr::include_graphics('../graphics/assorted/kraken_db_spp_table-2.pdf')
 ```
 
 \newpage
 
+Appendix XX - All Species in the Sequence Databases (con't)
+
 ```{r Seq DB 3, echo = F}
 knitr::include_graphics('../graphics/assorted/kraken_db_spp_table-3.pdf')
 ```
 
 \newpage
+
+Appendix XX - All Species in the Sequence Databases (con't)
 
 ```{r Seq DB 4, echo = F}
 knitr::include_graphics('../graphics/assorted/kraken_db_spp_table-4.pdf')
@@ -532,11 +532,15 @@ knitr::include_graphics('../graphics/assorted/pollen_slide_table_reduced-1.pdf')
 
 \newpage
 
+Appendix XX - All Pollen Reference Slides Used to Establish Morphotypes (con't)
+
 ```{r Pollen Reference Slides 2, echo = F}
 knitr::include_graphics('../graphics/assorted/pollen_slide_table_reduced-2.pdf')
 ```
 
 \newpage
+
+Appendix XX - All Pollen Reference Slides Used to Establish Morphotypes (con't)
 
 ```{r Pollen Reference Slides 3, echo = F}
 knitr::include_graphics('../graphics/assorted/pollen_slide_table_reduced-3.pdf')
@@ -544,9 +548,23 @@ knitr::include_graphics('../graphics/assorted/pollen_slide_table_reduced-3.pdf')
 
 \newpage
 
+Appendix XX - Pollen Key
+
+```{r Pollen Key 1, echo = F}
+knitr::include_graphics('../graphics/assorted/RMBL_pollen_key-1.pdf')
+```
 
 \newpage
 
+```{r Pollen Key 2, echo = F}
+knitr::include_graphics('../graphics/assorted/RMBL_pollen_key-2.pdf')
+```
+
+\newpage
+
+\newpage
+
+Appendix XX - Models used for Species Distribution Model Ensembles
 
 *Generalised Linear Models (GLM)*
 
@@ -559,3 +577,4 @@ Ensemble learning utilizes many sets of trees, each composed of many decisions, 
 *Boosted Regression Tree (BRT)* An initial tree is grown, and all other trees are derived sequentially from it, as each new tree is grown the errors in responses from the last tree are weighed more heavily so that the model focuses on selecting dependent variables which refine predictions. All response data and predictor variables are kept available to all trees.
 
 
+\newpage
