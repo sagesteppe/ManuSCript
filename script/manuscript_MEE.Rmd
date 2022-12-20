@@ -386,24 +386,33 @@ obs <- read.csv('../data/yearEndInteractionsObservations.csv')[,2:5] %>%
 
 # 4 | DISCUSSION
 
-Although we were able to use an actually fine scale flora to determine the species present at the field site, we suspect a similar approach may be accomplished via quick species richness inventories at sites, and then utilizing a bootstrap approach akin to ours, to the taxa returned from databases to derive these estimates. 
 
+We have demonstrated how hyb-seq data may be used in for plant barcoding in a metagenomic context. 
 
-** Mention in here that the general effect of sample size on predictions means that larger samples sizes are required for this to work!!!! **
-Although our temporal results were lackluster, we note that our study area has an incredibly brief growing period. and we suspect these temporal results would be useful in sub-tropical and tropical ecosystems. FURTHER, the sites used for ground truthing the temporal flowering periods were not randomly selected across the study area, and cannot be used to make inference to the population across the entirety of the study area as we did here. Regardless both show good agreement on flower onset, peak flowering, and moderate agreement with flowering cessation. The disagreement in flowering cessation is perhaps due to more microclimates which retain water, rather than microclimates which allow the early accumulation of heat. 
+These results show that the overall results between **Bumble Bee ecology  ** observational and barcoding are largely congruent. But that ...
 
-Fewer modelling runs for SDM's likely to be effective for determining inclusion, elastic inclusion criteria. The actual dataset which was used for training and testing all of the models incorporated into SDM's represented only roughly one quarter of the records available for such purposes. We consciously chose to do this in order to showcase the possibility of this approach working in less data rich areas. 
+**Spatial ... & Timing ** (filters!)
+- Fewer modelling runs for SDM's likely to be effective for determining inclusion, elastic inclusion criteria.
+- The actual dataset which was used for training and testing all of the models incorporated into SDM's represented only roughly one quarter of the records available for such purposes. We consciously chose to do this in order to showcase the possibility of this approach working in less data rich areas. 
+- Used fine scale flora to evaluate results of modelling, similar approaches based on quick field surveys which do not require comprehensive floristic endeavors.
+- Timing in other areas may suffer complications due to lacking as strong a signal as that induced by snowmelt, but longer durations of flowering likely to help. 
+- Sample size in phenology estimates had an effect which is likely to be maintained across all results.
+- Regardless both show good agreement on flower onset, peak flowering, and moderate agreement with flowering cessation. The disagreement in flowering cessation is perhaps due to more microclimates which retain water, rather than microclimates which allow the early accumulation of heat. 
+- Number of botanists rapidy decreasing and little hope for much more field based information 
 
-Bayesian framework
+**Molecular ... **
+- PAFTOL project provide complete genus level reference dataset for the kingdom
+- Expected to work nearly immediately for dna barcoding of whole plant material.
+- With work expected to work well in meta contexts. 
+- Harvest both variable loci, and variable flanking regions of loci for fine taxonomic resolution
+- Potential for infraspecific inference (@wenzell2021incomplete, Loke et al. in prep, Matt JOhnson has a paper on this too.)
 
+**Final P**
+ < bayesian framework > 
 
-Future Directions:
-
-While at the time of writing this there are limited A353 sequence data, the Plant and Fungal Trees of Life (PAFTOL) project, which is sequencing at least a species of each genera in the plant Kingdom will produce sequence data from over 14,000 species. Given the extant publicly available genomic data, we conservatively estimate that upon completion of PAFTOL there will be no fewer than 15,500 species (4.4% of all ca. 350,000 plant species) for which sequence data of a majority of these loci exist (@govaerts2021world). Accordingly, projects in the near future may increase the number of metagenomics samples while decreasing the need to create their own plant sequence reference libraries. 
-  As a result of PAFTOL the first ever comprehensive phylogenetic hypotheses of all plant genera will be presented. In tandem with an increased number of digitised and geo-referenced herbarium specimens, and monitoring programs in natural areas, we believe that geo-informatics, and phylogenetic inference will increase the ability of researchers applying this technique to identifying sequence reads. 
-  While our approach emphasises the use of this metagenomic technique for the purpose of identifying pollen, I argue the template and resources we provide here make this approach a suitable candidate for many plant metagenomic tasks. While we did not have the resources to explore the possibility of characterising infraspecific characteristics, preliminary results from others (@wenzell2021incomplete, Loke et al. in prep) indicate a possibility for these probes to also collect data at the level of populations and individuals. **
-  
 In regards to better understanding the foraging preferences of *Bombus* feeding in subalpine ecosystems. **JANE AND PAUL SET UP FOR NEAR FUTURE RESULTS?**
+
+**CONCLUSIONS **
 
 **AUTHOR CONTRIBUTIONS:**  R.C.B conducted botanical collections, conducted all molecular lab work, lead all analyses, and writing. J.E.O conceived, designed, and conducted all ecological fieldwork, assisted with analyses, and writing. E.J.W. prepared, imaged, and collected trait data on pollen reference slides, and assisted with analysis of trait data and writing a dichotomous key. S.T. assisted with spatial analyses and writing. P.J.C assisted with ecological analyses and writing. J.B.F. conceived, and designed all lab work, analyses, assisted with writing, and secured funding for molecular work. 
 
