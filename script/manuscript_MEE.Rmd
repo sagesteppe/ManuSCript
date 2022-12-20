@@ -387,7 +387,8 @@ obs <- read.csv('../data/yearEndInteractionsObservations.csv')[,2:5] %>%
 # 4 | DISCUSSION
 
 
-We have demonstrated how hyb-seq data may be used in for plant barcoding in a metagenomic context. 
+**overall stuff and things**
+We have demonstrated how a533 data may be used for plant barcoding in a metagenomic context. This was exemplified in an ecologically realistic situation, centered both in a context which serves as an immediate framework for land management studies,  and which produced fundamental natural history information. These datasets included taxonomically difficult clades (e.g. Mertensia, Lupinus) . 
 
 These results show that the overall results between **Bumble Bee ecology  ** observational and barcoding are largely congruent. But that ...
 
@@ -398,19 +399,17 @@ These results show that the overall results between **Bumble Bee ecology  ** obs
 - Timing in other areas may suffer complications due to lacking as strong a signal as that induced by snowmelt, but longer durations of flowering likely to help. 
 - Sample size in phenology estimates had an effect which is likely to be maintained across all results.
 - Regardless both show good agreement on flower onset, peak flowering, and moderate agreement with flowering cessation. The disagreement in flowering cessation is perhaps due to more microclimates which retain water, rather than microclimates which allow the early accumulation of heat. 
-- Number of botanists rapidy decreasing and little hope for much more field based information 
+- Number of botanists rapidly decreasing no hope for much more field based information or funding.   
 
 **Molecular ... **
 - PAFTOL project provide complete genus level reference dataset for the kingdom
-- Expected to work nearly immediately for dna barcoding of whole plant material.
+- Expected to work nearly immediately for DNA barcoding of whole plant material.
 - With work expected to work well in meta contexts. 
 - Harvest both variable loci, and variable flanking regions of loci for fine taxonomic resolution
-- Potential for infraspecific inference (@wenzell2021incomplete, Loke et al. in prep, Matt JOhnson has a paper on this too.)
+- Potential for infra-specific inference (@wenzell2021incomplete, Loke et al.,  @slimp2021potential, @beck2021palmer). 
 
 **Final P**
- < bayesian framework > 
-
-In regards to better understanding the foraging preferences of *Bombus* feeding in subalpine ecosystems. **JANE AND PAUL SET UP FOR NEAR FUTURE RESULTS?**
+ < bayesian framework > < harvesting loci > 
 
 **CONCLUSIONS **
 
