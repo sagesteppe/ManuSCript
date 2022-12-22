@@ -386,14 +386,14 @@ obs <- read.csv('../data/yearEndInteractionsObservations.csv')[,2:5] %>%
 
 # 4 | DISCUSSION
 
-
 **overall stuff and things**
-We have demonstrated how a533 data may be used for plant barcoding in a metagenomic context. This was exemplified in an ecologically realistic situation, centered both in a context which serves as an immediate framework for land management studies,  and which produced fundamental natural history information. These datasets included taxonomically difficult clades (e.g. Mertensia, Lupinus) . 
+We have demonstrated how Angiosperms533 data may be used for plant barcoding in a metagenomic context. This was exemplified in an ecologically realistic situation, centered both in a context which serves as an immediate framework for land management studies, and which produced fundamental natural history information. These datasets included closely related taxa in notoriously taxonomically difficult clades (e.g. *Mertensia*, *Lupinus*). We utilized spatial and temporal approaches for creating custom sequence databases which are readily applicable to any lab group with the capacity to perform next-generation sequencing across the entirety of multiple continents. In conjunction with well designed and implemented field based data collection we show how these methods may be widely used to test a variety of hypotheses related to ecological interactions. 
 
-These results show that the overall results between **Bumble Bee ecology  ** observational and barcoding are largely congruent. But that ...
+These results show that the overall results between **Bumble Bee ecology** observational and barcoding are largely congruent. But that ...
+Future analyses of the long term dataset... Global studies should aim to corroborate ...
 
 **Spatial ... & Timing ** (filters!)
-- Fewer modelling runs for SDM's likely to be effective for determining inclusion, elastic inclusion criteria.
+- Fewer modelling runs for SDM's likely to be effective for determining inclusion, elastic inclusion criteria per application.
 - The actual dataset which was used for training and testing all of the models incorporated into SDM's represented only roughly one quarter of the records available for such purposes. We consciously chose to do this in order to showcase the possibility of this approach working in less data rich areas. 
 - Used fine scale flora to evaluate results of modelling, similar approaches based on quick field surveys which do not require comprehensive floristic endeavors.
 - Timing in other areas may suffer complications due to lacking as strong a signal as that induced by snowmelt, but longer durations of flowering likely to help. 
@@ -410,8 +410,6 @@ These results show that the overall results between **Bumble Bee ecology  ** obs
 
 **Final P**
  < bayesian framework > < harvesting loci > 
-
-**CONCLUSIONS **
 
 **AUTHOR CONTRIBUTIONS:**  R.C.B conducted botanical collections, conducted all molecular lab work, lead all analyses, and writing. J.E.O conceived, designed, and conducted all ecological fieldwork, assisted with analyses, and writing. E.J.W. prepared, imaged, and collected trait data on pollen reference slides, and assisted with analysis of trait data and writing a dichotomous key. S.T. assisted with spatial analyses and writing. P.J.C assisted with ecological analyses and writing. J.B.F. conceived, and designed all lab work, analyses, assisted with writing, and secured funding for molecular work. 
 
