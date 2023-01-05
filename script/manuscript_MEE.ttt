@@ -18,7 +18,7 @@ Precision & 88.04 & Tied & 0.00\\
  
 \begin{table}
 
-\caption{\label{tab:Results for SA Logistic Regression Contingency table}SDM evaluation contingency table}
+\caption{\label{tab:Results for SA Logistic Regression Contingency table}Species Distribution Modeling evaluation contingency table}
 \centering
 \begin{tabular}[t]{lrrrr}
 \toprule
