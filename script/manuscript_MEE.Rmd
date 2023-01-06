@@ -38,7 +38,19 @@ library(bookdown)
 library(knitr)
 suppressWarnings(library(kableExtra))
 pNumC <- function(...) prettyNum(...,big.mark = ',')
-#print(citation('spdep'), bibtex=TRUE)
+
+
+prcnt_detect <- function(x, Lprop, Hprop){
+  if(missing(Lprop)){Lprop <- 0}
+  
+  y <- x[x$Prop > Lprop & x$Prop < Hprop,]; total <- nrow(y)
+  detected <- round((nrow(y[y$DETECTED == 1,])/total) * 100, 1)
+  Mdn <- round(median(y$Prop),3)
+  
+  return(writeLines(paste0('were detected in ',  detected, 
+                '% of samples where the proportion of target grains were between ', 
+                Lprop, '-', Hprop,  ' (n = ', total, ' Mdn = ', Mdn, ')')))
+}
 ```
 
 # 1 | INTRODUCTION
@@ -201,35 +213,28 @@ At the six study plots, of the 117 plant species identified to the species level
 ## 3.2 | Microscopic Pollen identification
 
 ```{r, echo = F}
-a <- c('Trifolium', 'Lupinus', 'Glyccrrhiza', 'Mitella', 'Geum')
-b <- c('Lupinus', 'Lathyrus', 'Potentilla', 'Androsace', 'Bistorta', 'Vicia')
-c <- c('Jeffersonia', 'Micranthes', 'Prunus', 'Delphinium', 'Androsace', 
-       'Penstemon', 'Orthocarpus', 'Scuttelaria', 'Aquilegia', 'Castilleja', 'Draba')
-d <- c('Salix', 'Boechera')
+#a <- c('Trifolium', 'Lupinus', 'Glyccrrhiza', 'Mitella', 'Geum')
+#b <- c('Lupinus', 'Lathyrus', 'Potentilla', 'Androsace', 'Bistorta', 'Vicia')
+#c <- c('Jeffersonia', 'Micranthes', 'Prunus', 'Delphinium', 'Androsace', 
+#       'Penstemon', 'Orthocarpus', 'Scuttelaria', 'Aquilegia', 'Castilleja', 'Draba')
+#d <- c('Salix', 'Boechera')
 
 # are mertensia and Asteraceae 1 & 2 detected in all Pollen samples where the bee was COLLECTED ON THEM ?
+ 
+pmorph <- read.csv('../data/morpho_pollen.csv') 
+blst <- read.csv('../data/blast_seqs_classified.csv') 
+blst_seqs <- distinct(blst, sample.id) 
 
-corb <- read.csv('../data/Corbiculae_collections.csv', header = F) %>% 
-  mutate(V1 = str_remove(V1, 'dark|orange')) %>% 
-  filter(!str_detect(V1, 'bifarius')) %>% 
-  separate(V1, into = c('sample.id', 'genus', 'species', 'caste',
-                        'plant.genus', 'plant.species')) %>% 
-  filter(plant.genus == 'Mertensia')
-    
-pmorph <- read.csv('../data/morpho_pollen.csv')
-mertensia_samples <- pmorph %>% 
+pmorph <- filter(pmorph, sample.id %in% blst$sample.id) %>% 
   group_by(sample.id) %>% 
-  mutate(Prop = sum/sum(sum)) %>% 
+  mutate(Prop = sum/sum(sum)) 
+
+mertensia_samples <- pmorph %>% 
   filter(morphotype == 'MERTENSIA') %>% 
   select(sample.id, Prop, sum)
 
-# Do we detect mertensia, asteraceae 1, asteraceae 2, in all molecular samples which they are present in the pollen samples of?
-
-blst <- read.csv('../data/classified_blast.csv') 
-blst_seqs <- distinct(blst, sample.id) 
 mertensia_samples <- filter(mertensia_samples, sample.id %in% blst_seqs$sample.id)
 
-# # SOMETHING MUST BE VERY WRONG HERE, MISSED MERTENSIA IN NEARLY PURE SAMPLES. 
 blst_mertensia <- blst %>% 
   filter(Genus == 'Mertensia') %>% 
   select(sample.id,  Prcnt_seqs) %>% 
@@ -237,21 +242,86 @@ blst_mertensia <- blst %>%
   mutate(Prcnt_seqs = sum(Prcnt_seqs)) %>% 
   distinct(sample.id, .keep_all = T)
 
+# set up as evaluation table !?
+
 mertensia_detected <- mertensia_samples %>% 
   mutate(DETECTED = if_else(sample.id %in% blst_mertensia$sample.id, 1, 0)) 
-  
+ # sample 26 - very strange !!!! this needs investigation
+
 M1 <- glm(DETECTED ~ Prop, mertensia_detected, family = binomial)
-M.df <- data.frame(Prop = seq(0, 100, 0.5))
+M.df <- data.frame(Prop = seq(0, 1, 0.0001))
 M.df$DETECTED <- predict(M1, newdata=M.df, type="response")
 
-ggplot(M.df, aes(x=Prop, y=DETECTED)) +
+ggplot(mertensia_detected, aes(x=Prop, y=DETECTED)) +
   stat_smooth(method="glm", se=T, fullrange=TRUE, 
               method.args = list(family=binomial))  +
   theme_bw()
 
+# Repeat for Asteraceae 1 & 2
+
+blst_aster <- blst %>% 
+  filter(Family == 'Asteraceae') %>% 
+  select(sample.id,  Prcnt_seqs, Genus) %>% 
+  group_by(sample.id) %>% 
+  distinct(sample.id, .keep_all = T)
+
+# ASTER 2 HERE...
+aster2_samples <- pmorph %>% 
+  filter(morphotype == 'ASTERACEAE_2')
+
+blst_aster2 <- filter(blst_aster, Genus %in% 
+                            c('Taraxacum', 'Helianthella', 'Scabrethia'))
+
+aster2_detected <- aster2_samples %>% 
+  mutate(DETECTED = if_else(sample.id %in% blst_aster2$sample.id, 1, 0)) 
+
+M1 <- glm(DETECTED ~ Prop, aster2_detected, family = binomial)
+M.df <- data.frame(Prop = seq(0, 1, 0.0001))
+M.df$DETECTED <- predict(M1, newdata=M.df, type="response")
+
+ggplot(aster2_detected, aes(x=Prop, y=DETECTED)) +
+  stat_smooth(method="glm", se=T, fullrange=TRUE, method.args = list(family='binomial'))  +
+  theme_bw()
+
+# ASTER 1 HERE... ? WERE ALL OF THESE SPECIES PRUNED... ?
+aster1_samples <- pmorph %>% 
+  filter(morphotype == 'ASTERACEAE_1') 
+
+blst_aster1 <- filter(blst_aster, !Genus %in% c('Taraxacum', 'Helianthella', 'Scabrethia') )
+
+aster1_detected <- aster1_samples %>% 
+  mutate(DETECTED = if_else(sample.id %in% blst_aster1$sample.id, 1, 0)) 
+
+ggplot(aster1_detected, aes(x=Prop, y=DETECTED)) +
+  stat_smooth(method="glm", se=T, fullrange=TRUE, method.args = list(family='binomial'))  +
+  theme_bw()
+
+# ALL HIGH NUMBER ASTERACEAE 
+
+aster_samples <- pmorph %>% 
+  filter(str_detect(morphotype, 'ASTER.*'))
+aster_detected <- aster_samples %>% 
+  mutate(DETECTED = if_else(sample.id %in% blst_aster$sample.id, 1, 0)) 
+
+rm(M1, M.df, M.df,  mertensia_samples, blst, blst_aster, 
+   blst_aster1, blst_aster2, aster1_samples,  aster2_samples, 
+   a, b, c, d, blast_mertensia, aster_samples)
 ```
 
+
+The pollen samples contained three morphotypes which could readily be identified. Two of these mapped to monophyletic clades (Boraginaceae & Heliantheae Alliance), and one to a paraphyletic clade (Asteraceae less Heliantheae).
+Boraginaceae grains `r prcnt_detect(mertensia_detected, Lprop = 0.01, Hprop = 1)`.  Asteraceae type 1, non-helianthoids, `r prcnt_detect(aster1_detected, Lprop = 0.001, Hprop = 0.01)` Asteraceae type 2, Helianthoids, `r prcnt_detect(aster2_detected, Lprop = 0.001, Hprop = 0.01)`. Both morphotypes of Asteraceae pollen `r prcnt_detect(aster_detected, Lprop = 0.01, Hprop = 1)`. 
+
+
+
+
 Using the fuchsin jelly preparation and light microscopic analyses of grains and scoring of 10 character states resulted in the establishment of 28 morphotypes which grains could be classified into. *APPENDIX 7*. 60 samples were counted and based on rarefaction **had over % of expected morphotypes found** (morphotype richness, $\bar{x}$ = 4.5, Mdn = 4, min = 1, max = 9), all samples had expected morphotype diversity reach the asymptote *APPENDIX 8*. The number of counted pollen grains in each sample range from (*MIN* - 16,293, $\bar{x}$ = 2788.685, Mdn = 1453). 
+
+
+```{r}
+rm(mertensia_detected, aster1_detected, aster2_detected, aster_detected)
+```
+
 
 ```{r Sequence and Morphological Vouchers, out.width = "65%", echo = F,  fig.cap="Phylogenetic tree of all biotically pollinated plant genera in the study area. The innermost ring indicates every genus which Queen Bee's were observed to visit. The intermediate ring indicates that at least a single morphological pollen voucher slide was prepared for a member of the genus. The outermost ring indicates that sequence data were available for at least a member of that genus. Branch colors follow APG 4."}
 knitr::include_graphics("../graphics/plots/rmbl_draft_tree.png")
@@ -391,10 +461,10 @@ corb <- read.csv('../data/Corbiculae_collections.csv', header = F) %>%
   filter(caste == 'q') %>% 
   select(-V1, -caste)
 
-blst <- read.csv('../data/classified_blast.csv') %>% 
+blst <- read.csv('../data/blast_seqs_classified.csv') %>% 
   distinct(sample.id)
 
-blst <- read.csv('../data/classified_blast.csv') %>% 
+blst <- read.csv('../data/blast_seqs_classified.csv') %>% 
   mutate(across(where(is.character), ~ replace_na(., 'UNKNOWN'))) %>% 
   arrange(sample.id, -Prcnt_seqs) %>% 
   inner_join(., corb, by = 'sample.id') 
