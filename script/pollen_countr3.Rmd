@@ -1,0 +1,540 @@
+---
+title: "pollen_countR"
+author: "Reed & Emily"
+date: "4/9/2021"
+output: 
+  pdf_document:
+      fig_caption: true
+      number_sections: true
+      includes:
+        in_header: float_free.tex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+\tableofcontents 
+\listoffigures
+\listoftables
+
+# Background
+
+The purposes of this script is to provide estimates of how thorough the sampling of corbiculae loads, via light microscopy, is. As always, the goal is to sample as little as possible in order to obtain estimates of true parameters of the population. 
+
+In the first section which we be hidden in PDF report, we create data sheets for recording our data. 
+
+# Analyses 
+
+```{r library, results = 'hide', message = F, warning = F, echo = FALSE}
+library(tidyverse)
+library(vegan)
+library(iNEXT)
+library(data.table)
+library(parallel)
+```
+
+```{r Import and clean field data associated with corbiculae collections, eval = F, echo = F}
+field_dat <- read.csv("L:\\Pollen_Reference_Library\\pollen_countR\\Bombus_corbiculae_pollen_samples.RAW.csv")[,c(1:2,4:5,7)]
+
+# some samples missing the DAY of month, we will say they were the 15th real quick
+field_dat <- field_dat %>% 
+  mutate(date = if_else(str_detect(date, "^[A-Z]"), paste('15', date, sep = "-"), date)) %>% 
+  mutate(date = str_squish(date)) %>% 
+  mutate(date = as.Date(date, "%d-%b-%y")) %>% 
+  mutate(bombus.species = str_remove(bombus.species, "Bombus[.]")) %>% 
+  rename(site = ï..site,
+         caste = bombus.caste,
+         species = bombus.species) %>% 
+  mutate(across(c(site:caste), function(x) as.factor(x)))
+
+```
+
+## Create Data Sheets
+
+Remember each slide has 20*20 2mm^2 cells on it, i.e. 400. That would be a a lot of counting. let's try to avoid that. We are going to sample 8 'transects' and each of the 20 cells. 
+
+```{r Create Data Sheets, eval = F, echo = F}
+set.seed(5548) # close thine eyes, lift thy fingers high, peck ye number pad. 
+
+pollen_df <- field_dat %>% 
+  dplyr::select(-date, -caste) %>% 
+  slice(rep(1:n(), each = 2)) %>% # rep for the number of transects you have. 
+  group_by(sample.id) %>% 
+  mutate(transect = c(7, 14)) %>%  # this covers 40 or 10% of all cells
+  
+  group_by(sample.id, transect) %>% # make our rows of slides. 
+  slice(rep(1:n(), each = 20)) %>% # create rows
+  mutate(cell = seq(from = -20, to = -1, by = 1)) %>% 
+  
+  group_by(sample.id, transect, cell) %>% 
+  slice(rep(1:n(), each = 2)) %>% # space for two morphotyps per cell. 
+  
+  mutate(morphotype = "") %>% # create some columns to hold the user input values. 
+  mutate(count = "") %>% 
+  mutate(count = as.numeric(count)) %>% 
+  mutate(SpR_morpho = "") %>% 
+  mutate(SpR_transect = "")
+
+pollen_df <- as.data.frame(pollen_df)
+
+#xlsx::write.xlsx(pollen_df, "Pollen_counting_data_sheet_2.xlsx", row.names = F)
+rm(field_dat)
+```
+
+# Analyses - Rarefaction
+
+We will use the vegan package for this I guess. I really can't spend more time messing around in R... (cries). But we should really just make this package tidy....fmwal. 
+
+First we prep our data, this chunk shows us creating dummy data which we used to code the functions. 
+```{r, eval = F, echo = F}
+site.id <- pollen_df %>% 
+  ungroup() %>% 
+  distinct(transect,cell) %>% 
+  mutate(plot.id = row_number()) # we can create a unique id for each slide grid cell...
+
+pollen_df_work <- pollen_df %>% 
+  ungroup() %>% 
+  mutate(morphotype = sample(letters[1:26], size = nrow(.), replace = TRUE)) %>% #dummy
+  mutate(count =  sample(0:5, size = nrow(.), replace = TRUE)) %>%  # dummy
+  
+  mutate(count = replace_na(count, 0)) %>% # keeper code starts here 
+  distinct() %>% # SHOULD drop the cells with no samples.
+  merge(., site.id, by = c("transect", "cell"))
+
+pollen_df_new <- pollen_df_work %>% 
+  select(sample.id, morphotype, count, plot.id) %>% 
+  pivot_wider(names_from = morphotype, values_from = count, values_fn = {sum}, values_fill = 0) #%>% #should only need  the values_fn term in the example due to sample producing more than one 'morphotype' per group...
+
+rm(site.id)
+```
+
+Here we will load in the data Emily acquired via microscopy. 
+
+```{r, echo = F, message = F, warning = F}
+
+data <- list.files(path = '../data/', pattern = 'xlsx') 
+
+pollen_df_new.1 <- readxl::read_xlsx(file.path('../data', data)) # read in the file to R. 
+pollen_df_new.1 <- pollen_df_new.1[,2:11]
+
+pollen_df_new.1 <- pollen_df_new.1 %>%
+  group_by(sample.id) %>% # form groups of each microscope slide. 
+  mutate(count = as.numeric(count)) %>% # ensure that the values in this columns are represented as numbers to the computer
+  mutate(count = replace_na(count, 0)) %>% # remember in our sample design NA's are 0's
+  filter(transect >= 4, transect <= 17) %>%  # remove the 1st and 20th transects which we stopped counting. 
+  mutate(group_sum = sum(count)) %>% # see which slides have been counted...
+  drop_na(morphotype) %>% 
+  filter(group_sum >= 1) %>% # find only the slides which we have counted pollen grains in .
+  mutate(morphotype = str_replace(morphotype, "CAN\'T_DISTINGUISH", "UNKNOWN")) %>% 
+  mutate(morphotype = str_replace(morphotype, "INDISTINGUISHABLE_CLUMP", "UNKNOWN")) %>% 
+  mutate(morphotype = str_replace(morphotype, "NER", "UNKNOWN")) %>% 
+  mutate(morphotype = str_replace(morphotype, "DEHYDRATED", "UNKNOWN")) %>% 
+  
+  mutate(morphotype = str_replace(morphotype, "SALIX", "D")) %>% 
+  mutate(morphotype = str_replace(morphotype, "C\\_\\(LINUM\\)", "LINUM")) %>% 
+  mutate(morphotype = str_replace_all(morphotype, " ", "_")) %>% # replace white spaces 
+  mutate(morphotype = str_to_upper(morphotype)) %>% # R is case sensitive
+  mutate(morphotype = str_remove_all(morphotype, "\\_\\(11B\\)")) %>% # while good to know, unknown will be it's own class. 
+  mutate(morphotype = if_else(str_detect(morphotype, "\\?"), "UNKNOWN", morphotype)) %>% # make all unknown observations the same format. 
+  mutate(morphotype = str_replace(morphotype, "UNK$", "UNKNOWN")) %>% # make all unknown observations the same format. 
+  mutate(morphotype = str_replace_all(morphotype, "UNKNWOWN", "UNKNOWN")) %>% 
+  filter(!morphotype %in% c("NO_FJ", "LOW_FJ", "LITTLE_FJ", "LESS_FJ")) %>%  # we cannot say we counted or scored these cells. 
+  filter(!sample.id %in% c(28, 29, 59))  %>%  # THIS SLIDES ARE PURELY OF A SINGLE TAXON, AND CANNOT BE ANALYZED. 
+  filter(!morphotype %in% c(4,8)) %>% 
+  mutate(plot.id = rleid(sample.id, transect, cell))
+
+table(pollen_df_new.1$morphotype)
+
+pollen_df_new.1.rare <- pollen_df_new.1 %>% 
+  dplyr::select(-site, -date, -species, -caste, -morpho_richness, -group_sum, -transect, -cell) %>% 
+  pivot_wider(names_from = morphotype, values_from = count) %>% #, values_fill = 0
+  mutate(across(everything(), ~replace(., . == "NULL", 0))) %>% 
+  mutate(across(everything(), ~as.numeric(as.character(.)))) %>% 
+  replace(is.na(.), 0) %>% 
+  ungroup()
+ 
+#pollen_df_new_test <- pollen_df_new.1 %>% 
+#  distinct(sample.id, transect, cell) %>% 
+#  rowid_to_column() %>% 
+#  left_join(., pollen_df_new.1, by = c(sample.id = sample.id, transect = transect, cell = cell))
+
+```
+
+
+```{r, eval = F}
+
+pollen_results <- pollen_df_new.1 %>% 
+  group_by(sample.id, morphotype) %>% 
+  mutate(sum = sum(count)) %>% 
+  distinct(sample.id, morphotype, .keep_all = T) %>% 
+  select(site:sample.id, morphotype, sum )
+
+write.csv(pollen_results, '/hdd/yun master/MEE_manuscript/data/morpho_pollen.csv', row.names = F)
+```
+
+
+Now we apply the function and interpret the results. 
+
+```{r Species Richness Rarefaction, echo = F, fig.cap= "Non-parametric Species Accumulation Curves", fig.height = 11, fig.width = 8}
+to_rare <- split(pollen_df_new.1.rare, f = pollen_df_new.1.rare$sample.id) # split our DF into a list of DF's by slide. 
+to_rare <- map(to_rare, ~
+                 (.x %>% dplyr::select(-sample.id, -plot.id))) # we need to remove these values which were required to create our list objects. We pluck them out of each DF of the list object. 
+
+pollen_df_new.1 %>% 
+  group_by(sample.id) %>% 
+  distinct(morphotype) %>% 
+  count(name = 'MorphotypeRichness') %>% 
+  ungroup() %>% 
+  summarize(.groups = 'drop', mean = mean(MorphotypeRichness),
+            median = median(MorphotypeRichness), min = min(MorphotypeRichness), 
+            max = max(MorphotypeRichness))
+
+pollen_df_new.1 %>% 
+  group_by(sample.id) %>% 
+  mutate(total_grains = sum(count)) %>% 
+  ungroup() %>% 
+  summarize(mean = mean(total_grains),
+            median = median(total_grains), min = min(total_grains), 
+            max = max(total_grains))
+
+raw_vegan <- function(x){
+  
+  test <- specaccum(x, "random", 1000)
+  values <- with(test, data.frame(sites, richness, sd))
+  return(values)
+  
+}
+
+
+rich_rare <- data.table::rbindlist(lapply(to_rare[c(1:41,43:44,46:60)], raw_vegan), idcol = T) # a couple still not working, 
+rich_rare <- rich_rare %>% rename(sample.id = '.id') %>% 
+  mutate(sample.id = as.numeric(sample.id))
+
+ggplot(rich_rare, aes(x = sites, y = richness, colour = "purple")) +
+  geom_line() +
+  theme_bw() +
+  facet_wrap(~sample.id, nrow = 9) +
+  
+  theme(
+    legend.position = "none",
+    #strip.text.x = element_blank(), 
+    plot.title = element_text(hjust = 0.5),
+    plot.subtitle = element_text(hjust = 0.5),
+    plot.caption = element_text(hjust = 0.5)
+  ) +
+  
+  labs(
+  title = "Rarefaction Curves of Species Richness",
+  subtitle = "Calculated as random plot order with 1000 bootstrap replicates",
+  caption = "Used to assess completeness of subsampling. VEGAN package 'specaccum' function used",
+  y = "Morphotype Richness",
+  x = "No. of Cells ")
+
+#   Samples 45 and 48 missing due to only a single morphotype being present per slide. 
+ggsave(
+   "../graphics/plots/species_richness_rarefaction.png",
+   plot = last_plot(),
+   scale = 1,
+   width = 20,
+   height =28,
+   units =  "cm",
+   dpi = 300,
+)
+
+rm(raw_vegan, rich_rare, to_rare, pollen_df_new.1.rare)
+```
+
+Well it is looking like something like 5 transects (100 cells) would be the best fit across all samples to date. 
+
+## Relative abundances of these grains
+One way of visualizing the dispersion of count proportions (very fast and easy). 
+
+```{r Relative Abundance of Grain Morphotype, echo = F, fig.cap= "Relative Abundance of Grain Morphotypes", fig.height = 11, fig.width = 8}
+
+abundance_metrics_df <- pollen_df_new.1 %>% # pollen.df.work in example test code. 
+  dplyr::select(-transect, -cell) %>% 
+  ungroup() %>% 
+  group_by(sample.id, plot.id) %>% 
+  mutate(rel_ab_cell = (count/sum(count))*10) %>% # in each cell, which grain is most abundant. heterogeneity as an artifact of slide preparation??
+  ungroup() %>% 
+  group_by(sample.id) %>% 
+  mutate(count_slide = sum(count)) %>% #how many total COUNTED grains per slide...
+  group_by(morphotype) %>% 
+  mutate(rel_ab_slide = count_slide/sum(count)*10) %>% # what proportion of the total slide count belongs to each morphotype. 
+  ungroup()
+
+ab_to_plot <- abundance_metrics_df %>% 
+  dplyr::select(sample.id, morphotype, plot.id, rel_ab_cell, rel_ab_slide)
+
+ab_to_plot %>% 
+  ungroup() %>% 
+  distinct(sample.id, morphotype, .keep_all = T) %>% 
+  ggplot(., aes(rel_ab_slide)) +
+  geom_histogram() +
+  geom_density(fill = "hotpink", alpha = 0.8) +
+  theme_bw() +
+  facet_wrap(~sample.id, scales = "free", nrow = 9) +
+  theme(
+    strip.text.x = element_blank(), 
+    plot.title = element_text(hjust = 0.5),
+    plot.subtitle = element_text(hjust = 0.5),
+    plot.caption = element_text(hjust = 0.5), 
+    axis.text.x = element_text(angle =45, vjust = 0.75)
+  ) +
+  labs(
+  title = "Proportion of Each Morphotype as a Fraction of the Total Pollen Grains",
+  subtitle = "Relative Abundance of Grain Morphotypes",
+  caption = "Strictly for visualization purposes",
+  y = "count of morphotypes in bin",
+  x = "Relative Abundance")
+
+rm(abundance_metrics_df, ab_to_plot)
+```
+
+
+## Rarefaction of incidence and diversity estimates based on sampling effort
+
+We need to create a slightly unusual object for these tests. Shouldn't be too gnar-bar. 
+
+```{r, warning = F, echo = F, fig.cap= "Abundance Rarefaction Estimates", fig.height = 11, fig.width = 8}
+
+rarify_abundance <- function(x){
+  
+  plot_cnt <- x %>% 
+    dplyr::select(sample.id, count, plot.id, morphotype) %>% 
+    group_by(sample.id) %>% 
+    distinct(plot.id) %>% 
+    add_count(sample.id, name = "no_plots_grid") %>% 
+    distinct(sample.id, .keep_all = T) %>% 
+    mutate(across(is.factor, as.character)) %>% 
+    arrange(sample.id) %>% 
+    ungroup() %>% 
+    pull(no_plots_grid)
+  
+  morpho_cnt <- x %>% 
+    dplyr::select(sample.id:count) %>% 
+    group_by(sample.id, morphotype) %>% 
+    add_tally(name = "no_incidences") %>% 
+    mutate(total_obs = sum(count)) %>% 
+    distinct(sample.id, morphotype, .keep_all = T) %>% 
+    pull(total_obs)
+  
+  data <- c(plot_cnt[1], morpho_cnt) # assemble in the list iNEXT format. 
+  #must specify  [1] or vector with repeat to length of the second vector... 
+  
+}
+
+to_rare_ab <- split(pollen_df_new.1, f = pollen_df_new.1$sample.id)
+to_rare_ab <- lapply(to_rare_ab, rarify_abundance)
+
+cl <- parallel::makeCluster(detectCores()) # Run in parallel
+to_rare_ab <- parallel::parLapply(cl,
+                      to_rare_ab,
+                      iNEXT,  q = 0, datatype = "abundance", se = TRUE, conf = 0.99, nboot= 1000)
+parallel::stopCluster(cl)
+
+
+to_rare_ab.df <- lapply(to_rare_ab, fortify,  type = 2)
+to_rare_ab.df <- rbindlist(to_rare_ab.df, idcol = 'true')
+to_rare_ab.df <- to_rare_ab.df %>% 
+  rename(site = true) %>% 
+  mutate(site = as.numeric(site)) %>% 
+  arrange(site)
+
+df.point <- to_rare_ab.df[which(to_rare_ab.df$Method=="Observed"),]
+df.line <- to_rare_ab.df[which(to_rare_ab.df$Method!="Observed"),]
+df.line$method <- factor(df.line$Method, 
+                         c("Interpolated", "Extrapolated"),
+                         c("Interpolation", "Extrapolation"))
+
+ggplot(to_rare_ab.df, aes(x=x, y=y)) + 
+  facet_wrap(~ site, nrow = 9, scales = "free_x") +
+  geom_point(size=1, data=df.point) +
+  geom_line(aes(linetype = Method), lwd = 1.5, data = df.line) +
+  geom_ribbon(aes(ymin = y.lwr, ymax = y.upr), alpha = 0.8, data = df.line) +
+  
+  labs(
+    title = "Species Richness Abundance Estimating via Hill Numbers (q = 0)",
+    subtitle = "Confidence Interval of 99% with 1000 Bootstrap replicates",
+    caption = "Calculated using iNEXT",
+    x="Number of Grains Counted", 
+    y="Species abundance"
+    ) +
+  theme_bw() +
+
+  theme(
+    legend.position = "none", 
+    legend.title = element_blank(),
+    legend.box = "vertical",
+   # strip.text.x = element_blank(), 
+    plot.title = element_text(hjust = 0.5),
+    plot.subtitle = element_text(hjust = 0.5),
+    plot.caption = element_text(hjust = 0.5), 
+    axis.text.x = element_text(angle = 45, vjust = 0.75)
+    ) 
+
+ggsave(
+   "../graphics/plots/SppAbundance.png",
+   plot = last_plot(),
+   scale = 1,
+   width = 21,
+   height = 28,
+   units =  "cm",
+   dpi = 300,
+)
+
+rm(df.point, df.line, to_rare_ab)
+```
+
+
+
+```{r, warning = F, echo = F, fig.cap= "Hill-Shannon Rarefaction Estimates", fig.height = 11, fig.width = 8}
+
+to_rare_ab <- split(pollen_df_new.1, f = pollen_df_new.1$sample.id)
+to_rare_ab <- lapply(to_rare_ab, rarify_abundance)
+
+cl <- parallel::makeCluster(detectCores())# Run parallel computation
+to_rare_ab <- parallel::parLapply(cl,
+                      to_rare_ab,
+                      iNEXT,  q = 1, datatype = "abundance", se = TRUE, conf = 0.99, nboot= 1000)
+parallel::stopCluster(cl)
+
+to_rare_ab.df <- fortify(to_rare_ab, type=2)
+to_rare_ab.df <- rbindlist(to_rare_ab.df, )
+to_rare_ab.df <- to_rare_ab.df %>% 
+  mutate(site = as.numeric(site)) %>% 
+  arrange(site)
+
+df.point <- to_rare_ab.df[which(to_rare_ab.df$method=="observed"),]
+df.line <- to_rare_ab.df[which(to_rare_ab.df$method!="observed"),]
+df.line$method <- factor(df.line$method, 
+                         c("interpolated", "extrapolated"),
+                         c("interpolation", "extrapolation"))
+ 
+ggplot(to_rare_ab.df, aes(x=x, y=y)) + 
+  facet_wrap(~site, nrow = 9, scales = "free_x") +
+  geom_point(size=1, data=df.point) +
+  geom_line(aes(linetype = method), lwd=1.5, data = df.line) +
+  geom_ribbon(aes(ymin = y.lwr, ymax = y.upr), alpha = 0.2, data = df.line) +
+  
+  labs(
+    title = "Hill-Shannon (q = 1)",
+    subtitle = "CI of 99% with 1000 BS replicates",
+    caption = "Calculated using iNEXT",
+    x="Number of Grains Counted", 
+    y="Species abundance"
+    ) +
+  theme_bw() +
+
+  theme(
+    legend.position = "none", 
+    legend.title = element_blank(),
+    text = element_text(size=10),
+    legend.box = "vertical",
+    strip.text.x = element_blank(), 
+    plot.title = element_text(hjust = 0.5),
+    plot.subtitle = element_text(hjust = 0.5),
+    plot.caption = element_text(hjust = 0.5), 
+    axis.text.x = element_text(angle = 45, vjust = 0.75)
+    ) 
+
+```
+
+How many grains must be counted to have a satisfied CI of 95% for the relative abundance metrics ?
+
+```{r, echo = F}
+to_rare_ab.df %>%
+  group_by(site) %>%
+  arrange(x) %>% 
+  filter(y >= 0.95) %>% 
+  slice_min(y, with_ties = F)%>% 
+  ungroup() %>% 
+  mutate(grains_to_count = ceiling(sum(x)/nrow(.))) %>% 
+  dplyr::select(grains_to_count) %>% 
+  distinct() %>% 
+  head()
+
+rm(to_rare_ab.df)
+```
+
+Ok abundance is saturating much more quickly than richness. Typical. But the curves are a little strange.
+
+# Find grains to review the identification of. We completed this in Fall of 2021.
+```{r, error = F, message = F}
+table(pollen_df_new.1$morphotype) #,pollen_df_new.1$count)
+a <- sort(unique(pollen_df_new.1$morphotype))
+
+a <- a[c(
+  2,  # apiaceae 0
+  3,  # apiaceae 1
+  8,  # linum - C
+  9,  # can't distinguish
+  13, # indistinguishable clump
+  16, # NER - could be a reeed artifact from R?
+  22, #unknown
+  23 #unknown ranunculus
+)]
+
+to_review <- filter(pollen_df_new.1, morphotype %in% a) %>%  
+  dplyr::select(-caste, -morpho_richness, -group_sum, -plot.id) #%>%  
+  arrange(sample.id, transect, cell)
+  
+to_review <- to_review[order(to_review$sample.id, to_review$transect, -to_review$cell), ]
+
+#to_review %>% 
+#  group_by(morphotype) %>% 
+#  summarise(sum(count)) 
+
+head(to_review)
+```
+
+
+## discarded
+
+https://www.researchgate.net/post/What-is-an-appropriate-method-to-compare-species-counts-containing-many-zero-values
+
+"you can try a generalized linear model with binomial variance function and a logit link, that worked for me. In your case the family might be poisson instead of binomial. Maybe you have to add a weight for example the total number of species present.
+In R this would look like:
+
+glm(count~site, weight=totalcount, data=speciesdata, family=binomial(link="logit"))
+
+Hope that helps.
+Otherwise here's information on zero inflated models that might help:
+http://www.ats.ucla.edu/stat/r/dae/zipoisson.htm"
+
+ ^^^^ Matthias Schumacher on Researchgate question....Don't delete this this may come in handy....
+
+```{r, eval = F, echo =F}
+
+table <- rhandsontable(pollen_df, width = 600, height = 300) %>% 
+  hot_col(c("site", "date", "bombus.species", "bombus.caste", "sample.id", "transect"), readOnly = TRUE) %>% 
+  hot_col(c("morphotype","count"), readOnly = F)
+
+```
+
+
+```{r, eval = F, echo = F}
+library(DT)
+
+
+datatable(data, options = list(), class = "display",
+    callback = JS("return table;"), rownames, colnames, container,
+    caption = NULL, filter = c("none", "bottom", "top"), escape = TRUE,
+    style = "default", width = NULL, height = NULL, elementId = NULL,
+    fillContainer = getOption("DT.fillContainer", NULL),
+    autoHideNavigation = getOption("DT.autoHideNavigation", NULL),
+    selection = c("multiple", "single", "none"), extensions = list(),
+    plugins = NULL, editable = FALSE)
+
+datatable(pollen_df, 
+          editable = "cell", 
+          caption = 'Pollen Grain Count Entry Data',
+          rownames = FALSE)
+
+
+
+#list(target = list(columns = c("morphotype","count"), disable = list(columns = 1:5))),
+?DT::datatable
+```
+

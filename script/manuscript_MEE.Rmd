@@ -207,7 +207,25 @@ c <- c('Jeffersonia', 'Micranthes', 'Prunus', 'Delphinium', 'Androsace',
        'Penstemon', 'Orthocarpus', 'Scuttelaria', 'Aquilegia', 'Castilleja', 'Draba')
 d <- c('Salix', 'Boechera')
 
+# are mertensia and Asteraceae 1 & 2 detected in all Pollen samples where the bee was COLLECTED ON THEM ?
+
+corb <- read.csv('../data/Corbiculae_collections.csv', header = F) %>% 
+  mutate(V1 = str_remove(V1, 'dark|orange')) %>% 
+  filter(!str_detect(V1, 'bifarius')) %>% 
+  separate(V1, into = c('sample.id', 'genus', 'species', 'caste',
+                        'plant.genus', 'plant.species')) %>% 
+  filter(plant.genus == 'Mertensia')
+    
+pmorph <- read.csv('../data/morpho_pollen.csv')
+mertensia_samples <- pmorph %>% 
+  group_by(sample.id) %>% 
+  filter(morphotype == 'MERTENSIA') %>% 
+  select(sample.id, sum)
+
 # Do we detect mertensia, asteraceae 1, asteraceae 2, in all molecular samples which they are present in the pollen samples of?
+
+blst <- read.csv('../data/classified_blast.csv') 
+
 ```
 
 
@@ -272,7 +290,6 @@ no_reads <- loci %>% group_by(loci) %>% summarize(readsLoci = sum(n))
 **APPENDIX X Reads Per Loci**.
 
 After trimming `r pNumC(sum(trimmed_seqs))` sequences remained. `r pNumC(sum(krak[krak$Classified == 'C',]$n))` reads were matched using Kraken, of the reads classified by Kraken `r pNumC(sum(brack$reads))` reads were matched using Bracken, of the reads classified by Kraken `r pNumC(sum(blast$Total_seqs))` reads were matched using BLAST.  
-
 Based upon subjective review of the three classifiers **APPENDIX X MOLECULAR NETWORKS - 3 DIFFERENT ONES**, BLAST was chosen as the classification method which yielded the most probable results, and it's values were used for all subsequent analyses. 
 
 ```{r clean sequence numbers from environment, eval = F, echo = F}
@@ -343,7 +360,7 @@ rm(bee_obs, flr_ranks, obs_time, t_b_b, t_b_wk, t_b_pl, t_b_wk_pl, e, s, files, 
 ```
 
 
-```{r Most used resources by species, eval = F, echo =F}
+```{r Most used resources by species, echo =F, fig.cap = 'Number of the ten most commonly visited plants which are also in the top ten most common sequences', out.width = "45%"}
 
 corb <- read.csv('../data/Corbiculae_collections.csv', header = F) %>% 
   mutate(sample.id = as.numeric(str_extract(V1, '[0-9]{1,2}')),
@@ -364,21 +381,103 @@ blst_cnt <- blst %>%
   distinct(sample.id, .keep_all = T) %>% 
   count(species)
 
+# Need to do some kind of weighted total proportion... 
+# the number of reads per sample, and the % of reads should be a factor
+gf_lkp2 <- read.csv('../data/genus2family_lkp.csv')
+gf_lkp <- blst %>% select(Genus, Family) %>% distinct(Genus, .keep_all = T) %>% 
+  bind_rows(gf_lkp2)
+
 tb <- blst %>% 
   left_join(., blst_cnt, by = 'species') %>% 
   group_by(species, name) %>% 
-  mutate(Mu_Seqs = sum(Prcnt_seqs)/n)  %>% 
-  distinct(species, name, .keep_all = T)
-
-tb %>% 
-  filter(species == 'Bombus appositus') %>% 
-  ungroup() %>% 
-  mutate(total = sum(Mu_Seqs))
+  mutate(Mu_Seqs = sum(Prcnt_seqs)/n,
+         species = str_remove(species, 'Bombus '))  %>% 
+  distinct(species, name, .keep_all = T) %>% 
+  ungroup(name) %>% 
+  slice_max(Mu_Seqs, n = 10) %>% 
+  select(plant.species = name, species, n, Mu_Seqs, Genus, Family) %>% 
+  mutate(rank = 1:n()) %>% 
+  ungroup()
 
 obs <- read.csv('../data/yearEndInteractionsObservations.csv')[,2:5] %>% 
   group_by(species) %>% 
-  arrange(species, -bySpp) %>% 
-  slice_head(n = 10)
+  arrange(-bySpp) %>% 
+  slice_head(n = 10) %>% 
+  mutate(plant.species = case_when(
+    plant.species == 'Adenolinum.lewisii' ~  'Linum lewisii', 
+    plant.species == 'Lupinus.bakeri' ~ 'Lupinus sericeus' , 
+    plant.species == 'Dugaldia.hoopesii' ~ 'Hymenoxys hoopesii', 
+    TRUE ~ plant.species 
+  )) %>% 
+  separate(plant.species, into = 'Genus', extra = 'drop', remove = F) %>% 
+  mutate(plant.species = str_replace(plant.species, '[.]', " ")) %>% 
+  left_join(., gf_lkp, by = 'Genus') %>% 
+  filter(species %in% tb$species) %>% 
+  mutate(rank = 1:n()) %>% 
+  ungroup()
+
+## Which bombus species are shared??
+
+# REMOVE KIRBIELLIUS, ONLY  A SINGLE FEEDING RECORD
+obs <- filter(obs, !species %in% c('kirbiellus', 'mixtus'))
+tb <- filter(tb, !species %in% c('kirbiellus', 'mixtus'))
+
+tblist <- split(tb, tb$species) %>% 
+  map(., ~ select(., plant.species, Genus, Family))
+oblist <- split(obs, obs$species) %>% 
+  map(., ~ select(., plant.species, Genus, Family))
+
+species <- purrr::map2_int(tblist, oblist,
+                ~ inner_join(.x, .y, by = 'plant.species') %>% nrow())
+
+#purrr::map2(tblist, oblist,  ~ inner_join(.x, .y, by = 'Genus') %>%  
+#              distinct(plant.species.y, .keep_all = T))
+
+genus <- purrr::map2_int(tblist, oblist,
+  ~ inner_join(.x, .y, by = 'Genus') %>%
+    distinct(plant.species.y) %>% nrow()
+) 
+
+#purrr::map2(tblist, oblist,  ~ inner_join(.x, .y, by = 'Family') %>% 
+#              distinct(plant.species.y, .keep_all = T))
+
+family <- purrr::map2_int(tblist, oblist,
+  ~ inner_join(.x, .y, by = 'Family') %>%
+    distinct(plant.species.y) %>%
+    nrow()
+) 
+
+correct <- data.frame(Bombus.Species = names(species),
+           Species = species, Genus = genus, Family = family) %>% 
+          # ObsMax = map_int(oblist, ~ nrow(.))) %>% 
+  pivot_longer(!Bombus.Species, names_to = 'Observation') %>% 
+  mutate(Observation = factor(Observation,  levels = c("Species", "Genus", "Family")))
+
+
+bee_cols <- c('appositus' = '#A50026FF', 'bifarius' = '#FFA319FF', 
+              'californicus' = '#9632B8', 'flavifrons' = '#EFAE90',
+              'rufocinctus' = '#155F83FF', '#8F3931FF', 
+                'mixtus' = '#350E20FF', 'kirbiellus'  =  '#8074A8', 
+              'nevadensis' = '#C96731')
+
+ggplot(data=correct, aes(x=Observation, y=value,
+                         group = Bombus.Species, color = Bombus.Species)) +
+  geom_line(lwd = 1.25)+
+  geom_point(size = 3, shape = 23, aes(fill = Bombus.Species)) +
+  scale_fill_manual('Bee species', values = bee_cols) +
+  scale_color_manual('Bee species', values = bee_cols) +
+  theme_bw() +
+  scale_y_continuous(breaks = c(0,2,4,6,8,10), limits = c(0,10))+
+  labs(title = 'Taxa shared between the top 10 observations and molecular work', 
+       y = 'Shared Observations', x= NULL) + 
+  theme(panel.grid.major.x = element_blank(),
+        panel.border = element_blank()) 
+
+rm(bee_cols, correct, family, genus, tblist, oblist, gf_lkp, gf_lkp2)
+```
+
+
+```{r}
 
 ```
 
@@ -398,7 +497,7 @@ Future analyses of the long term data set... Global studies should aim to corrob
 - Fewer modelling runs for SDM's likely to be effective for determining inclusion, elastic inclusion criteria per application.
 - The actual data set which was used for training and testing all of the models incorporated into SDM's represented only roughly one quarter of the records available for such purposes. We consciously chose to do this in order to showcase the possibility of this approach working in less data rich areas. 
 - Used fine scale flora to evaluate results of modelling, similar approaches based on quick field surveys which do not require comprehensive floristic endeavors.
-- Timing in other areas may suffer complications due to lacking as strong a signal as that induced by snowmelt, but longer durations of flowering likely to help. 
+- Timing in other areas may suffer complications due to lacking as strong a signal as that induced by snow melt, but longer duration of flowering likely to help. 
 - Sample size in phenology estimates had an effect which is likely to be maintained across all results.
 - Regardless both show good agreement on flower onset, peak flowering, and moderate agreement with flowering cessation. The disagreement in flowering cessation is perhaps due to more microclimates which retain water, rather than microclimates which allow the early accumulation of heat. 
 - Number of botanists rapidly decreasing no hope for much more field based information or funding.   
@@ -408,10 +507,11 @@ Future analyses of the long term data set... Global studies should aim to corrob
 - Expected to work nearly immediately for DNA barcoding of whole plant material.
 - With work expected to work well in meta contexts. 
 - Harvest both variable loci, and variable flanking regions of loci for fine taxonomic resolution
+- As genes are nuclear, single copy, and a variety are present the possibility of identifying target loci for quantitative purposes is high.
 - Potential for infra-specific inference (@wenzell2021incomplete, Loke et al.,  @slimp2021potential, @beck2021palmer). 
 
 **Final P**
- < bayesian framework > & < harvesting loci >  = Possible Application at landscape scale. 
+ < bayesian framework > & < harvesting loci >  < Possible Application at landscape scale >  < expert natural history >
  
  
 **AUTHOR CONTRIBUTIONS:**  R.C.B conducted botanical collections, conducted all molecular lab work, lead all analyses, and writing. J.E.O conceived, designed, and conducted all ecological fieldwork, assisted with analyses, and writing. E.J.W. prepared, imaged, and collected trait data on pollen reference slides, and assisted with analysis of trait data and writing a dichotomous key. S.T. assisted with spatial analyses and writing. P.J.C assisted with ecological analyses and writing. J.B.F. conceived, and designed all lab work, analyses, and integration of approaches, assisted with writing, and secured funding for molecular work. 
@@ -490,7 +590,7 @@ Layer                   Description                            Source
 
 APPENDIX XX - Pollen Morphotype Richness Rarefaction Curves
 
-```{r Morphotype Richness, echo= F,  out.width = '99%'}
+```{r Morphotype Richness, echo= F,  out.width = '95%'}
 knitr::include_graphics('../graphics/plots/species_richness_rarefaction.png')
 ```
 
@@ -512,8 +612,6 @@ knitr::include_graphics('../graphics/tables/specimen_tables-1.pdf')
 
 \newpage
 
-Appendix XX - Molecular Reference Specimen Table (con't)
-
 ```{r Voucher Reference Specimen table 2, echo = F}
 knitr::include_graphics('../graphics/tables/specimen_tables-2.pdf')
 ```
@@ -527,8 +625,6 @@ knitr::include_graphics('../graphics/assorted/kraken_db_spp_table-1.pdf')
 ```
 
 \newpage
-
-Appendix XX - All Species in the Sequence Databases (con't)
 
 ```{r Seq DB 2, echo = F}
 knitr::include_graphics('../graphics/assorted/kraken_db_spp_table-2.pdf')
@@ -560,15 +656,11 @@ knitr::include_graphics('../graphics/assorted/pollen_slide_table_reduced-1.pdf')
 
 \newpage
 
-Appendix XX - All Pollen Reference Slides Used to Establish Morphotypes (con't)
-
 ```{r Pollen Reference Slides 2, echo = F}
 knitr::include_graphics('../graphics/assorted/pollen_slide_table_reduced-2.pdf')
 ```
 
 \newpage
-
-Appendix XX - All Pollen Reference Slides Used to Establish Morphotypes (con't)
 
 ```{r Pollen Reference Slides 3, echo = F}
 knitr::include_graphics('../graphics/assorted/pollen_slide_table_reduced-3.pdf')
@@ -588,6 +680,11 @@ knitr::include_graphics('../graphics/assorted/RMBL_pollen_key-1.pdf')
 knitr::include_graphics('../graphics/assorted/RMBL_pollen_key-2.pdf')
 ```
 
+\newpage 
+
+```{r Molecular Networks, echo = F, out.width="110%"}
+knitr::include_graphics('../graphics/plots/Molecular_nets.pdf')
+```
 
 \newpage
 
@@ -597,7 +694,10 @@ Appendix XX - Models used for Species Distribution Model Ensembles
 
 *Generalised Additive Models (GAM)*
 
-Ensemble learning utilizes many sets of trees, each composed of many decisions, to create a single model. Each independent variable ( - or *feature*, may) become a node on the tree, a location on the tree where a binary decision will move towards a predicted outcome. Each of the decision tree models which ensemble learning utilizes is a weak models, each of which may suffer due to high variance or bias, but which produce better outcomes than would be expected via random chance. When ensembled these models generate a strong model, a model which should have more appropriately balanced variance and bias and predicts outcomes which are more strongly correlated with the expected values than the individual weak models. 
+
+The two machine learning models utilize Ensemble learning.
+
+Ensemble learning utilizes many sets of trees, each composed of many decisions, to create a single model. Each independent variable ( - or *feature*) may become a node on the tree - i.e. a location on the tree where a binary decision will move towards a predicted outcome. Each of the decision tree models which ensemble learning utilizes is a weak model, each of which may suffer due to high variance or bias, but which produce better outcomes than would be expected via chance. When ensembled these models generate a strong model, a model which should have more appropriately balanced variance and bias and predicts outcomes which are more strongly correlated with the expected values than the individual weak models. 
 
 *Random Forest (RF)* the training data are continually bootstrap re-sampled, in combination with random subsets of features, to create nodes which attempt to optimally predict a known outcome. A large number of trees are then aggregated, via the most common predictions, to generate a final classification prediction tree. Each individual prediction tree is generated independently of the others. 
 
