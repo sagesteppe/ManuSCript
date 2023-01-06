@@ -219,15 +219,37 @@ corb <- read.csv('../data/Corbiculae_collections.csv', header = F) %>%
 pmorph <- read.csv('../data/morpho_pollen.csv')
 mertensia_samples <- pmorph %>% 
   group_by(sample.id) %>% 
+  mutate(Prop = sum/sum(sum)) %>% 
   filter(morphotype == 'MERTENSIA') %>% 
-  select(sample.id, sum)
+  select(sample.id, Prop, sum)
 
 # Do we detect mertensia, asteraceae 1, asteraceae 2, in all molecular samples which they are present in the pollen samples of?
 
 blst <- read.csv('../data/classified_blast.csv') 
+blst_seqs <- distinct(blst, sample.id) 
+mertensia_samples <- filter(mertensia_samples, sample.id %in% blst_seqs$sample.id)
+
+# # SOMETHING MUST BE VERY WRONG HERE, MISSED MERTENSIA IN NEARLY PURE SAMPLES. 
+blst_mertensia <- blst %>% 
+  filter(Genus == 'Mertensia') %>% 
+  select(sample.id,  Prcnt_seqs) %>% 
+  group_by(sample.id) %>% 
+  mutate(Prcnt_seqs = sum(Prcnt_seqs)) %>% 
+  distinct(sample.id, .keep_all = T)
+
+mertensia_detected <- mertensia_samples %>% 
+  mutate(DETECTED = if_else(sample.id %in% blst_mertensia$sample.id, 1, 0)) 
+  
+M1 <- glm(DETECTED ~ Prop, mertensia_detected, family = binomial)
+M.df <- data.frame(Prop = seq(0, 100, 0.5))
+M.df$DETECTED <- predict(M1, newdata=M.df, type="response")
+
+ggplot(M.df, aes(x=Prop, y=DETECTED)) +
+  stat_smooth(method="glm", se=T, fullrange=TRUE, 
+              method.args = list(family=binomial))  +
+  theme_bw()
 
 ```
-
 
 Using the fuchsin jelly preparation and light microscopic analyses of grains and scoring of 10 character states resulted in the establishment of 28 morphotypes which grains could be classified into. *APPENDIX 7*. 60 samples were counted and based on rarefaction **had over % of expected morphotypes found** (morphotype richness, $\bar{x}$ = 4.5, Mdn = 4, min = 1, max = 9), all samples had expected morphotype diversity reach the asymptote *APPENDIX 8*. The number of counted pollen grains in each sample range from (*MIN* - 16,293, $\bar{x}$ = 2788.685, Mdn = 1453). 
 
