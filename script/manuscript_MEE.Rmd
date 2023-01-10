@@ -2,26 +2,24 @@
 title: Metagenomic Barcoding of Pollen Loads Offers Insights on the Foraging
   Patterns of Queen Bumble Bees
 author:  |
-    |  Sophie Taddeo $^1$$^,$$^2$, Paul J. CaraDonna $^1$$^,$$^2$$^,$$^3$, Jeremie B. Fant $^1$$^,$$^2$ 
+    |  Reed Clark Benkendorf^[Correspondence: reedbenkendorf2021@u.northwestern.edu] $^1$$^,$$^2$, Jane E. Ogilvie$^3$$^,$$^4$ , Emily J. Woodworth$^1$$^,$$^2$  
+    |  Sophie Taddeo$^1$$^,$$^2$, Paul J. CaraDonna$^1$$^,$$^2$$^,$$^3$, Jeremie B. Fant$^1$$^,$$^2$ 
     |  $^1$Chicago Botanic Garden, 1000 Lake Cook Road, Glencoe, Illinois 60022 USA, 
     |  $^2$Plant Biology and Conservation, Northwestern University, Evanston, IL 60208, USA,
-    |  $^3$Rocky Mountain Biological Laboratory, P.O. Box 519, Crested Butte, CO 81224, USA
-    |  Reed Clark Benkendorf^[Correspondence: reedbenkendorf2021@u.northwestern.edu] $^1$$^,$$^2$, Jane E. Ogilvie $^3$, Emily J. Woodworth $^1$$^,$$^2$  
+    |  $^3$ Rocky Mountain Biological Laboratory, P.O. Box 519, Crested Butte, CO 81224, USA
+    |  $^4$ Australia post fire project, ----, ----, ----, AU
 abstract:  |  
   1) DNA Barcoding has been remarkably successful in nearly all kingdoms of life and has allowed for the rapid analysis of ecological assemblages. Successful DNA barcoding in the plant kingdom has been more difficult than other kingdoms. Due to this understanding plants in ecological contexts and understandings of their synecology in some instances may begin to lag behind other kingdoms.  
   2) Here we utilize hyb-seq, museum studies, and species distribution modelling, to detect the plant species present in pollen loads collected from Queen Bumble Bees.  
-  3) By utilizing Species distribution modelling we allow for one to process hyb-seq data, create user specified sequence databases which may use MORE ACCURATE alignment algorithms on personal computers over realistic time periods.  
+  3) By utilizing Species distribution modelling we allow for one to process hyb-seq data, create user specified sequence databases which may use MORE ACCURATE alignment algorithms on personal computers over realistic time periods. 
   4) We show that hyb-seq using the Angiosperms 353 probes, which are currently being used in the largest ever plant systematic endeavor, offers significant promise to metagenomic approaches in real world scenarios.  
   5) We conclude that these probes offer promise for the identification of plant tissue in both single sample, and metasample contexts.  
-keywords: |  
+keywords: | 
   DNA baroding, metagenomics, hyb-seq, Angiosperms353, plant metagenomics, bombus queens, subalpine, species distribution model
 output:
-  word_document: default
-  toc: no
-  pandoc_args:
-      - '--lua-filter=scholarly-metadata.lua'
-      - '--lua-filter=author-info-blocks.lua'
   pdf_document: default
+  toc: no
+  word_document: default
 csl: "../citations/methods-in-ecology-and-evolution.csl"
 bibliography: ../citations/citations.bib
 link-citations: yes
@@ -218,7 +216,7 @@ c <- c('Jeffersonia', 'Micranthes', 'Prunus', 'Delphinium', 'Androsace',
 d <- c('Salix', 'Boechera')
 
 # are mertensia and Asteraceae 1 & 2 detected in all Pollen samples where the bee was COLLECTED ON THEM ?
- 
+
 pmorph <- read.csv('../data/morpho_pollen.csv') 
 blst <- read.csv('../data/blast_seqs_classified.csv') 
 blst_seqs <- distinct(blst, sample.id) 
@@ -240,15 +238,23 @@ blst_mertensia <- blst %>%
   mutate(Prcnt_seqs = sum(Prcnt_seqs)) %>% 
   distinct(sample.id, .keep_all = T)
 
-
 mertensia_detected <- mertensia_samples %>% 
   mutate(DETECTED = if_else(sample.id %in% blst_mertensia$sample.id, 1, 0)) 
- # sample 26 - very strange !!!! this needs investigation
+ # sample 26 - very strange !!!! this needs investigation - ALSO THE ERICOID IS LIKELY ONAGRAD !?
 
 blst_aster <- blst %>% 
   filter(Family == 'Asteraceae') %>% 
   group_by(sample.id) %>% 
   distinct(sample.id, .keep_all = T)
+
+# PERFORM FOR ERICACEAE TOO - A single record maybe come out?
+ericaceae_samples <- pmorph %>% 
+  filter(morphotype == 'ERICACEAE') %>% 
+  select(sample.id, Prop, sum)
+
+blst_ericoid <- filter(blst, Family == 'Ericaceae') # 44 might be Epilobium anagallidolium
+ericaceae_detected <- ericaceae_samples %>% 
+  mutate(DETECTED = if_else(sample.id %in% blst_ericoid$sample.id, 1, 0)) 
 
 # ASTER 2 HERE...
 aster2_samples <- pmorph %>% 
@@ -256,7 +262,6 @@ aster2_samples <- pmorph %>%
 
 blst_aster2 <- filter(blst_aster, Genus %in% 
                             c('Taraxacum', 'Helianthella', 'Scabrethia'))
-
 aster2_detected <- aster2_samples %>% 
   mutate(DETECTED = if_else(sample.id %in% blst_aster2$sample.id, 1, 0)) 
 
@@ -265,7 +270,6 @@ aster1_samples <- pmorph %>%
   filter(morphotype == 'ASTERACEAE_1') 
 
 blst_aster1 <- filter(blst_aster, !Genus %in% c('Taraxacum', 'Helianthella', 'Scabrethia') )
-
 aster1_detected <- aster1_samples %>% 
   mutate(DETECTED = if_else(sample.id %in% blst_aster1$sample.id, 1, 0)) 
 
@@ -280,10 +284,11 @@ aa <- prcnt_detect(mertensia_detected, Lprop = 0.01, Hprop = 1)
 bb <- prcnt_detect(aster1_detected, Lprop = 0.001, Hprop = 0.01)
 cc <- prcnt_detect(aster2_detected, Lprop = 0.001, Hprop = 0.01)
 dd <-  prcnt_detect(aster_detected, Lprop = 0.01, Hprop = 1)
+ee <- prcnt_detect(ericaceae_detected, Lprop = 0.001, Hprop = 0.1)
 
 rm(mertensia_samples, blst, blst_aster, blst_aster1,
    blst_aster2, aster1_samples,  aster2_samples, a, b, c, d, 
-   blst_mertensia, aster_samples)
+   blst_mertensia, aster_samples, ericaceae_samples, blst_ericoid)
 ```
 
 Using the fuchsin jelly preparation and light microscopic analyses of grains and scoring of 10 character states resulted in the establishment of 28 morphotypes which grains could be classified into. *APPENDIX 7*. 60 samples were counted and based on rarefaction **had over % of expected morphotypes found** (morphotype richness, $\bar{x}$ = 4.5, Mdn = 4, min = 1, max = 9), all samples had expected morphotype diversity reach the asymptote *APPENDIX 8*. The number of counted pollen grains in each sample range from (*MIN* - 16,293, $\bar{x}$ = 2788.685, Mdn = 1453). 
@@ -351,14 +356,13 @@ no_reads <- loci %>% group_by(loci) %>% summarize(readsLoci = sum(n))
 
 **APPENDIX X Reads Per Loci**.
 
-After trimming `r pNumC(sum(trimmed_seqs))` sequences remained. `r pNumC(sum(krak[krak$Classified == 'C',]$n))` reads were matched using Kraken, of the reads classified by Kraken `r pNumC(sum(brack$reads))` reads were matched using Bracken, of the reads classified by Kraken `r pNumC(sum(blast$Total_seqs))` reads were matched using BLAST.  
-Based upon subjective review of the three classifiers **APPENDIX X MOLECULAR NETWORKS - 3 DIFFERENT ONES**, BLAST was chosen as the classification method which yielded the most probable results, and it's values were used for all subsequent analyses. 
+After trimming `r pNumC(sum(trimmed_seqs))` sequences remained. `r pNumC(sum(krak[krak$Classified == 'C',]$n))` reads were matched using Kraken, of the reads classified by Kraken `r pNumC(sum(brack$reads))` reads were matched using Bracken, of the reads classified by Kraken `r pNumC(sum(blast$Total_seqs))` reads were matched using BLAST. Based upon subjective review of the three classifiers **APPENDIX X MOLECULAR NETWORKS - 3 DIFFERENT ONES**, BLAST was chosen as the classification method which yielded the most probable results, and it's values were used for all subsequent analyses. 
 
 ```{r clean sequence numbers from environment, eval = F, echo = F}
 rm(toseq, krak, brack, blast, loci, no_loci, aa, bb, cc, dd)
 ```
 
-To determine at which level species in pollen loads could be detected the results of light microscopy were compared to the molecular results. The pollen samples contained three morphotypes which could readily be identified via microscopy. Two of these mapped to the clades (Boraginaceae & Heliantheae Alliance), and one to a Asteraceae less Heliantheae. Boraginaceae grains `r toString(aa)`.  Asteraceae type 1, non-helianthoids, `r toString(bb)` Asteraceae type 2, Helianthoids, `r toString(cc)`. Both morphotypes of Asteraceae pollen `r toString(dd)`.
+To determine at which level species in pollen loads could be detected the results of light microscopy were compared to the molecular results. The pollen samples contained three morphotypes which could readily be identified via microscopy. Two of these mapped to the clades (Boraginaceae & Heliantheae Alliance), and one to a Asteraceae less Heliantheae. Boraginaceae grains `r toString(aa)`.  Asteraceae type 1, non-helianthoids, `r toString(bb)` Asteraceae type 2, Helianthoids, `r toString(cc)`. Both morphotypes of Asteraceae pollen `r toString(dd)`, and Ericaceae `r toString(ee)`.
 
 ## 3.4 | Temporal Analyses
 
@@ -448,8 +452,10 @@ blst_cnt <- blst %>%
 # Need to do some kind of weighted total proportion... 
 # the number of reads per sample, and the % of reads should be a factor
 gf_lkp2 <- read.csv('../data/genus2family_lkp.csv')
-gf_lkp <- blst %>% select(Genus, Family) %>% distinct(Genus, .keep_all = T) %>% 
-  bind_rows(gf_lkp2)
+gf_lkp <- blst %>% select(Genus, Family) %>% 
+  distinct(Genus, .keep_all = T) %>% 
+  bind_rows(gf_lkp2) %>% 
+  filter(Family != 'UNKNOWN')
 
 tb <- blst %>% 
   left_join(., blst_cnt, by = 'species') %>% 
@@ -461,7 +467,18 @@ tb <- blst %>%
   slice_max(Mu_Seqs, n = 10) %>% 
   select(plant.species = name, species, n, Mu_Seqs, Genus, Family) %>% 
   mutate(rank = 1:n()) %>% 
-  ungroup()
+  ungroup() %>% 
+  mutate(Family = case_when(
+    Genus %in% c('Trollius', 'Caltha', 'Aquilegia', 'Delphinium') ~ 'Ranunculaceae',
+    Genus == 'Hydrophyllum' ~ 'Hydrophyllaceae',
+    Genus == 'Epilobium' ~ 'Onagraceae',
+    Genus == 'Viola' ~ 'Violaceae',
+    Genus == 'Salix' ~ 'Saliceae',
+    Genus == 'Cynoglossum' ~ 'Boraginaceae', 
+    Genus == 'Arenaria' ~ 'Caryophyllaceae',
+    Genus == 'Parnasiia' ~ 'Celastraceae',
+    TRUE ~ Family 
+  ))
 
 obs <- read.csv('../data/yearEndInteractionsObservations.csv')[,2:5] %>% 
   group_by(species) %>% 
@@ -473,6 +490,7 @@ obs <- read.csv('../data/yearEndInteractionsObservations.csv')[,2:5] %>%
     plant.species == 'Dugaldia.hoopesii' ~ 'Hymenoxys hoopesii', 
     TRUE ~ plant.species 
   )) %>% 
+  #mutate(Family = if_else(Family == 'UNKNOWN', 'HYDROPHYLLACEAE', Family)) %>% 
   separate(plant.species, into = 'Genus', extra = 'drop', remove = F) %>% 
   mutate(plant.species = str_replace(plant.species, '[.]', " ")) %>% 
   left_join(., gf_lkp, by = 'Genus') %>% 
@@ -526,7 +544,7 @@ bee_cols <- c('appositus' = '#A50026FF', 'bifarius' = '#FFA319FF',
 
 ggplot(data=correct, aes(x=Observation, y=value,
                          group = Bombus.Species, color = Bombus.Species)) +
-  geom_line(linewidth = 1.25)+
+  geom_line(linewidth = 1.25, linetype = 'dotted')+
   geom_point(size = 3, shape = 23, aes(fill = Bombus.Species)) +
   scale_fill_manual('Bee species', values = bee_cols) +
   scale_color_manual('Bee species', values = bee_cols) +
@@ -537,21 +555,35 @@ ggplot(data=correct, aes(x=Observation, y=value,
   theme(panel.grid.major.x = element_blank(),
         panel.border = element_blank()) 
 
-rm(bee_cols, correct, family, genus, tblist, oblist, gf_lkp, gf_lkp2)
+n_corbiculae <- tb %>% 
+  distinct(species, .keep_all = T) %>% pull(n) 
+prop_obs <- obs %>% 
+  group_by(species) %>% 
+  slice_max(bySpp, n = 5, with_ties = F) %>% 
+  mutate(prop = sum(bySpp)/total) %>% 
+  distinct(species, .keep_all = T) %>% 
+  pull(prop)
+
+srm(bee_cols, correct, family, genus, tblist, oblist, gf_lkp, gf_lkp2)
 ```
 
 ## 3.6 | Integrated Observational, Molecular, and Palynological Network
 
+For example a common UNKNOWN sequence mapped to the Asteraceae family, but which was flagged by temporal filters and is present in both
+*B. nevadensis* and *B. rufocinctus* pollen is most likely *Frasera*, failed extraction. A similar likely mismatch could be between what was fide molecular evidence as *Agastache pallidiflora* but where feeding was infrequently observed on *Pedicularis*, likely due to this entire order being represented by only a single molecular reference species. 
+
+It is not unlikely that much of the difference in the results between the observational and molecular work are attributable to the challenges in detecting rare events in these smaller sizes. For example, no more than 10 bee corbiculae loads per species were sequenced with the Mdn = `r median(n_corbiculae)` ... , and the median of interactions with the top 5 plant sizes constituted `r median(prop_obs)`  of the top. 
+
+... many of our results indicate foraging on *Viola* spp, zygomorphic flowers with architecture which would require subtle handling and strength to reach the pollen and nectar loads... .. Or the *Epilobium sp.* results indicating that a species such as *Chamerion angustifolium* or *latifolium* is occasionally utilized, as it supported by limited paylnological data.  
 
 
 # 4 | DISCUSSION
 
-**overall stuff and things**
-We have demonstrated how Angiosperms533 hyb-seq probes may be used for plant barcoding in a metagenomic context. This was exemplified in an ecologically realistic situation, centered both in a context which serves as an immediate framework for land management studies, and which produced fundamental natural history information. These data sets included closely related taxa in notoriously taxonomically difficult clades (e.g. *Mertensia*, *Lupinus*). We utilized spatial and temporal approaches for creating custom sequence databases which are readily applicable to any lab group with the capacity to perform next-generation sequencing across the entirety of multiple continents. In conjunction with well designed and implemented field based data collection we show how these methods may be widely used to test a variety of hypotheses related to ecological interactions. 
+We have demonstrated how Angiosperms533 hyb-seq probes may be used for plant barcoding in a metagenomic context. This was exemplified in an ecologically relevant scenario, where the results have immediate implications for natural history driven fundamental science and the applied science of land management. The test pollen loads contained a number of closely related taxa, some in notoriously taxonomically difficult clades (e.g. *Mertensia*, *Lupinus*), at naturally occurring proportions.  We incorporated spatial and temporal approaches for creating custom sequence databases an approach which is readily applicable to any lab group with the capacity to perform next-generation sequencing across the entirety of multiple continents, and which we expect to be highly beneficial in many study areas. By combining insights from these novel approaches with an extensive observational field based study we show how these methods may be applied to test a variety of hypotheses related to ecological interactions. 
 
-*Complications* We likely had issues detecting pollen from several genera of plants, bsaed upon these and other obesrvationla studies most likely Vicia-Lathyrus and Frasera (CITE), probably due to low quality sequencing of whole plant material... (REED SHOULD HUNT FOR LOCI RETURNS FROM BLAST LIKE HE DID POLLEN)
+We anticipate that many of the complications which we faced, using opportunistically collected pollen loads and the first implementation of this method may readily be overcome. It seems apparent that we had issues detecting pollen from several genera of plants, based upon these and other observational studies most likely *Vicia*, *Lathyrus*, and *Frasera* (@inouye1980effect, @pleasants1980competition), this is most likely related to user error in obtaining high quality DNA during the plant reference library generation period.  **(REED SHOULD HUNT FOR LOCI RETURNS FROM BLAST LIKE HE DID POLLEN)**. Additional complications seem to relate to the presence of closely related false positives, e.g. frequent classifications of sequences as *Trollius*,  *Caltha*, and *Thalictrum* alongside a more common species in the family, e.g. *Delphinium.*. Many of our errors are known to us and multiple mnemonics are in *APPENDIX XX* to assist others in future attempts to achieve better results.  However, the line between false and negative positives may be blurred in some of these instances and warrant further work, for example **Ericaceae pollen grains were observed in a number of samples in trace quantities...**. 
 
-These results show that the overall results between **Bumble Bee ecology** observational and barcoding are largely congruent. But that ...
+These results show that the overall results between **Bumble Bee ecology** observational and barcoding are largely congruent. But that ... We analyzed pollen loads from all of the most common bumble bee species in the area(@pyke1982local)
 Future analyses of the long term data set... 
 
 **Spatial ... & Timing ** (filters!)
@@ -559,7 +591,7 @@ Future analyses of the long term data set...
   Tandem to the lack of continued expertise required to generate and maintain species lists, is the expertise required to continue tracking when major phenological events occur in many plant species at relatively fine scales or under novel climates. Knowledge of these events is currently limited to general time periods of only a handful of phenological events and groups of organisms (e.g. flowering initiation, or trees) (@prather2004implications, @li2016responses). While many programs and initiatives exist to collect phenological information on subsets of easily identifiable charismatic species to detect major trends in phenology, by design these capture only a subset of the extent diversity (@betancourt2005implementing, @havens2007chicago). In many instances it appears that while landscapes respond similarly to environmental variables which predict phenological responses, that individual species vary widely in their responses to similar environmental cues, or respond to different cues (@augspurger2020concordance, @xie2015deciduous, @xie2018predicting, @caradonna2014shifts). As can be seen here, predictions of when a single, major phenological event occurs is already data limited, with sample size having an effect on the subset of species which we could even generate weibull estimates for. 
 
 **Molecular ... **
-  The nearly complete Plant and Fungal Tree of Life (PAFTOL) will provide a comprehensive phylogenetic backbone of the entire plant kingdom, and the inclusion of A353 probes with lineage specific probe sets is common in producing massive genetic datasets (@baker2021exploring).  We predict that the A353 probes which it is utilizing to work nearly immediately for DNA barcoding of whole plant material, and that more elaborate validation studies in controlled metabarcoding settings, utilizing existing experimental designs,  will have favorable results (@bell2017applying, @bell2019quantitative). In particular the harvesting of loci with more variation in certain lineages, and or with more variable flanking regions, will prove promising for identifying closely related plant material (CITE). We suspect that conserved reaches of genes resulted in the high amounts of reads in somewhat obscure species. Given that the A353 loci are nuclear, single copy, and a variety are present the possibility of identifying target loci for quantitative purposes is high, without continual PCR enrichment is possible. Recent evidence indicates that the potential for identifying nearly cryptic taxa and even infra-specific inference, of either whole plant material, and perhaps in metagenomic context are possible (@ottenlips2021resolving, @wenzell2021incomplete, Loke et al. in prep,  @slimp2021potential, @beck2021palmer).
+  The nearly complete Plant and Fungal Tree of Life (PAFTOL) will provide a comprehensive phylogenetic backbone of the entire plant kingdom, and the inclusion of A353 probes with lineage specific probe sets is common in producing massive genetic datasets (@baker2021exploring).  We predict that the A353 probes which it is utilizing to work nearly immediately for DNA barcoding of whole plant material, and that more elaborate validation studies in controlled metabarcoding settings, utilizing existing experimental designs, will have favorable results (@bell2017applying, @bell2019quantitative, @bell2021comparing, @lamb2019quantitative). In particular the harvesting of loci with more variation in certain lineages, and or with more variable flanking regions, will prove promising for identifying closely related plant material (CITE). We suspect that conserved reaches of genes resulted in the high amounts of reads in somewhat obscure species. Given that the A353 loci are nuclear, single copy, and a variety are present the possibility of identifying target loci for quantitative purposes is high, without continual PCR enrichment is possible; this would align with relatively high efficacy of WGS (@lang2019genome, @peel2019semi, @bell2021comparing). Recent evidence indicates that the potential for identifying nearly cryptic taxa and even infra-specific inference, of either whole plant material, and perhaps in metagenomic context are possible (@ottenlips2021resolving, @wenzell2021incomplete, Loke et al. in prep,  @slimp2021potential, @beck2021palmer).
 
 # 4 | CONCLUSION 
 We believe that the combination of spatial and temporal models, united and guided by localized natural history knowledge, provides the essential components of a bayesian framework for approaching the coarse elucidation of ecological interactions using DNA Barcoding. Herein we crudely utilized this thinking via binary outcomes, should a species predicted be predicted present or not? Is it unequivocally flowering or not? Myriad data show biological systems and ecological interactions have more variance than can be reasonably discretely parsed. We expect that within a bayesian framework studies of pollinator behavior may be enacted via this approach at a landscape level, e.g. the scale of an entire drainage basin such as the Gunnison which is quickly becoming one of the worlds few model ecosystems. We hope that the promise of A353 probes as tools for metabarcoding play a role in these endeavors. 
