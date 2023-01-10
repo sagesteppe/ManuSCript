@@ -4,9 +4,9 @@ title: Metagenomic Barcoding of Pollen Loads Offers Insights on the Foraging
 author:  |
     |  Reed Clark Benkendorf^[Correspondence: reedbenkendorf2021@u.northwestern.edu] $^1$$^,$$^2$, Jane E. Ogilvie$^3$$^,$$^4$ , Emily J. Woodworth$^1$$^,$$^2$  
     |  Sophie Taddeo$^1$$^,$$^2$, Paul J. CaraDonna$^1$$^,$$^2$$^,$$^3$, Jeremie B. Fant$^1$$^,$$^2$ 
-    |  $^1$Chicago Botanic Garden, 1000 Lake Cook Road, Glencoe, Illinois 60022 USA, 
-    |  $^2$Plant Biology and Conservation, Northwestern University, Evanston, IL 60208, USA,
-    |  $^3$ Rocky Mountain Biological Laboratory, P.O. Box 519, Crested Butte, CO 81224, USA
+    |  $^1$Chicago Botanic Garden, 1000 Lake Cook Road, Glencoe, Illinois 60022, USA  
+    |  $^2$Plant Biology and Conservation, Northwestern University, Evanston, Illinois 60208, USA  
+    |  $^3$ Rocky Mountain Biological Laboratory, P.O. Box 519, Crested Butte, Colorado 81224, USA
     |  $^4$ Australia post fire project, ----, ----, ----, AU
 abstract:  |  
   1) DNA Barcoding has been remarkably successful in nearly all kingdoms of life and has allowed for the rapid analysis of ecological assemblages. Successful DNA barcoding in the plant kingdom has been more difficult than other kingdoms. Due to this understanding plants in ecological contexts and understandings of their synecology in some instances may begin to lag behind other kingdoms.  
@@ -33,10 +33,10 @@ header-includes:
 ---
     
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
+knitr::opts_chunk$set(echo = F, warning = F, message = F)
 ```
 
-```{r Required Libraries, message=F, warning=F, results='hide', echo = F}
+```{r Required Libraries, message=F, warning=F, results='hide'}
 library(here)
 library(tidyverse)
 library(bookdown)
@@ -155,7 +155,7 @@ To estimate the duration of dates in which plant species were flowering weibull 
 
 ## 3.1 | Spatial Analyses
 
-```{r Results for SA Modelling, echo = F, message = F, warning = F}
+```{r Results for SA Modelling}
 
 files <- list.files('/hdd/MS_SDM_RMBL/SDMS_RMBL/results/maps', pattern = 'tif$')
 ml <- files[grep( '_ml_', files)]
@@ -169,7 +169,7 @@ linear <- unique(sub('_glm.*$', '', linear))
 rm(files, ml, linear)
 ```
 
-```{r Results for SA Logistic Regression Metrics, echo = F, message = F, warning = F}
+```{r Results for SA Logistic Regression Metrics}
 
 logR_dat <- read.csv('../data/PA_records_logistic_regression.csv')[,2:4] %>% 
   filter(occurrence == 0) 
@@ -188,7 +188,7 @@ data.frame(Metric  = dat[1:5,1],
   #kableExtra::kable_styling(position = "float_right")
 ```
 
-```{r Results for SA Logistic Regression Contingency table, echo = F, message = F, warning = F}
+```{r Results for SA Logistic Regression Contingency table}
 read.csv('../data/Pa_conting_table.csv') %>% 
     knitr::kable(caption = "Species Distribution Modeling evaluation contingency table",
     col.names = c('', ' Absence ', '  Presence  ', ' Absence ', ' Presence '), align = "lrrrr",
@@ -208,7 +208,7 @@ At the six study plots, of the 117 plant species identified to the species level
 
 ## 3.2 | Microscopic Pollen identification
 
-```{r compare microscopic to molecular Pollen ID, echo = F}
+```{r compare microscopic to molecular Pollen ID, eval = T}
 a <- c('Trifolium', 'Lupinus', 'Glyccrrhiza', 'Mitella', 'Geum')
 b <- c('Lupinus', 'Lathyrus', 'Potentilla', 'Androsace', 'Bistorta', 'Vicia')
 c <- c('Jeffersonia', 'Micranthes', 'Prunus', 'Delphinium', 'Androsace', 
@@ -293,18 +293,18 @@ rm(mertensia_samples, blst, blst_aster, blst_aster1,
 
 Using the fuchsin jelly preparation and light microscopic analyses of grains and scoring of 10 character states resulted in the establishment of 28 morphotypes which grains could be classified into. *APPENDIX 7*. 60 samples were counted and based on rarefaction **had over % of expected morphotypes found** (morphotype richness, $\bar{x}$ = 4.5, Mdn = 4, min = 1, max = 9), all samples had expected morphotype diversity reach the asymptote *APPENDIX 8*. The number of counted pollen grains in each sample range from (*MIN* - 16,293, $\bar{x}$ = 2788.685, Mdn = 1453). 
 
-```{r, echo = F, warning = F, message = F}
+```{r}
 rm(mertensia_detected, aster1_detected, aster2_detected, aster_detected)
 ```
 
 
-```{r Sequence and Morphological Vouchers, out.width = "65%", echo = F,  fig.cap="Phylogenetic tree of all biotically pollinated plant genera in the study area. The innermost ring indicates every genus which Queen Bee's were observed to visit. The intermediate ring indicates that at least a single morphological pollen voucher slide was prepared for a member of the genus. The outermost ring indicates that sequence data were available for at least a member of that genus. Branch colors follow APG 4."}
+```{r Sequence and Morphological Vouchers, out.width = "65%", fig.cap="Phylogenetic tree of all biotically pollinated plant genera in the study area. The innermost ring indicates every genus which Queen Bee's were observed to visit. The intermediate ring indicates that at least a single morphological pollen voucher slide was prepared for a member of the genus. The outermost ring indicates that sequence data were available for at least a member of that genus. Branch colors follow APG 4."}
 knitr::include_graphics("../graphics/plots/rmbl_draft_tree.png")
 ```
 
 ## 3.3 | Metabarcoding Pollen identification
 
-```{sh Get number of raw and trimmed reads for metagenome samples, eval = F, echo = F}
+```{sh Get number of raw and trimmed reads for metagenome samples, eval = F}
 
 cd ~/sequenceData/Original_zip
 files=$(find -type f -name "[0-9]_S[0-9]*_paired.fastq.gz") # doesnt support {2}
@@ -319,7 +319,7 @@ files=$(find  -maxdepth 1 -name '*gz')
 wc -l  $files  > '/hdd/yun master/MEE_manuscript/data/trimmed_reads_metagenome_seq.txt'
 ```
 
-```{r Summary statistics of sequence numbers, echo = F}
+```{r Summary statistics of sequence numbers}
 
 raw_seqs <- read.delim('../data/raw_reads_metagenome_seq.txt', header = F) %>% 
   mutate(V1 = str_trim(V1)) %>% 
@@ -358,11 +358,11 @@ no_reads <- loci %>% group_by(loci) %>% summarize(readsLoci = sum(n))
 
 After trimming `r pNumC(sum(trimmed_seqs))` sequences remained. `r pNumC(sum(krak[krak$Classified == 'C',]$n))` reads were matched using Kraken, of the reads classified by Kraken `r pNumC(sum(brack$reads))` reads were matched using Bracken, of the reads classified by Kraken `r pNumC(sum(blast$Total_seqs))` reads were matched using BLAST. Based upon subjective review of the three classifiers **APPENDIX X MOLECULAR NETWORKS - 3 DIFFERENT ONES**, BLAST was chosen as the classification method which yielded the most probable results, and it's values were used for all subsequent analyses. 
 
-```{r clean sequence numbers from environment, eval = F, echo = F}
-rm(toseq, krak, brack, blast, loci, no_loci, aa, bb, cc, dd)
-```
-
 To determine at which level species in pollen loads could be detected the results of light microscopy were compared to the molecular results. The pollen samples contained three morphotypes which could readily be identified via microscopy. Two of these mapped to the clades (Boraginaceae & Heliantheae Alliance), and one to a Asteraceae less Heliantheae. Boraginaceae grains `r toString(aa)`.  Asteraceae type 1, non-helianthoids, `r toString(bb)` Asteraceae type 2, Helianthoids, `r toString(cc)`. Both morphotypes of Asteraceae pollen `r toString(dd)`, and Ericaceae `r toString(ee)`.
+
+```{r clean sequence numbers from environment}
+rm( krak, brack, blast, loci, no_loci, aa, bb, cc, dd)
+```
 
 ## 3.4 | Temporal Analyses
 
@@ -377,7 +377,7 @@ knitr::include_graphics("../graphics/plots/phenology_estimates_10_90.png")
 
 ## 3.5 | Floral Observations 
 
-```{r Floral Observations Summary Statistics, echo = F, warning = F}
+```{r Floral Observations Summary Statistics }
 
 files <- list.files('../data', pattern = 'csv')
 
@@ -428,7 +428,7 @@ rm(bee_obs, flr_ranks, obs_time, t_b_b, t_b_wk, t_b_pl, t_b_wk_pl, e, s, files, 
 ```
 
 
-```{r Most used resources by species, echo =F, fig.cap = 'Number of the ten most commonly visited plants which are also in the top ten most common sequences', out.width = "45%"}
+```{r Most used resources by species, fig.cap = 'Number of the ten most commonly visited plants which are also in the top ten most common sequences', out.width = "45%"}
 
 corb <- read.csv('../data/Corbiculae_collections.csv', header = F) %>% 
   mutate(sample.id = as.numeric(str_extract(V1, '[0-9]{1,2}')),
@@ -564,7 +564,7 @@ prop_obs <- obs %>%
   distinct(species, .keep_all = T) %>% 
   pull(prop)
 
-srm(bee_cols, correct, family, genus, tblist, oblist, gf_lkp, gf_lkp2)
+rm(bee_cols, correct, family, genus, tblist, oblist, gf_lkp, gf_lkp2)
 ```
 
 ## 3.6 | Integrated Observational, Molecular, and Palynological Network
@@ -576,6 +576,9 @@ It is not unlikely that much of the difference in the results between the observ
 
 ... many of our results indicate foraging on *Viola* spp, zygomorphic flowers with architecture which would require subtle handling and strength to reach the pollen and nectar loads... .. Or the *Epilobium sp.* results indicating that a species such as *Chamerion angustifolium* or *latifolium* is occasionally utilized, as it supported by limited paylnological data.  
 
+```{r}
+rm(n_corbiculae, prop_obs)
+```
 
 # 4 | DISCUSSION
 
