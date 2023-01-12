@@ -2,12 +2,12 @@
 title: Metagenomic Barcoding of Pollen Loads Offers Insights on the Foraging
   Patterns of Queen Bumble Bees
 author:  |
-    |  Reed Clark Benkendorf^[Correspondence: reedbenkendorf2021@u.northwestern.edu] $^1$$^,$$^2$, Jane E. Ogilvie$^3$$^,$$^4$ , Emily J. Woodworth$^1$$^,$$^2$  
     |  Sophie Taddeo$^1$$^,$$^2$, Paul J. CaraDonna$^1$$^,$$^2$$^,$$^3$, Jeremie B. Fant$^1$$^,$$^2$ 
     |  $^1$Chicago Botanic Garden, 1000 Lake Cook Road, Glencoe, Illinois 60022, USA  
     |  $^2$Plant Biology and Conservation, Northwestern University, Evanston, Illinois 60208, USA  
     |  $^3$ Rocky Mountain Biological Laboratory, P.O. Box 519, Crested Butte, Colorado 81224, USA
     |  $^4$ Australia post fire project, ----, ----, ----, AU
+    |  Reed Clark Benkendorf^[Correspondence: reedbenkendorf2021@u.northwestern.edu] $^1$$^,$$^2$, Jane E. Ogilvie$^3$$^,$$^4$ , Emily J. Woodworth$^1$$^,$$^2$  
 abstract:  |  
   1) DNA Barcoding has been remarkably successful in nearly all kingdoms of life and has allowed for the rapid analysis of ecological assemblages. Successful DNA barcoding in the plant kingdom has been more difficult than other kingdoms. Due to this understanding plants in ecological contexts and understandings of their synecology in some instances may begin to lag behind other kingdoms.  
   2) Here we utilize hyb-seq, museum studies, and species distribution modelling, to detect the plant species present in pollen loads collected from Queen Bumble Bees.  
@@ -17,9 +17,9 @@ abstract:  |
 keywords: | 
   DNA baroding, metagenomics, hyb-seq, Angiosperms353, plant metagenomics, bombus queens, subalpine, species distribution model
 output:
-  pdf_document: default
-  toc: no
   word_document: default
+  toc: no
+  pdf_document: default
 csl: "../citations/methods-in-ecology-and-evolution.csl"
 bibliography: ../citations/citations.bib
 link-citations: yes
@@ -209,16 +209,14 @@ At the six study plots, of the 117 plant species identified to the species level
 ## 3.2 | Microscopic Pollen identification
 
 ```{r compare microscopic to molecular Pollen ID, eval = T}
-a <- c('Trifolium', 'Lupinus', 'Glyccrrhiza', 'Mitella', 'Geum')
-b <- c('Lupinus', 'Lathyrus', 'Potentilla', 'Androsace', 'Bistorta', 'Vicia')
-c <- c('Jeffersonia', 'Micranthes', 'Prunus', 'Delphinium', 'Androsace', 
-       'Penstemon', 'Orthocarpus', 'Scuttelaria', 'Aquilegia', 'Castilleja', 'Draba')
-d <- c('Salix', 'Boechera')
 
 # are mertensia and Asteraceae 1 & 2 detected in all Pollen samples where the bee was COLLECTED ON THEM ?
 
 pmorph <- read.csv('../data/morpho_pollen.csv') 
-blst <- read.csv('../data/blast_seqs_classified.csv') 
+blst <- read.csv('../data/blast_seqs_classified.csv') %>% 
+  group_by(sample.id) %>% 
+  mutate(Prcnt_Seqs_Class = sum(Prcnt_seqs)) %>% 
+  ungroup()
 blst_seqs <- distinct(blst, sample.id) 
 
 pmorph <- filter(pmorph, sample.id %in% blst$sample.id) %>% 
@@ -227,15 +225,16 @@ pmorph <- filter(pmorph, sample.id %in% blst$sample.id) %>%
 
 mertensia_samples <- pmorph %>% 
   filter(morphotype == 'MERTENSIA') %>% 
-  select(sample.id, Prop, sum)
+  select(sample.id, morphotype, Prop, sum)
 
 mertensia_samples <- filter(mertensia_samples, sample.id %in% blst_seqs$sample.id)
 
 blst_mertensia <- blst %>% 
   filter(Genus == 'Mertensia') %>% 
-  select(sample.id,  Prcnt_seqs) %>% 
+  select(sample.id,  Prcnt_seqs, Seqs_pr_taxon, Total_seqs, Prcnt_seqs, Prcnt_Seqs_Class) %>% 
   group_by(sample.id) %>% 
-  mutate(Prcnt_seqs = sum(Prcnt_seqs)) %>% 
+  mutate(Prcnt_seqs = sum(Prcnt_seqs),
+         morphotype = 'MERTENSIA') %>% 
   distinct(sample.id, .keep_all = T)
 
 mertensia_detected <- mertensia_samples %>% 
@@ -250,18 +249,20 @@ blst_aster <- blst %>%
 # PERFORM FOR ERICACEAE TOO - A single record maybe come out?
 ericaceae_samples <- pmorph %>% 
   filter(morphotype == 'ERICACEAE') %>% 
-  select(sample.id, Prop, sum)
+  select(sample.id, Prop, morphotype) 
 
-blst_ericoid <- filter(blst, Family == 'Ericaceae') # 44 might be Epilobium anagallidolium
+blst_ericoid <- filter(blst, Family == 'Ericaceae') %>% # 44 might be Epilobium anagallidolium
+  mutate(morphotype = 'ERICACEAE')
 ericaceae_detected <- ericaceae_samples %>% 
   mutate(DETECTED = if_else(sample.id %in% blst_ericoid$sample.id, 1, 0)) 
 
 # ASTER 2 HERE...
 aster2_samples <- pmorph %>% 
-  filter(morphotype == 'ASTERACEAE_2')
+  filter(morphotype == 'ASTERACEAE_2') 
 
 blst_aster2 <- filter(blst_aster, Genus %in% 
-                            c('Taraxacum', 'Helianthella', 'Scabrethia'))
+                            c('Taraxacum', 'Helianthella', 'Scabrethia')) %>% 
+  mutate(morphotype = 'ASTERACEAE_2')
 aster2_detected <- aster2_samples %>% 
   mutate(DETECTED = if_else(sample.id %in% blst_aster2$sample.id, 1, 0)) 
 
@@ -269,7 +270,9 @@ aster2_detected <- aster2_samples %>%
 aster1_samples <- pmorph %>% 
   filter(morphotype == 'ASTERACEAE_1') 
 
-blst_aster1 <- filter(blst_aster, !Genus %in% c('Taraxacum', 'Helianthella', 'Scabrethia') )
+blst_aster1 <- filter(blst_aster, !Genus %in% c('Taraxacum', 'Helianthella', 
+                                                'Scabrethia') ) %>% 
+  mutate(morphotype = 'ASTERACEAE_1')
 aster1_detected <- aster1_samples %>% 
   mutate(DETECTED = if_else(sample.id %in% blst_aster1$sample.id, 1, 0)) 
 
@@ -286,8 +289,17 @@ cc <- prcnt_detect(aster2_detected, Lprop = 0.001, Hprop = 0.01)
 dd <-  prcnt_detect(aster_detected, Lprop = 0.01, Hprop = 1)
 ee <- prcnt_detect(ericaceae_detected, Lprop = 0.001, Hprop = 0.1)
 
+# Semi-quantitative accord between sequence % and Grain Count
+palyn_cnt <- bind_rows(aster1_samples, aster2_samples, ericaceae_samples, mertensia_samples) %>% 
+  select(morphotype, countProp = Prop) 
+
+pollen_props <- bind_rows(blst_aster1, blst_aster2, blst_mertensia, blst_ericoid) %>% 
+  select(morphotype, sequenceProp = Prcnt_seqs, Seqs_pr_taxon, Total_seqs, Prcnt_Seqs_Class) %>% 
+  left_join(., palyn_cnt, by = c('sample.id', 'morphotype')) %>% 
+  drop_na()
+
 rm(mertensia_samples, blst, blst_aster, blst_aster1,
-   blst_aster2, aster1_samples,  aster2_samples, a, b, c, d, 
+   blst_aster2, aster1_samples,  aster2_samples, a, b, c, d, palyn_cnt,
    blst_mertensia, aster_samples, ericaceae_samples, blst_ericoid)
 ```
 
@@ -363,6 +375,74 @@ To determine at which level species in pollen loads could be detected the result
 ```{r clean sequence numbers from environment}
 rm( krak, brack, blast, loci, no_loci, aa, bb, cc, dd)
 ```
+
+
+QUANTITATIVE EVIDENCE !?!?!
+
+```{r}
+
+pol_p <- pollen_props %>% 
+  mutate(sequenceProp = sequenceProp/100, 
+         adjSeqProp = sequenceProp * (100/Prcnt_Seqs_Class))
+
+summary(model <-  lm(sequenceProp ~ countProp, data = pol_p) ) # better with additive term + morphotype
+summary(model)$adj.r.squared
+summary(model)$p.val
+
+newdat <- data.frame(
+  countProp = seq(from = min(pol_p$countProp), to = max(pol_p$countProp), 
+                  length.out = 100) )#, 
+#  morphotype = sample(unique(pol_p$morphotype), replace = T, size = 100,
+#       prob = as.numeric(table(pol_p$morphotype)) / nrow(pol_p)))
+
+CI <- predict(model, newdat, se.fit = TRUE, interval = "confidence", level = 0.95)
+
+par(pty="s")
+plot(x = pol_p$countProp,  pol_p$sequenceProp, 
+      xlim = c(0,1), ylim = c(0,1), axes = F, main = 'Correlation of Proportion Counted\nGrains and Sequence Reads',
+     xlab = 'Grains Counted', ylab = 'Classified Sequences',
+     pch=18, slty = 3, gap = 0.025)
+axis(1)
+axis(2)
+abline(model)
+lines(newdat$countProp, CI[['fit']][,3], lty = 'dotted', col = 'grey25')
+lines(newdat$countProp, CI[['fit']][,2], lty = 'dotted', col = 'grey25')
+text(0.2, 0.8, expression("adj. r"^2*" = " ))
+text(0.4, 0.8, paste0(round(summary(model)$adj.r.squared, 3)))
+text(0.3, 0.7, "p < 0.001")
+
+rm(newdat)
+```
+
+
+```{r Run with correction for total sequences, eval = F}
+## doesnt really make a difference - increase r2 by about 2% - with morphotype up to 6%, multiple r2 0.8
+
+summary(model <-  lm(adjSeqProp ~ countProp, data = pol_p) )  #  + morphotype
+newdat <- data.frame(
+  countProp = seq(from = min(pol_p$countProp), to = max(pol_p$countProp), 
+                  length.out = 100) )
+CI <- predict(model, newdat, se.fit = TRUE, interval = "confidence", level = 0.95)
+
+par(pty="s")
+plot(x = pol_p$countProp,  pol_p$adjSeqProp, 
+      xlim = c(0,1), ylim = c(0,1), axes = F, main = 'Correlation of Proportion Counted\nGrains and Sequence Reads',
+     xlab = 'Grains Counted', ylab = 'Classified Sequences',
+     pch=18, slty = 3, gap = 0.025)
+
+axis(1)
+axis(2)
+abline(model)
+lines(newdat$countProp, CI[['fit']][,3], lty = 'dotted', col = 'grey25')
+lines(newdat$countProp, CI[['fit']][,2], lty = 'dotted', col = 'grey25')
+text(0.2, 0.8, expression("adj. r"^2*" = " ))
+text(0.4, 0.8, paste0(round(summary(model)$adj.r.squared, 3)))
+text(0.3, 0.7, "p < 0.001")
+
+rm(pol_p, newdat)
+```
+
+The relationship shows that grains which are often present in trace amounts have relatively high amounts of their abundances estimated, and grains which are present in high amounts have fewer sequences classified. This is considered to be due to the proportion of high false positives which occur in the classification process with NGS (BELL NOVEMEBER 2021)
 
 ## 3.4 | Temporal Analyses
 
