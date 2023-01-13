@@ -376,73 +376,33 @@ To determine at which level species in pollen loads could be detected the result
 rm( krak, brack, blast, loci, no_loci, aa, bb, cc, dd)
 ```
 
-
-QUANTITATIVE EVIDENCE !?!?!
-
-```{r}
+```{r Correlation between Number of Grains and Number of Sequences, eval = F}
 
 pol_p <- pollen_props %>% 
   mutate(sequenceProp = sequenceProp/100, 
          adjSeqProp = sequenceProp * (100/Prcnt_Seqs_Class))
 
-summary(model <-  lm(sequenceProp ~ countProp, data = pol_p) ) # better with additive term + morphotype
-summary(model)$adj.r.squared
-summary(model)$p.val
-
-newdat <- data.frame(
-  countProp = seq(from = min(pol_p$countProp), to = max(pol_p$countProp), 
-                  length.out = 100) )#, 
-#  morphotype = sample(unique(pol_p$morphotype), replace = T, size = 100,
-#       prob = as.numeric(table(pol_p$morphotype)) / nrow(pol_p)))
-
-CI <- predict(model, newdat, se.fit = TRUE, interval = "confidence", level = 0.95)
-
-par(pty="s")
-plot(x = pol_p$countProp,  pol_p$sequenceProp, 
-      xlim = c(0,1), ylim = c(0,1), axes = F, main = 'Correlation of Proportion Counted\nGrains and Sequence Reads',
-     xlab = 'Grains Counted', ylab = 'Classified Sequences',
-     pch=18, slty = 3, gap = 0.025)
-axis(1)
-axis(2)
-abline(model)
-lines(newdat$countProp, CI[['fit']][,3], lty = 'dotted', col = 'grey25')
-lines(newdat$countProp, CI[['fit']][,2], lty = 'dotted', col = 'grey25')
-text(0.2, 0.8, expression("adj. r"^2*" = " ))
-text(0.4, 0.8, paste0(round(summary(model)$adj.r.squared, 3)))
-text(0.3, 0.7, "p < 0.001")
-
-rm(newdat)
-```
-
-
-```{r Run with correction for total sequences, eval = F}
-## doesnt really make a difference - increase r2 by about 2% - with morphotype up to 6%, multiple r2 0.8
-
-summary(model <-  lm(adjSeqProp ~ countProp, data = pol_p) )  #  + morphotype
-newdat <- data.frame(
-  countProp = seq(from = min(pol_p$countProp), to = max(pol_p$countProp), 
-                  length.out = 100) )
-CI <- predict(model, newdat, se.fit = TRUE, interval = "confidence", level = 0.95)
+ct <-cor.test(pol_p$countProp, pol_p$adjSeqProp, method = "kendall")
+# ct[["p.value"]] too small to write out. . tau > 0.4 strong
+summary(model <-  lm(sequenceProp ~ countProp, data = pol_p) )
 
 par(pty="s")
 plot(x = pol_p$countProp,  pol_p$adjSeqProp, 
       xlim = c(0,1), ylim = c(0,1), axes = F, main = 'Correlation of Proportion Counted\nGrains and Sequence Reads',
      xlab = 'Grains Counted', ylab = 'Classified Sequences',
      pch=18, slty = 3, gap = 0.025)
-
 axis(1)
 axis(2)
 abline(model)
-lines(newdat$countProp, CI[['fit']][,3], lty = 'dotted', col = 'grey25')
-lines(newdat$countProp, CI[['fit']][,2], lty = 'dotted', col = 'grey25')
-text(0.2, 0.8, expression("adj. r"^2*" = " ))
-text(0.4, 0.8, paste0(round(summary(model)$adj.r.squared, 3)))
-text(0.3, 0.7, "p < 0.001")
+text(0.3, 0.9, paste0("tau = ", round(ct[["estimate"]][["tau"]], 3)))
+text(0.3, 0.8, "p < 0.001") 
 
 rm(pol_p, newdat)
 ```
 
-The relationship shows that grains which are often present in trace amounts have relatively high amounts of their abundances estimated, and grains which are present in high amounts have fewer sequences classified. This is considered to be due to the proportion of high false positives which occur in the classification process with NGS (BELL NOVEMEBER 2021)
+To detect whether the sequencing reads were semi-quantitative the subset of all pollen `r ` morphotypes distinguishable by microscopy were regressed against the sequence reads. In all instances sequence reads were pooled to the highest taxonomic rank associated with the morphotype, e.g. if both species of *Mertensia*, or one species and read only classified to genus were present in a sample, the reads were summed. 
+
+The relationship shows that grains which are often present in trace amounts have relatively high amounts of their abundances estimated, and grains which are present in high amounts have relatively low amounts of sequences classified. This is likely due to the proportion of high false positives which occur in the classification process with NGS (BELL NOVEMEBER 2021). The correlation between 
 
 ## 3.4 | Temporal Analyses
 
