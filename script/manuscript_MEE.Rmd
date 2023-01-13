@@ -383,8 +383,8 @@ pol_p <- pollen_props %>%
          adjSeqProp = sequenceProp * (100/Prcnt_Seqs_Class))
 
 ct <-cor.test(pol_p$countProp, pol_p$adjSeqProp, method = "kendall")
-# ct[["p.value"]] too small to write out. . tau > 0.4 strong
-summary(model <-  lm(sequenceProp ~ countProp, data = pol_p) )
+# ct[["p.value"]] too small to write out. tau > 0.4 strong relationship
+summary(model <-  lm(adjSeqProp ~ countProp, data = pol_p) )
 
 par(pty="s")
 plot(x = pol_p$countProp,  pol_p$adjSeqProp, 
@@ -400,9 +400,13 @@ text(0.3, 0.8, "p < 0.001")
 rm(pol_p, newdat)
 ```
 
-To detect whether the sequencing reads were semi-quantitative the subset of all pollen `r ` morphotypes distinguishable by microscopy were regressed against the sequence reads. In all instances sequence reads were pooled to the highest taxonomic rank associated with the morphotype, e.g. if both species of *Mertensia*, or one species and read only classified to genus were present in a sample, the reads were summed. 
+To detect whether the sequencing reads were semi-quantitative the subset of all pollen morphotypes distinguishable by microscopy were compared to the sequence reads. In all instances sequence reads were pooled to the highest taxonomic rank associated with the morphotype, e.g. if both species of *Mertensia*, or one species and read only classified to genus were present in a sample, the reads were summed. The total percentage of the ten most abundant grains per sample were then were then relativized to constitute the entire sample. 
 
-The relationship shows that grains which are often present in trace amounts have relatively high amounts of their abundances estimated, and grains which are present in high amounts have relatively low amounts of sequences classified. This is likely due to the proportion of high false positives which occur in the classification process with NGS (BELL NOVEMEBER 2021). The correlation between 
+The relationship shows that grains which are often present in trace amounts have relatively high amounts of their abundances estimated, and grains which are present in high amounts have relatively low amounts of sequences classified. This is likely due to the proportion of high false positives which occur in the classification process with NGS (BELL NOVEMEBER 2021). There was strong evidence of a strong correlation between the proportion of grains per morphotype and the number of sequences per group (`r round(ct[["estimate"]][["tau"]], 3)`, p < 0.0001, n = `r nrow(pol_p)`). 
+
+```{r}
+rm(pol_p, ct)
+```
 
 ## 3.4 | Temporal Analyses
 
