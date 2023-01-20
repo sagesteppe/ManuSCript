@@ -1,0 +1,105 @@
+---
+title: NULL
+author: NULL
+date: NULL
+output: 
+  pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, warning = F, message = F)
+```
+
+```{r}
+
+library(tidyverse)
+m <- expand.grid(Spat_Present = c(0,1), 
+            Temp_Present = c(0,1),
+            Congener_1 = c(0,1),
+            Fam_Congener_1 = c(0,1),
+            Congener_2 = c(0,1),
+            Fam_Congener_2 = c(0,1)
+            ) %>% 
+  filter(Congener_2 <= Congener_1, Fam_Congener_2 <=  Fam_Congener_1,
+         Temp_Present <= Spat_Present) %>%
+  filter(rowSums(.) > 0) %>% 
+  arrange(-Spat_Present, -Temp_Present, -Congener_1, -Fam_Congener_1) %>% 
+  
+  
+  mutate(Condition = case_when(
+    Spat_Present == 1 & Temp_Present == 1 ~ 'A',
+    Spat_Present == 1 & Temp_Present == 0 &
+    Congener_1 == 1 & Congener_2 == 0 ~ 'B',
+    Spat_Present == 1 & Congener_2 == 1 ~ 'C',
+    Spat_Present == 1 & Fam_Congener_1 == 1 & Fam_Congener_2 == 0 ~ 'D',
+    Spat_Present == 1 & Fam_Congener_1 == 1 & Fam_Congener_2 == 1 ~ 'E',
+    Spat_Present == 1 ~ 'F',
+    Spat_Present == 0 & Congener_1 == 1 & Congener_2 == 0 ~ 'G',
+    Spat_Present == 0 & Congener_2 == 1 ~ 'H',
+    Spat_Present == 0 & Fam_Congener_1 == 1 & Fam_Congener_2 == 0 ~ 'I',
+    Spat_Present == 0 & Fam_Congener_1 == 1 & Fam_Congener_2 == 1 ~ 'J',
+  ),
+  Return = case_when(
+    Spat_Present == 1 & Temp_Present == 1 ~ 'Input',
+    Spat_Present == 1 & Temp_Present == 0 &
+      Congener_1 == 1 & Congener_2 == 0 ~ 'Congener',
+    Spat_Present == 1 & Congener_2 == 1 ~ 'Congener',
+    Spat_Present == 1 & Fam_Congener_1 == 1 & Fam_Congener_2 == 0 ~ 'Confamilial',
+    Spat_Present == 1 & Fam_Congener_1 == 1 & Fam_Congener_2 == 1 ~ 'Confamilial',
+    Spat_Present == 1 ~ 'Input',
+    Spat_Present == 0 & Congener_1 == 1 & Congener_2 == 0 ~ 'Congener',
+    Spat_Present == 0 & Congener_2 == 1 ~ 'Congener',
+    Spat_Present == 0 & Fam_Congener_1 == 1 & Fam_Congener_2 == 0 ~ 'Confamilial',
+    Spat_Present == 0 & Fam_Congener_1 == 1 & Fam_Congener_2 == 1 ~ 'Confamilial',
+  ),
+  Rank = case_when(
+    Spat_Present == 1 & Temp_Present == 1 ~ 'Species',
+    Spat_Present == 1 & Temp_Present == 0 &
+      Congener_1 == 1 & Congener_2 == 0 ~ 'Species',
+    Spat_Present == 1 & Congener_2 == 1 ~ 'Genus',
+    Spat_Present == 1 & Fam_Congener_1 == 1 & Fam_Congener_2 == 0 ~ 'Species',
+    Spat_Present == 1 & Fam_Congener_1 == 1 & Fam_Congener_2 == 1 ~ 'Family',
+    Spat_Present == 1 ~ 'Species',
+    Spat_Present == 0 & Congener_1 == 1 & Congener_2 == 0 ~ 'Species',
+    Spat_Present == 0 & Congener_2 == 1 ~ 'Genus',
+    Spat_Present == 0 & Fam_Congener_1 == 1 & Fam_Congener_2 == 0 ~ 'Species',
+    Spat_Present == 0 & Fam_Congener_1 == 1 & Fam_Congener_2 == 1 ~ 'Family',
+  )) %>% 
+  rename(Spatial = Spat_Present, Temporal = Temp_Present, Congener = Congener_1,
+         Congeners = Congener_2, Confamilial = Fam_Congener_1, 
+         Confamilials = Fam_Congener_2) %>% 
+  arrange(Condition) %>% 
+  group_by(Condition) %>% 
+  mutate(Condition = paste(Condition, 1:n(), sep = '.'))
+
+knitr::kable(m, align = "c", 
+             caption = "Subset of Possible Combinations for re-classifying Sequences by Incorporating Ecological Factors") %>% 
+  kableExtra::kable_styling(
+      latex_options = "striped",
+      stripe_color = "gray!10"
+)
+
+```
+
+Note, for both 'Congener' and 'Confamilial' (*in the singular*) '1' denotes that a species is present; in a sense the genus is monotypic in space and time. For both 'Congener**s**' and 'Confamilial**s**' (*in the plural*), '1' denotes that two or more species are present; 'Confamilial' again representing a monotypic entity in space and time.
+
+\center
+Spatial == 1 & Temporal == 1  ~ *__A__*  
+Spatial == 1 & Temporal == 0 & Congener = 1  ~ *__B__*   
+
+*The temporal dimension is now buffered and a form of __A__ is employed*    
+Spatial == 1 & Temporal +/- Buffer == 1 ~ *__X__*
+
+Spatial == 1 & Temporal == 0 & Congener**s** >= 2  ~ *__C__*  
+Spatial == 1 & Temporal == 0 & Congener**s** == 0 & Confamilial == 1 ~ *__D__*  
+Spatial == 1 & Temporal == 0 & Congener**s** == 0 & Confamilial >= 2 ~ *__E__*   
+Spatial == 1 & Temporal == 0 & Congener|**s** == 0 & Confamilial|**s** == 0 ~ *__F__*
+
+Spatial == 0 & Temporal == 0 & Congener == 1  ~ *__G__*    
+Spatial == 0 & Temporal == 0 & Congener**s** == 1 ~ *__H__*    
+Spatial == 0 & Temporal == 0 & Confamilial == 1  ~ *__I__*   
+Spatial == 0 & Temporal == 0 & Confamilial**s** == 1 ~ *__J__*
+
+\center
+
+While the overall order matters, *__X__* in particular may significantly alter conclusions.
