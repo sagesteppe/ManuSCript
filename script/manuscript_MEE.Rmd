@@ -400,6 +400,8 @@ To detect whether the sequencing reads were semi-quantitative the proportion of 
 
 The relationship between the number of pollen grains in a sample and the number of sequence reads is roughly *curvilinear*, where grains which are present in trace amounts are overestimated by sequence counts, while grains present in high amounts are underestimated. This is likely due to the proportion of high false positives which occur in the classification process with NGS (BELL NOVEMEBER 2021). There was strong evidence of a strong correlation between the proportion of grains per morphotype and the number of sequences per group (`r round(ct[["estimate"]][["tau"]], 3)`, p < 0.0001, n = `r nrow(pol_p)`). 
 
+Sequences which were assigned to genera without any species predicted by spatial analyses, were investigated by hand after post-processing steps. These were manually assigned to a variety of ranks, occasionally to genus #COUNTS# and family #COUNTS#,  by consultation of the alpha-taxonomic literature (@sadeghian2015molecular, @sennikov2017phylogenetic, @rabeler2016new, @pusalkar2015taxonomic, @moore2003its,  @weber1998new). 
+
 ```{r}
 rm(pol_p, ct)
 ```
