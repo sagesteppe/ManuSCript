@@ -41,19 +41,19 @@ Presence & 6614 & 28248 & 2758 & 12024\\
 \hline
 Condition & No. Class. & Prcnt. Class. & Total Seqs & Rank\\
 \hline
-\cellcolor{gray!10}{A} & \cellcolor{gray!10}{88} & \cellcolor{gray!10}{19.60} & \cellcolor{gray!10}{28.38} & \cellcolor{gray!10}{Species}\\
+\cellcolor{gray!10}{A} & \cellcolor{gray!10}{100} & \cellcolor{gray!10}{22.83} & \cellcolor{gray!10}{32.96} & \cellcolor{gray!10}{Species}\\
 \hline
-B & 126 & 28.06 & 8.94 & Species\\
+B & 108 & 24.66 & 9.35 & Species\\
 \hline
-\cellcolor{gray!10}{C} & \cellcolor{gray!10}{158} & \cellcolor{gray!10}{35.19} & \cellcolor{gray!10}{47.95} & \cellcolor{gray!10}{Genus}\\
+\cellcolor{gray!10}{C} & \cellcolor{gray!10}{171} & \cellcolor{gray!10}{39.04} & \cellcolor{gray!10}{46.39} & \cellcolor{gray!10}{Genus}\\
 \hline
-D & 11 & 2.45 & 1.33 & Species\\
+D & 5 & 1.14 & 0.45 & Species\\
 \hline
-\cellcolor{gray!10}{E} & \cellcolor{gray!10}{38} & \cellcolor{gray!10}{8.46} & \cellcolor{gray!10}{4.61} & \cellcolor{gray!10}{Family}\\
+\cellcolor{gray!10}{E} & \cellcolor{gray!10}{17} & \cellcolor{gray!10}{3.88} & \cellcolor{gray!10}{2.23} & \cellcolor{gray!10}{Family}\\
 \hline
-F & 2 & 0.45 & 0.07 & Species\\
+F & 7 & 1.60 & 0.58 & Species\\
 \hline
-\cellcolor{gray!10}{X} & \cellcolor{gray!10}{26} & \cellcolor{gray!10}{5.79} & \cellcolor{gray!10}{8.71} & \cellcolor{gray!10}{Species}\\
+\cellcolor{gray!10}{X} & \cellcolor{gray!10}{30} & \cellcolor{gray!10}{6.85} & \cellcolor{gray!10}{8.03} & \cellcolor{gray!10}{Species}\\
 \hline
 \end{tabular}
 \end{table}
