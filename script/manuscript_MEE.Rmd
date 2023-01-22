@@ -17,9 +17,9 @@ abstract:  |
 keywords: |
   DNA baroding, metagenomics, hyb-seq, Angiosperms353, plant metagenomics, bombus queens, subalpine, species distribution model
 output:
-  word_document: default
-  toc: no
   pdf_document: default
+  toc: no
+  word_document: default
 csl: "../citations/methods-in-ecology-and-evolution.csl"
 bibliography: ../citations/citations.bib
 link-citations: yes
@@ -211,7 +211,8 @@ At the six study plots, of the 117 plant species identified to the species level
 # are mertensia and Asteraceae 1 & 2 detected in all Pollen samples where the bee was COLLECTED ON THEM ?
 
 pmorph <- read.csv('../data/morpho_pollen.csv') 
-blst <- read.csv('../data/blast_seqs_classified.csv') %>% 
+blst <- read.csv('../data/Post_Classified_BLAST_sqs.csv') %>% 
+  rename(sample.id = Sample, Family = FAMILY, Genus = GENUS) %>% 
   group_by(sample.id) %>% 
   mutate(Prcnt_Seqs_Class = sum(Prcnt_seqs)) %>% 
   ungroup()
@@ -228,8 +229,8 @@ mertensia_samples <- pmorph %>%
 mertensia_samples <- filter(mertensia_samples, sample.id %in% blst_seqs$sample.id)
 
 blst_mertensia <- blst %>% 
-  filter(Genus == 'Mertensia') %>% 
-  select(sample.id,  Prcnt_seqs, Seqs_pr_taxon, Total_seqs, Prcnt_seqs, Prcnt_Seqs_Class) %>% 
+  filter(Family == 'Boraginaceae') %>% 
+  select(sample.id,  Prcnt_seqs, Seqs_pr_taxon, Total_seqs, Prcnt_Seqs_Class) %>% 
   group_by(sample.id) %>% 
   mutate(Prcnt_seqs = sum(Prcnt_seqs),
          morphotype = 'MERTENSIA') %>% 
@@ -368,8 +369,36 @@ no_reads <- loci %>% group_by(loci) %>% summarize(readsLoci = sum(n))
 
 After trimming `r pNumC(sum(trimmed_seqs))` sequences remained. `r pNumC(sum(krak[krak$Classified == 'C',]$n))` reads were matched using Kraken, of the reads classified by Kraken `r pNumC(sum(brack$reads))` reads were matched using Bracken, of the reads classified by Kraken `r pNumC(sum(blast$Total_seqs))` reads were matched using BLAST. Based upon subjective review of the three classifiers **APPENDIX X MOLECULAR NETWORKS - 3 DIFFERENT ONES**, BLAST was chosen as the classification method which yielded the most probable results by the field ecologist, and it's values were used for all subsequent analyses. 
 
+
+```{r Read Post Processing}
+
+pp_seqs_t <- read.csv( file.path('../data', 'Sequence_Reclass_table.csv') )
+
+knitr::kable(pp_seqs_t, align = "c", 
+             col.names = c('Condition', 'No. Class.', 'Prcnt. Class.', 'Total Seqs', 'Rank'),
+             caption = "Post classification of Sequences via Taxonomy and Ecology") %>% 
+  kableExtra::kable_styling(
+      latex_options = "striped",
+      stripe_color = "gray!10")
+
+seqs_sp <- sum (pp_seqs_t[pp_seqs_t$Rank=='Species','Prcnt_Records'] )
+seqs_ge <- sum (pp_seqs_t[pp_seqs_t$Rank=='Genus','Prcnt_Records'] )
+seqs_fa <- sum (pp_seqs_t[pp_seqs_t$Rank=='Family','Prcnt_Records'] )
+
+sp_total_seqs <- sum (pp_seqs_t[pp_seqs_t$Rank=='Species','Total_Prcnt_Seqs'] )
+sp_total_seqs <- sum (pp_seqs_t[pp_seqs_t$Rank=='Genus','Total_Prcnt_Seqs'] )
+fa_total_seqs <- sum (pp_seqs_t[pp_seqs_t$Rank=='Family','Total_Prcnt_Seqs'] )
+```
+
+The initial classification of sequences which were made by BLAST were reviewed programmatically, using predicted presence of the species (from spatial modelling), modelled flowering time (from temporal modelling), and taxonomy (from existing sources). A sequential process was utilized which reassigned sequences based on binary combinations of the factors above (Appendix XX). Given the relative sparsity of the number, and relatedness, of species represented in the sequence database this was performed to: 1) Identify locally present species represented by surrogates in the DB 2) Reduce false classifications of focal species 3) Identify high confidence sequence matches. Each of the top ten taxa which were identified by BLAST from the aforementioned process composed `r sum(pp_seqs_t$Samples_Classified)` distinct records (CONFUSING WORDS), of these `r seqs_sp`% of the reads were classified to species `r sp_total_seqs`% which represent of the total classified sequences, `r seqs_ge`% of the reads were classified to genus representing `r sp_total_seqs`% of the classified reads, and `r seqs_fa`% of the records were classified to genus `r fa_total_seqs`% of total sequences.
+
+*Sequences which were assigned to genera without any species predicted by spatial analyses, were investigated by hand after post-processing steps. These were manually assigned to a variety of ranks, occasionally to genus #COUNTS# and family #COUNTS#, by consultation of the alpha-taxonomic literature (@sadeghian2015molecular, @sennikov2017phylogenetic, @rabeler2016new, @pusalkar2015taxonomic, @moore2003its,  @weber1998new). * <- went back on this as new function captures most of it, but don't throw out.
+
+To determine at which level species in pollen loads could be detected the results of light microscopy were compared to the molecular results. The pollen samples contained three morphotypes which could readily be identified via microscopy. Two of these mapped to the clades (Boraginaceae & Heliantheae Alliance), and one to a Asteraceae less Heliantheae. Boraginaceae grains `r toString(aa)`.  Asteraceae type 1, non-helianthoids, `r toString(bb)` Asteraceae type 2, Helianthoids, `r toString(cc)`. Both morphotypes of Asteraceae pollen `r toString(dd)`, and Ericaceae `r toString(ee)`.
+
 ```{r clean sequence numbers from environment}
-rm( krak, brack, blast, loci, no_loci, aa, bb, cc, dd)
+rm( krak, brack, blast, loci, no_loci, aa, bb, cc, dd, fa_total_seqs, 
+    ge_total_seqs, sp_total_seqs, seqs_sp, seqs_ge, seqs_fa)
 ```
 
 ```{r Correlation between Number of Grains and Number of Sequences}
@@ -396,11 +425,9 @@ text(0.3, 0.8, "p < 0.001")
 rm( newdat)
 ```
 
-To detect whether the sequencing reads were semi-quantitative the proportion of all pollen morphotypes distinguishable by microscopy were compared to the sequence reads. In all instances sequence reads were pooled to the highest taxonomic rank associated with the morphotype, e.g. if both species of *Mertensia* Roth, or one species and read only classified to genus were present in a sample, the reads were summed. The total percentage of the ten most abundant grains per sample were then were then *corrected* to constitute the entire sample. 
+To detect whether the sequencing reads were semi-quantitative the subset of all pollen morphotypes distinguishable by microscopy were compared to the sequence reads. In all instances sequence reads were pooled to the highest taxonomic rank associated with the morphotype, e.g. if both species of *Mertensia*, or one species and read only classified to genus were present in a sample, the reads were summed. The total percentage of the ten most abundant grains per sample were then were then relativized to constitute the entire sample. 
 
 The relationship between the number of pollen grains in a sample and the number of sequence reads is roughly *curvilinear*, where grains which are present in trace amounts are overestimated by sequence counts, while grains present in high amounts are underestimated. This is likely due to the proportion of high false positives which occur in the classification process with NGS (BELL NOVEMEBER 2021). There was strong evidence of a strong correlation between the proportion of grains per morphotype and the number of sequences per group (`r round(ct[["estimate"]][["tau"]], 3)`, p < 0.0001, n = `r nrow(pol_p)`). 
-
-Sequences which were assigned to genera without any species predicted by spatial analyses, were investigated by hand after post-processing steps. These were manually assigned to a variety of ranks, occasionally to genus #COUNTS# and family #COUNTS#,  by consultation of the alpha-taxonomic literature (@sadeghian2015molecular, @sennikov2017phylogenetic, @rabeler2016new, @pusalkar2015taxonomic, @moore2003its,  @weber1998new). 
 
 ```{r}
 rm(pol_p, ct)
@@ -479,7 +506,8 @@ corb <- read.csv('../data/Corbiculae_collections.csv', header = F) %>%
   filter(caste == 'q') %>% 
   select(-V1, -caste)
 
-blst <- read.csv('../data/blast_seqs_classified.csv') %>% 
+blst <- read.csv('../data/Post_Classified_BLAST_sqs.csv') %>% 
+  rename(sample.id = Sample, Genus = GENUS, Family = FAMILY) %>% 
   distinct(sample.id)
 
 blst <- read.csv('../data/blast_seqs_classified.csv') %>% 
@@ -518,7 +546,8 @@ tb <- blst %>%
     Genus == 'Salix' ~ 'Saliceae',
     Genus == 'Cynoglossum' ~ 'Boraginaceae', 
     Genus == 'Arenaria' ~ 'Caryophyllaceae',
-    Genus == 'Parnasiia' ~ 'Celastraceae',
+    Genus == 'Parnassia' ~ 'Celastraceae',
+    Genus %in% c('Erigeron', 'Symphyotrichum') ~ 'Asteraceae',
     TRUE ~ Family 
   ))
 
@@ -612,7 +641,6 @@ rm(bee_cols, correct, family, genus, tblist, oblist, gf_lkp, gf_lkp2)
 ## 3.6 | Integrated Observational, Molecular, and Palynological Network
 
 While the spatial results were used to declare the taxonomic composition of the sequence database, temporal results were used in consideration with plant phylogeny to retroactively, reassign the assignment of sequences to taxa. Essentially, if a sequence was identified to a taxon which was not known from the field site 
-
 
 For example a common UNKNOWN sequence mapped to the Asteraceae family, but which was flagged by temporal filters and is present in both *B. nevadensis* Cresson and *B. rufocinctus* Cresson pollen is most likely *Frasera* Walter, failed extraction. A similar likely mismatch could be between what was fide molecular evidence as *Agastache pallidiflora* (A. Heller) Rydb. but where feeding was infrequently observed on *Pedicularis* L., likely due to this entire order being represented by only a single molecular reference species. 
 
@@ -857,9 +885,15 @@ Random Forest have high bias and low variance, where boosted regressions trees h
 
 \newpage
 
-APPENDIX XX - Tips and tricks for implementing plant metagenomic sequencing
+APPENDIX XX - Review Classified Reads and Reassign
+
+```{r}
+knitr::include_graphics('../graphics/tables/reclassify_reads_table.pdf')
+```
 
 \newpage
+
+APPENDIX XX - Tips and tricks for implementing plant metagenomic sequencing
 
 ```{r}
 knitr::include_graphics('../graphics/assorted/overall_metagenomic_workflow.pdf')
