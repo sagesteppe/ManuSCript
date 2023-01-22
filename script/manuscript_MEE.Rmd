@@ -41,6 +41,7 @@ library(here)
 library(tidyverse)
 library(bookdown)
 library(knitr)
+#devtools::install_github("kpmainali/CooccurrenceAffinity")
 suppressWarnings(library(kableExtra))
 pNumC <- function(...) prettyNum(...,big.mark = ',')
 
@@ -433,11 +434,30 @@ The relationship between the number of pollen grains in a sample and the number 
 rm(pol_p, ct)
 ```
 
+
+```{r Co-occurrence of splash drop sequences, eval = F}
+
+e <- blst %>% 
+  filter(Family %in% c('Boraginaceae', 'Hydrophyllaceae', 'Ranunculaceae')) %>% 
+  select(sample.id, Genus) %>% 
+  mutate(Present = 1) %>% 
+  group_by(Genus) %>% 
+  distinct() %>% 
+  pivot_wider(names_from = Genus, values_from = Present) %>% 
+  mutate(across(.col = everything(), ~replace_na(.,  0))) %>% 
+  column_to_rownames('sample.id')
+
+myout <- CooccurrenceAffinity::affinity(data = e, row.or.col = "col", squarematrix = c("all"))
+CooccurrenceAffinity::plotgg(data = myout, variable = "alpha_mle", legendlimit = "datarange")
+```
+
+To ascertain the extent to which records of multiple species in a family, which were suspected to be sampling artefacts occurred in molecular samples an index of similarity, ala jaccard,  $\alpha$ index was used to assess co-occurrence (@mainali2022better, @mainali2022alpha). Numerous taxa from the family Ranunculaceae (*Caltha* L. sp., *Thalictrum* L. spp., *Trollius* L. sp., *Aquilegia* L. spp.), had $\alpha$ scores which indicated that they are only present when a more common confamilial taxa *Delphinium barbeyi* (Huth) Huth *nuttallianum* Pritz. were recorded. A similar relationship was observed in the Hydrophyllaceae with samples placed in *Nemophila* Nutt., which only occurred when the more abundant *Hydrophyllum* L. species were present.
+
 ## 3.4 | Temporal Analyses
 
 The first date of modeled snow melt in the Gothic area (n = 17, $\bar{x}$ = 137.9, Mdn = 135, 3^rd^ quantile = 151), and the first date of a consistent winter snow base (n = 17, $\bar{x}$ = 299.9, Mdn = 300, 1^st^ quantile = 291) from 2000-2017, were used as delimiters for the inclusions of herbarium records in modelling. Of the 439 species predicted likely present in the area via logistic regression, 332 species (64.4%) with more than 10 records in the focal level 4 ecoregions ($\bar{x}$ = 35.016, Mdn = 35, max = 96) had weibull estimates calculated, an additional 56 species (11.2%) with enough contributing records from the "Sedimentary Mid-Elevation Forests", a large ecoregion generally just beneath the elevation bands occupied by the five ecoregions around the study area had weibull estimates also calculated ($\bar{x}$ = 13.868, Mdn = 13, max = 24).
 
-Only 58 of these 388 species (n = 34.568, Mdn = 31) were able to be compared to plot based observational data from the long term (1974–2012) data set (CITE). Of these species relatively high accord was observed between the long-term ground truthed data set, and the modelled species. There was very strong evidence that the weibull estimates were positively associated with the observed onset (r^2^ = 0.72, p < 0.0001, tau = 0.61) and peak (r^2^ = 0.70, p < 0.0001, tau = 0.65) of flowering, and that the number of herbarium samples had a moderate effect on the estimates (p = 0.004 and p = 0.034 respectively). There was very strong evidence that the weibull estimates had a positive association with the observed cessation of flowering (r^2^ =  0.4339,  p < 0.0001, tau = 0.489), however their was no evidence that sample size had an effect (p = 0.349). There was moderate evidence that the weibull estimates, with an effect of sample size, had a weak positive association with the observed duration of flowering (p = 0.0401, r^2^ = 0.07, tau = 0.17).
+Only 58 of these 388 species (n = 34.568, Mdn = 31) were able to be compared to plot based observational data from the long term (1974–2012) data set (@caradonna2014shifts). Of these species relatively high accord was observed between the long-term ground truthed data set, and the modelled species. There was very strong evidence that the weibull estimates were positively associated with the observed onset (r^2^ = 0.72, p < 0.0001, tau = 0.61) and peak (r^2^ = 0.70, p < 0.0001, tau = 0.65) of flowering, and that the number of herbarium samples had a moderate effect on the estimates (p = 0.004 and p = 0.034 respectively). There was very strong evidence that the weibull estimates had a positive association with the observed cessation of flowering (r^2^ =  0.4339,  p < 0.0001, tau = 0.489), however their was no evidence that sample size had an effect (p = 0.349). There was moderate evidence that the weibull estimates, with an effect of sample size, had a weak positive association with the observed duration of flowering (p = 0.0401, r^2^ = 0.07, tau = 0.17).
 
 ```{r plot phenology estimates, echo=F, fig.cap="Modelled dates of when major flowering events occurred", out.width = '100%'}
 knitr::include_graphics("../graphics/plots/phenology_estimates_10_90.png")
@@ -545,7 +565,7 @@ tb <- blst %>%
     Genus == 'Viola' ~ 'Violaceae',
     Genus == 'Salix' ~ 'Saliceae',
     Genus == 'Cynoglossum' ~ 'Boraginaceae', 
-    Genus == 'Arenaria' ~ 'Caryophyllaceae',
+    Genus == c('Arenaria', 'Odontostemma') ~ 'Caryophyllaceae',
     Genus == 'Parnassia' ~ 'Celastraceae',
     Genus %in% c('Erigeron', 'Symphyotrichum') ~ 'Asteraceae',
     TRUE ~ Family 
@@ -583,16 +603,10 @@ oblist <- split(obs, obs$species) %>%
 species <- purrr::map2_int(tblist, oblist,
                 ~ inner_join(.x, .y, by = 'plant.species') %>% nrow())
 
-#purrr::map2(tblist, oblist,  ~ inner_join(.x, .y, by = 'Genus') %>%  
-#              distinct(plant.species.y, .keep_all = T))
-
 genus <- purrr::map2_int(tblist, oblist,
   ~ inner_join(.x, .y, by = 'Genus') %>%
     distinct(plant.species.y) %>% nrow()
 ) 
-
-#purrr::map2(tblist, oblist,  ~ inner_join(.x, .y, by = 'Family') %>% 
-#              distinct(plant.species.y, .keep_all = T))
 
 family <- purrr::map2_int(tblist, oblist,
   ~ inner_join(.x, .y, by = 'Family') %>%
@@ -669,9 +683,11 @@ We anticipate that many of the complications which we faced, using opportunistic
 These results show that the overall results between **Bumble Bee ecology** observational and barcoding are largely congruent. But that ... We analyzed pollen loads from all of the most common bumble bee species in the area (@pyke1982local)
 Future analyses of the long term data set... 
 
+Results from palynological analyses show that several species of bee show near perfect fidelity to the genus Hydrophyllum on a per visit basis. 
+
 ##### ~ WHAT this tells us about Bee foraging (APPLIED) ~
 
-  Some foraging preferences of *Bombus*, both at this field site and across a great many localities globally emerge from this work, which reiterates the needs for land managers to maintain relatively high amounts of members of the Fabaceae, Boraginaceae, and Ranunculaceae, in Western North American montane landscapes (@goulson2005causes, @goulson2010bumblebees, @liang2021evolutionary, @bontvsutvsnaja2021bumble). Numerous historic, and some ongoing, land management practices reduce the ability of many landscapes to support stable populations of *Bombus*. Historic livestock grazing was often associated with the targeted removal of many species of plants which are known to have compounds toxic to cattle. In particular, the removal of locoweeds (Fabaceae: *Astragalus* L. & *Oxytropis* DC.) and larkspurs (Ranunculaceae: *Delphinium*) were common across public lands administered by the United States Forest Service (@ralphs1988herbicide, @aldous1919eradicating, @ralphs2003mechanism). Further actions, generally initiated by early settlers, involved the channelization and incising of streams, culling of beavers, and leaving cattle concentrated on higher order stream banks for significant periods of time, all processes which lower the water tables and reduced the extent of stream-associated [riverine] wetlands and the mesic meadows fringes which provide habitat for many species of tall *Mertensia* (Boraginaceae, e.g. *M. ciliata* Torr. G. Don.) widely distributed across Western North America, and to an extent *Delphinium barbeyi* (Huth) Huth and many species of native *Trifolium* L. (@dahl1990wetlands, @naiman1988alteration, @belsky1999survey, @cooke1976arroyos). Fire suppression further resulted in the succession of many Aspen (*Populus tremuloides* Michx.) groves to Conifer stands, decreasing the mosaic of age structured habitats in many landscapes, adversely effects habitat for tall *Mertensia* species and several species of *Delphinium* (@brewen202176, @keane2002cascading). Finally the effects of Nitrogen deposition, especially given the West's rapidly growing population still pose adverse effects on the abundance of a variety of species of Fabaceae at Urban-Rural interfaces (see @stevens2018atmospheric, @fenn2003ecological). Current solutions to these issues, involve targeted burns, reintroduction of beavers and beaver habitat analogs, and the possibility of re-seeding a variety of 'locoweeds' and 'larkspurs' in areas now seldom used, or only used for early, grazing. The highly enthusiastic response of land managers, and homeowners, to plant *Ascelpias* L., using genetically appropriate materials, to improve Monarch Butterfly (*Danaus plexippus* L.) habitat provides an effective framework for the latter (@oberhauser2015monarchs, @basey2015producing). 
+  Some foraging preferences of *Bombus*, both at this field site and across a great many localities globally emerge from this work, which reiterates the needs for land managers to maintain relatively high amounts of members of the Fabaceae, Boraginaceae, and Ranunculaceae, in Western North American montane landscapes (@goulson2005causes, @goulson2010bumblebees, @liang2021evolutionary, @bontvsutvsnaja2021bumble). Numerous historic, and some ongoing, land management practices reduce the ability of many landscapes to support stable populations of *Bombus*. Historic livestock grazing was often associated with the targeted removal of many species of plants which are known to have compounds toxic to cattle. In particular, the removal of locoweeds (Fabaceae: *Astragalus* L. & *Oxytropis* DC.) and larkspurs (Ranunculaceae: *Delphinium*) were common across public lands administered by the United States Forest Service (@ralphs1988herbicide, @aldous1919eradicating, @ralphs2003mechanism). Further actions, generally initiated by early settlers, involved the channelization and incising of streams, culling of beavers, and leaving cattle concentrated on higher order stream banks for significant periods of time, all processes which lower the water tables and reduced the extent of stream-associated [riverine] wetlands and the mesic meadows fringes which provide habitat for many species of tall *Mertensia* (Boraginaceae, e.g. *M. ciliata* Torr. G. Don.) widely distributed across Western North America, and to an extent *Delphinium barbeyi*  and many species of native *Trifolium* L. (@dahl1990wetlands, @naiman1988alteration, @belsky1999survey, @cooke1976arroyos). Fire suppression further resulted in the succession of many Aspen (*Populus tremuloides* Michx.) groves to Conifer stands, decreasing the mosaic of age structured habitats in many landscapes, adversely effects habitat for tall *Mertensia* species and several species of *Delphinium* (@brewen202176, @keane2002cascading). Finally the effects of Nitrogen deposition, especially given the West's rapidly growing population still pose adverse effects on the abundance of a variety of species of Fabaceae at Urban-Rural interfaces (see @stevens2018atmospheric, @fenn2003ecological). Current solutions to these issues, involve targeted burns, reintroduction of beavers and beaver habitat analogs, and the possibility of re-seeding a variety of 'locoweeds' and 'larkspurs' in areas now seldom used, or only used for early, grazing. The highly enthusiastic response of land managers, and homeowners, to plant *Ascelpias* L., using genetically appropriate materials, to improve Monarch Butterfly (*Danaus plexippus* L.) habitat provides an effective framework for the latter (@oberhauser2015monarchs, @basey2015producing). 
 
 ##### ~ WHERE we see spatial/temporal going
 
