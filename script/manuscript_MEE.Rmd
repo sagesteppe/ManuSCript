@@ -9,11 +9,12 @@ author:  |
     |  $^4$ Australia post fire project, ----, ----, ----, AU  
     |  Reed Clark Benkendorf^[Correspondence: reedbenkendorf2021@u.northwestern.edu] $^1$$^,$$^2$, Jane E. Ogilvie$^3$$^,$$^4$ , Emily J. Woodworth$^1$$^,$$^2$  
 abstract:  |  
-  1) DNA Barcoding has been remarkably successful in nearly all kingdoms of life and has allowed for the rapid analysis of ecological assemblages. Successful DNA barcoding in the plant kingdom has been more difficult than other kingdoms. Due to this understanding plants in ecological contexts and understandings of their synecology in some instances may begin to lag behind other kingdoms.  
-  2) Here we utilize hyb-seq, museum studies, and species distribution modelling, to detect the plant species present in pollen loads collected from Queen Bumble Bees.  
-  3) By utilizing Species distribution modelling we allow for one to process hyb-seq data, create user specified sequence databases which may use MORE ACCURATE alignment algorithms on personal computers over realistic time periods.  
-  4) We show that hyb-seq using the Angiosperms 353 probes, which are currently being used in the largest ever plant systematic endeavor, offers significant promise to metagenomic approaches in real world scenarios.  
-  5) We conclude that these probes offer promise for the identification of plant tissue in both single sample, and metasample contexts.  
+  1) DNA Barcoding has been successful for the rapid analysis of ecological assemblages. Although barcoding in the plant kingdom barcoding has been more difficult than others, and hence may begin to lag behind other kingdoms.  
+  2) Here we test the utilization of Angiosperms 353 probes to barcode plant species found in pollen loads collected from Queen Bumble Bees.  
+  3) To verify the accuracy for this barcoding system we compared the data to museum species, observation studies, and species distribution modelling to identify likely candidate species. 
+  4) By utilizing Species distribution modelling we allow users to create a regionally appropriate sequence databases which may use increase the alignment algorithms minimizing need for large computational power, and run time.  
+  5) We show that the Angiosperms 353 probes, which are currently being used in the largest ever plant systematic endeavor, offers significant promise to metagenomic approaches.    
+  6) Understanding plants in ecological contexts and understandings of their synecology.  
 keywords: |
   DNA baroding, metagenomics, hyb-seq, Angiosperms353, plant metagenomics, bombus queens, subalpine, species distribution model
 output:
@@ -62,23 +63,25 @@ prcnt_detect <- function(x, Lprop, Hprop){
 
 # 1 | INTRODUCTION
 
-The inability to reliably identify plants down to terminal taxon can limit our understanding of ecosystem function and interactions (@bortolus2008error). This is especially true for genera where many species are defined upon ecological and behavioral rather than morphological properties, and hence often serve as bioindicators of habitat (e.g. different species of Sagebrush- *Artemisia* L., Willows - *Salix* L., and Sedges - *Carex* L.) (@Gage2013HistoricalRO). The lack of species level data can hinder our understanding of the breadth of habitat which some species occupy, and the interactions they have with other species. Current methods to ameliorate this situation include: ignoring these ecologically relevant levels of detail, revisiting plots as diagnostic material becomes temporally available, assistance from taxonomic specialists, or the use of barcoding or other molecular techniques (CITE). The identification of organisms to terminal taxon is often mired by lack of diagnostic characters (e.g. flowers, fruits, roots or combinations thereof), an increasing lack of taxonomic experts (@hebert2003biological) and increasingly the description of cryptic species (@janzen2017nuclear, @oliver2009cryptic). And revisiting field sites to identify material using morphological or chemical approaches, can be resource intensive and often does not work.
+The inability to reliably identify plants to terminal taxon can limit our understanding of ecosystem function and interactions (@bortolus2008error). This is especially true for genera where identification down to species can be useful as specific bioindicators; defining ecological and behavioral properties  (e.g. different species of Sagebrush- *Artemisia* L., Willows - *Salix* L., and Sedges - *Carex* L.) (@Gage2013HistoricalRO).In these instances the lack of species level data can hinder our understanding of the breadth of habitat which some species occupy, and their interactions with other species. This can be further complicated by the fact that the identification of organisms to terminal taxon is also often mired by lack of diagnostic characters(e.g. flowers, fruits, roots or combinations thereof), an increasing lack of taxonomic experts (@hebert2003biological) and the presence of cryptic species (@janzen2017nuclear, @oliver2009cryptic). Taxonomic verification can also be limited by the fact that revisiting field sites to identify material using morphological or chemical approaches, can be resource intensive and often does not work. The current methods to ameliorate this situation include: ignoring these ecologically relevant levels of detail, revisiting plots as diagnostic material becomes temporally available, seeking the assistance from taxonomic specialists, or the use of barcoding using molecular techniques (CITE)
   
-  Recently barcoding (the identification of a sample from a single organism *e.g.* a piece of leaf), and metabarcoding (the identification of a sample containing a mix of organisms *e.g.* soil), have shown considerable promise in all Kingdoms of Life (@ruppert2019past). With plants the identification of members of certain clades using barcoding has been quite successful (@kress2017plant), whereas with many other clades results have been elusive (@liu2014identification, @china2011comparative, @coissac2012bioinformatic), however metabarcoding incurs additional challenges to those which  exist for the currently implemented barcodes (@li2015plant, @kress2007two, @cbol2009dna, @coissac2012bioinformatic). Particular challenges with the high copy number barcodes (e.g. ITS2, *rbcL*, *matK*, *trnH-psbA*) include the utilization their rates of divergence, gene tree conflict, and hybridization (@coissac2016barcodes, @fazekas2009plant). 
+  Recently molecular barcoding (the identification of a sample from a single organism *e.g.* a piece of leaf), or metabarcoding (the identification of a sample containing a mix of organisms *e.g.* soil), have shown considerable promise in many taxa (@ruppert2019past). For plants the success is a little more mix, with the identification of certain clades using barcoding being quite successful (@kress2017plant), however for many other clades the results have been more elusive (@liu2014identification, @china2011comparative, @coissac2012bioinformatic), while metabarcoding has incurred additional challenges for the currently available barcodes (@li2015plant, @kress2007two, @cbol2009dna, @coissac2012bioinformatic). Particular challenges for the utilization of the high copy number barcodes (e.g. ITS2, *rbcL*, *matK*, *trnH-psbA*) include their rates of divergence, gene tree conflict, and hybridization (@coissac2016barcodes, @fazekas2009plant). 
   
-  Currently the largest plant systematic endeavor ever undertaken, the Plant and Fungal Tree of Life (PAFTOL) undertaken by the Royal Botanic Gardens Kew, is approaching completion (@baker2021PAFTOL). This data set will contain hybridization capture (Hyb-Seq) data from at least one species in each genus of the plant kingdom using the popular Angiosperms353 (A353) probes, at 353 single-copy orthologous loci, (@baker2021PAFTOL, @johnson2019universal), resulting in over 14,000 represented species. These publicly available data serve to provide a taxonomically comprehensive backbone for plant metabarcoding, and the A353 probes are currently being used in many other plant phylogenetic issues increasing the sampling depth of many clades (@baker2021exploring). Data from the 10kP project, which seeks to develop reference genomes from a phylogenetically diverse suite of plants will contribute many more species upon it’s intended completion, now slated to be by 2030, similar projects which seek to sequence high amounts of genomes in geographic regions e.g. the ‘Darwin Tree of Life’ which will sequence all described taxa in Britain and Ireland, are being undertaken which will contribute data sets applicable to enormous spatial domains (@cheng2018tenkp, @darwin2022project, @lewin2022biogenome). These data will promote the ability to apply metabarcoding to resolve a diversity of questions relevant to theoretical and applied ecology (@kress2017plant, @hollingsworth2016telling). However, the application of metabarcoding still face challenges relating to the enormity of the genomic data sets and the computational power required to process sequence data. Herein we have resolved major components of the problems of identifying plant material without diagnostic morphological character states using the A353 Hyb-Seq probes (@johnson2019universal), and custom species sequence databases derived via species distribution modelling, and temporal filtering.
+  Currently the largest plant systematic endeavor ever undertaken,by the Royal Botanic Gardens Kew, the Plant and Fungal Tree of Life (PAFTOL) is approaching completion (@baker2021PAFTOL).  This data set will contain hybridization capture (Hyb-Seq) data from at least one species in each genus of the plant kingdom,14,000 represented species, using the popular Angiosperms353 (A353) probes, which includes 353 single-copy orthologous loci, (@baker2021PAFTOL, @johnson2019universal). These publicly available data serve to provide a taxonomically comprehensive backbone for plant metabarcoding. The A353 probes are currently being used in many other plant phylogenetic studies increasing the sampling depth of many clades  (@baker2021exploring). Data from the 10kP project, which seeks to develop reference genomes from a phylogenetically diverse suite of plants will contribute many more species upon it’s intended completion, slated for 2030. Similar projects such as the ‘Darwin Tree of Life’ which will sequence all described taxa in Britain and Ireland, seek to sequence high amounts of genomes in geographic regions will contribute data sets applicable to enormous spatial domains (@cheng2018tenkp, @darwin2022project, @lewin2022biogenome). These data will promote the ability to apply metabarcoding to resolve a diverse array of questions relevant to theoretical and applied ecology (@kress2017plant, @hollingsworth2016telling). However, the application of metabarcoding still face challenges relating to the enormity of the genomic data sets and the computational power required to process sequence data.
   
-  To increase the quality of metabarcoding results in plants, we suggest reducing the number of possible plant species candidates by generating user selected sequence databases relevant to the the region of study and its ecological characteristics. To achieve this goal, we first create a list of candidate species using digital collections gleaned from herbaria, survey work, and citizen science (e.g. iNaturalist), from a region exceeding the study area. To these candidate species, modelling approaches - such as logistic regression, may be used to identify taxa which warrant further exploration e.g. modelling to determine their possibility of presence in metabarcoding samples. We then use species distribution models to create potential distribution maps for the candidate species to limit the impact of spatial and taxonomic biases in the species list and account for spatial variations in niche availability throughout the study area. Species distribution models (SDM’s) examine the ecological conditions associated with known occurrence of a species to identify where else in the study area might suitable habitats be found. This approach has the additional benefit of greatly reducing the size of a sequence database, which allows for the usage of genomic size data on personal computers. This approach can also significantly reduce processing time, particularly as as most next-generation sequence data is deposited as raw-sequence reads.
+  Herein we have resolved major components of the problems of identifying plant material without diagnostic morphological character states using the A353 Hyb-Seq probes (@johnson2019universal), and custom species sequence databases derived via species distribution modelling, and temporal filtering.
   
-  Considerable amounts of species interactions vary both in space and time (@caradonna2021seeing). In many regions of the world, contrasts in the flowering periods of many plant species, can provide an additional filter for identifying material in certain types of metagenomic samples (@janzen1967synchronization, @Newstrom1994ANC). In high elevation temperate regions, pollination interactions vary temporally and are characterized by high turnover in active periods of species (@caradonna2017interaction), however the overall shorter extent of the active growing season in these systems results in the presence of few to any natural breaks,  which reduces the utility of these to operate as filters in the post-processing of sequence matches. Nonetheless, we work develop a general approach which seems applicable to many areas which utilize the temporal dimension for classifying sequences in metagenomic samples (but see @davis2022new).
+  To increase the quality of metabarcoding results in plants, we are proposing reducing the number of possible candidate species by generating a user specific databases relevant to the region of study and the ecological characteristics of interest. To achieve this goal, we first create a regional list of candidate species using digital collections gleaned from herbaria, survey work, and citizen science (e.g. iNaturalist), from a region exceeding the study area. For these candidate species, a modelling approach, such as logistic regression, may be used to identify taxa which warrant further exploration e.g. determine their possibility of presence in metabarcoding samples. We then use species distribution models to create potential distribution maps for the candidate species to limit the impact of spatial and taxonomic biases in the species list and account for spatial variations in niche availability throughout the study area. Species distribution models (SDM’s) examine the ecological conditions associated with known occurrence of a species to identify where in the study area might suitable habitats. This approach has the benefit of greatly reducing the size of a sequence database, which allows for the usage of genomic size data on personal computers. This approach can significantly reduce processing time, particularly as as most next-generation sequence data is deposited as raw-sequence reads.
   
-  We test these metagenomic and informatics approaches to determine whether the foraging record of Queen Bumble Bee's are consistent across direct observations and the pollen record, an incongruency noted in several floral visitation networks involving smaller bodied fauna (@barker2021pollen, @zhao2019topology, @alarcon2010congruence). The assessment of the plant species compositions of pollen is a desired result, with several applications, and numerous complications (@pornon2017dna, @bell2017applying, @sickel2015increased, @bell2019quantitative, @suchan2019pollen,  @johnson2021airborne). The two foraging phases of the Queen Bumble Bee life cycle is essential to 1) increase their weight before diapause, 2) increase their ovary weights while establishing their recently found nests, both of these time periods represent potential demographic bottlenecks in bumble bee populations (@sarro2022bumble, ...). Bumblebees are one of the only groups of insects with unequivocal quantitative evidence for numerous population declines, while simultaneously serving as the most effective pollinators in many temperate montane ecosystems (@cameron2020global, @goulson2008decline, @williams1982distribution, @colla2012assessing, @bergman1996micrometeorological, @bingham1998efficient, @grixti2009decline) often represent the most diverse areas in the temperate and oftentimes offer the sole potential refugia for multiple dimensions of biodiversity under climate change, whilst simultaneously experiencing the greatest proportional changes in mean annual temperature (@brito2018climate, @pepin2022climate). An immediate understanding of how to manage previously overlooked keystone insect species, such as bumble bees, is essential if the refugial potential of the temperate mountains are to be incorporated into their current diversity (@loarie2009velocity, @dobrowski2016climate). 
+  As species interactions vary both in space and time (@~THOMSON1995 MOSIAC?, @caradonna2021seeing). Contrasts in the flowering periods of many plant species, can provide an additional filter for identifying material in certain types of metagenomic samples (@janzen1967synchronization, @Newstrom1994ANC). In high elevation temperate regions, pollination interactions vary temporally and are characterized by high turnover in active periods of species (@caradonna2017interaction), however the overall shorter extent of the active growing season in these systems results in the presence of few to any natural breaks,  which reduces the utility of these to operate as filters in the post-processing of sequence matches. Nonetheless, we work develop a general approach which seems applicable to many areas which utilize the temporal dimension for classifying sequences in metagenomic samples (but see @davis2022new).
+  
+  We tested this metagenomic and informatics approach to determine to examine the foraging behaviour of queen bumblebee, and compare this approach with direct observations and the pollen record, which has shown some incongruency in several floral visitation networks involving smaller bodied fauna (@barker2021pollen, @zhao2019topology, @alarcon2010congruence). The assessment of the plant species compositions from pollen is a desirable approach, with several potential applications, despite numerous potential complications (@pornon2017dna, @bell2017applying, @sickel2015increased, @bell2019quantitative, @suchan2019pollen,  @johnson2021airborne). The two foraging phases of the queen bumblebee life cycle are essential to 1) increase their weight before diapause, and 2) increase their ovary weights while establishing their recently found nests. Both of these time periods represent potential demographic bottlenecks in bumble bee populations (@sarro2022bumble, ...). Bumblebees are one of the only groups of insects with unequivocal quantitative evidence for numerous population declines, while simultaneously serving as the most effective pollinators in many temperate montane ecosystems (@cameron2020global, @goulson2008decline, @williams1982distribution, @colla2012assessing, @bergman1996micrometeorological, @bingham1998efficient, @grixti2009decline). These areas often represent the most diverse areas in the temperate and often offer the sole potential refugia for multiple dimensions of biodiversity under climate change, whilst simultaneously experiencing the greatest proportional changes in mean annual temperature (@brito2018climate, @pepin2022climate). An immediate understanding of how to manage previously overlooked keystone insect species, such as bumble bees, is essential if the refugial potential of the temperate mountains are to be incorporated into their current diversity (@loarie2009velocity, @dobrowski2016climate). 
 
 # 2 | METHODS
 
 ## Study System & Field Work
 
-Observations and sample collection was conducted at The Rocky Mountain Biological Laboratory (RMBL; 38°57.5” N, 106°59.3” W (WGS 84), 2900 m.a.s.l.), Colorado, USA (APPENDIX 1 for site information). Pollinator observations of *Bombus* Latreille spp. (Apidae Latreille) were conducted from June - August of 2015 in six study sites characterized by high-montane/subalpine Parkland vegetation communities. Observations of *Bombus* foraging took place for one hour at each field site in three 100m transects, where all flowers were also counted and placed into abundance bins. Corbiculae loads were, non-lethally, collected once from all Queen individuals encountered. 
+Observations and bee sample collection was conducted at The Rocky Mountain Biological Laboratory (RMBL; 38°57.5” N, 106°59.3” W (WGS 84), 2900 m.a.s.l.), Colorado, USA (APPENDIX 1 for site information), characterized by high-montane/subalpine Parkland vegetation communities. Pollinator observations of *Bombus* Latreille spp. (Apidae Latreille) were conducted from June - August of 2015 in six study sites. Observations of *Bombus* foraging took place for one hour at each field site in three 100m transects, where all flowers were also counted and placed into abundance bins. Corbiculae loads were, non-lethally, collected once from all Queen individuals encountered.
 
 ### 2.1 | Spatial Analyses
 
@@ -745,11 +748,10 @@ We believe that the combination of spatial and temporal models, united and guide
 
 ```{r}
 a <- read.csv('../data/herbaria_4_acknowledgements.csv') %>% 
-  pull() %>% 
-  toString()
+  pull() 
 ```
 
-**ACKNOWLEDGMENTS:** Nyree Zerega for assistance obtaining herbaria loans and accessioning our collections at CHIC. Pat Herendeen for assistance with virtually all aspects of preparing pollen vouchers and the identification process. Ian Breckheimer for sharing the SDM predictor variables. Hilary Noble, Zoe Diaz-Martinez, Angela McDonnell, & Elena Loke for assistance with genomic library preparation. We thank the curators at the following herbaria for supplying tissue: Ben Legler at Stillinger (ID), Charles (Rick) Williams at Ray J. Davis (IDS), (B)Ernie Nelson at Rocky Mountain (RM); and the collectors: D. Knoke, L. Brummer, J. Boyd, C. Davidson, I. Gilman, M. Kirkpatrick, S. McCauley, J. Smith, K. Taylor, & C. Williams. David Giblin & Mare Nazaire for sharing relevant sections of an advanced draft of FNA V. 15. The Bureau of Land Management is thanked as many plant specimens were collected by R.C.B as a partner or contractor to the agency; Sarah Burnett and Lauren Price are thanked for sharing AIM data. Sanda and New England Biotech are gratefully acknowledged for technical support and generously sharing samples. T.C.H. Cole for sharing the Angiosperm Phylogeny 4 colour palette. The Program in Plant Biology and Conservation is thanked for funding. The holdings of the following herbaria were essential for this project: `r a`.
+**ACKNOWLEDGMENTS:** Nyree Zerega for assistance obtaining herbaria loans and accessioning our collections at CHIC. Pat Herendeen for assistance with virtually all aspects of preparing pollen vouchers and the identification process. Hilary Noble, Zoe Diaz-Martinez, Angela McDonnell, & Elena Loke for assistance with genomic library preparation. Ian Breckheimer for sharing the SDM predictor variables. We thank the curators at the following herbaria for supplying tissue: Ben Legler at Stillinger (ID), Charles (Rick) Williams at Ray J. Davis (IDS), (B)Ernie Nelson at Rocky Mountain (RM); and the collectors: D. Knoke, L. Brummer, J. Boyd, C. Davidson, I. Gilman, M. Kirkpatrick, S. McCauley, J. Smith, K. Taylor, & C. Williams. David Giblin & Mare Nazaire for sharing relevant sections of an advanced draft of FNA V. 15. The Bureau of Land Management is thanked as many plant specimens were collected by R.C.B as a partner or contractor to the agency; Sarah Burnett and Lauren Price are thanked for sharing AIM data. Sanda and New England Biotech are gratefully acknowledged for technical support and generously sharing samples. T.C.H. Cole for sharing the Angiosperm Phylogeny 4 colour palette. The Program in Plant Biology and Conservation is thanked for funding. The holdings of the following herbaria were essential for this project: `r toString(a)`.
 
 **CONFLICT OF INTERESTS** The authors declare no conflicts of interest.
 
@@ -781,35 +783,35 @@ knitr::include_graphics('../graphics/plots/siteMaps.png')
 
 Appendix 2 - Species Distribution Models Predictors
 
-Layer   LM                     Description                            Source
-----   ----    ------------------------------------------     ---------------------
-1.                   Mean annual cloudiness - MODIS            Wilson et al. 2016
-2.                 Cloudiness seasonality 1 - MODIS            Wilson et al. 2016 
-3.                 Cloudiness seasonality 2 - MODIS            Wilson et al. 2016 
-4.                 Cloudiness seasonality 3 - MODIS            Wilson et al. 2016
-5.                Beginning of the frost-free period               Wang et al.
-6.                   Climatic moisture deficit                     Wang et al.
-7.                   Degree-days above 5C from                     Wang et al.
-8.                   Mean annual precipitation                     Wang et al.
-9.                Mean annual precipitation as snow                Wang et al.
-10.                   Temperature seasonality                      Wang et al.
-11.             2015 Percent Grass/Herbaceous cover - MODIS         (MOD44B)
-12.            2015 Percent Tree cover from Landsat 7/8              (GLCF)
-13.             Soil probability of bedrock (R Horizon)             SoilGrids
-14.               Soil organic carbon (Tonnes / ha)                 SoilGrids
-15.                    Surface soil pH in H~2~O                     SoilGrids
-16.                   Surface soil percent sand                     SoilGrids
-17.                         Soil USDA class                         SoilGrids
-18.                       Topographic elevation                    EarthEnv DEM
-19.                 Topographic elevation, moving window.          EarthEnv DEM
-20.                   Topographic percent slope                    EarthEnv DEM 
-21.                   Topographic wetness index                    EarthEnv DEM 
-22.                    Topographic aspect from                     EarthEnv DEM
-23.             Annual potential solar radiation computed             r.sun
-24.            Estimated actual (w/-cloud) solar radiation  r.sun / Wilson et al. 2016
-25.             Log-transformed distance to surface water   Global Surface Water Explorer
-26.                   Percent surface water                 Global Surface Water Explorer 
-----        -------------------------------------------      ---------------------
+Layer   LM                     Description                              Source
+----   ----      ------------------------------------------    -------------------------
+1.      N              Mean annual cloudiness - MODIS              Wilson et al. 2016
+2.      Y            Cloudiness seasonality 1 - MODIS              Wilson et al. 2016 
+3.      N            Cloudiness seasonality 2 - MODIS              Wilson et al. 2016 
+4.      Y            Cloudiness seasonality 3 - MODIS              Wilson et al. 2016
+5.      N           Beginning of the frost-free period                 Wang et al.
+6.      N              Climatic moisture deficit                       Wang et al.
+7.      N              Degree-days above 5C from                       Wang et al.
+8.      N              Mean annual precipitation                       Wang et al.
+9.      Y           Mean annual precipitation as snow                  Wang et al.
+10.     Y               Temperature seasonality                        Wang et al.
+11.     Y         2015 Percent Grass/Herbaceous cover - MODIS           (MOD44B)
+12.     Y          2015 Percent Tree cover from Landsat 7/8              (GLCF)
+13.     Y         Soil probability of bedrock (R Horizon)               SoilGrids
+14.     N           Soil organic carbon (Tonnes / ha)                   SoilGrids
+15.     N                Surface soil pH in H~2~O                       SoilGrids
+16.     Y               Surface soil percent sand                       SoilGrids
+17.     Y                     Soil USDA class                           SoilGrids
+18.     N                   Topographic elevation                      EarthEnv DEM
+19.     Y             Topographic elevation, moving window.            EarthEnv DEM
+20.     Y               Topographic percent slope                      EarthEnv DEM 
+21.     Y               Topographic wetness index                      EarthEnv DEM 
+22.     Y                  Topographic aspect                          EarthEnv DEM
+23.     Y         Annual potential solar radiation computed               r.sun
+24.     N        Estimated actual (w/-cloud) solar radiation      r.sun / Wilson et al. 2016
+25.     Y        Log-transformed distance to surface water      Global Surface Water Explorer
+26.     Y                Percent surface water                  Global Surface Water Explorer 
+----   ----     -------------------------------------------    ------------------------------
 
 \newpage
 
@@ -913,7 +915,11 @@ knitr::include_graphics('../graphics/assorted/kraken_db_spp_table-4.pdf')
 
 Appendix XX - Reads Per Loci
 
-```{r READS PER LOCI, echo = F, out.width = '98%'}
+```{r READS PER LOCI - REFERENCE, echo = F, out.width = '98%'}
+knitr::include_graphics('../graphics/plots/Loci_Reference_Samples.png')
+```
+
+```{r READS PER LOCI - METAGENOMICS, echo = F, out.width = '98%'}
 knitr::include_graphics('../graphics/plots/Percent_loci_matched_by_sample.png')
 ```
 
@@ -927,21 +933,27 @@ knitr::include_graphics('../graphics/plots/Molecular_nets.pdf')
 
 Appendix XX - Models used for Species Distribution Model Ensembles
 
-*Generalised Linear Models (GLM)*
-
-*Generalised Additive Models (GAM)*
-
 The two machine learning models utilize Ensemble learning.
 
-Decision trees, ... 
+__Ensemble learning__ utilizes many sets of trees, each tree being composed of many binary decisions, to create a single model. Each independent variable ( - or *feature*) may become a node on the tree - i.e. a location on the tree where a binary decision will move towards a predicted outcome. Each of the decision tree models which ensemble learning utilizes is a weak model, each of which may suffer due to high variance or bias, but which produce better outcomes than would be expected via chance. When ensembled these models generate a strong model, a model which should have more appropriately balanced variance and bias and predicts outcomes which are more strongly correlated with the expected values than the individual weak models. 
 
-Ensemble learning utilizes many sets of trees, each tree being composed of many binary decisions, to create a single model. Each independent variable ( - or *feature*) may become a node on the tree - i.e. a location on the tree where a binary decision will move towards a predicted outcome. Each of the decision tree models which ensemble learning utilizes is a weak model, each of which may suffer due to high variance or bias, but which produce better outcomes than would be expected via chance. When ensembled these models generate a strong model, a model which should have more appropriately balanced variance and bias and predicts outcomes which are more strongly correlated with the expected values than the individual weak models. 
+*__Random Forest (RF)__* the training data are continually bootstrap re-sampled, in combination with random subsets of features, to create nodes which attempt to optimally predict a known outcome. A large number of trees are then aggregated, via the most common predictions, to generate a final classification prediction tree. Each individual prediction tree is generated independently of the others. 
 
-*Random Forest (RF)* the training data are continually bootstrap re-sampled, in combination with random subsets of features, to create nodes which attempt to optimally predict a known outcome. A large number of trees are then aggregated, via the most common predictions, to generate a final classification prediction tree. Each individual prediction tree is generated independently of the others. 
+*__Boosted Regression Tree (BRT)__* (or Gradient Boosted tree) An initial tree is grown, and all other trees are derived sequentially from it, as each new tree is grown the errors in responses from the last tree are weighed more heavily so that the model focuses on selecting dependent variables which refine predictions. All response data and predictor variables are kept available to all trees.
 
-*Boosted Regression Tree (BRT)* (or Gradient Boosted tree) An initial tree is grown, and all other trees are derived sequentially from it, as each new tree is grown the errors in responses from the last tree are weighed more heavily so that the model focuses on selecting dependent variables which refine predictions. All response data and predictor variables are kept available to all trees.
+*__Bias__* predictions from an algorithm are systematically in error due to being prejudiced for or against certain results, due to assumptions during learning.
 
-Random Forest have high bias and low variance, where boosted regressions trees have low bias and high variances. 
+*__Variance__* errors in models due to an over-reliance and sensitivity of training to outliers in training data. 
+
+In general, Random Forest  models have high bias and low variance, where boosted regressions trees have lower bias and higher variance. Theoretically, the weaknesses and strengths of bootstrap aggregation (bagging) as implemented by Random Forests are supplemented by the boosting. 
+
+\newpage
+
+APPENDIX XX - Time Spent Generating Species Distribution Models
+
+```{r}
+knitr::include_graphics('../graphics/assorted/individual_model_runs.pdf')
+```
 
 \newpage
 
@@ -991,4 +1003,5 @@ THIS SHOULD BE TURNED INTO A SMALLER PNG, AND HAVE THE NUMBER OF SEQUENCED METAG
 ```{r Samples per Bee}
 knitr::include_graphics('../graphics/tables/bombus_samples.pdf')
 ```
+
 
