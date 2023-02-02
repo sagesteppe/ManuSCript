@@ -79,21 +79,39 @@ The inability to reliably identify plants to terminal taxon can limit our unders
 
 # 2 | METHODS
 
-## Study System & Field Work
+## 2.1 Study System & Field Work
 
 Observations and bee sample collection was conducted at The Rocky Mountain Biological Laboratory (RMBL; 38°57.5” N, 106°59.3” W (WGS 84), 2900 m.a.s.l.), Colorado, USA (APPENDIX 1 for site information), characterized by high-montane/subalpine Parkland vegetation communities. Pollinator observations of *Bombus* Latreille spp. (Apidae Latreille) were conducted from June - August of 2015 in six study sites. Observations of *Bombus* foraging took place for one hour at each field site in three 100m transects, where all flowers were also counted and placed into abundance bins. Corbiculae loads were, non-lethally, collected once from all Queen individuals encountered.
 
-### 2.1 | Spatial Analyses
+## 2.2 | Floral Visitation
 
-#### 2.1.1 Candidate Species
+...
 
-We downloaded from the Botanical Information and Ecology Network ‘BIEN’ (@bien2022) all records adjacent to the field sites to develop an ecologically relevant list of vascular plant species, with expected biotic pollination, which may be present at the study area . We then generated Species Distribution Models (SDMs) to predict their distribution throughout the study area. These maps of potential distribution served as a reference to reduce the list of species to include in the genomic sequence databases.
+## 2.3 | Pollen Morphological identification
 
-In order to minimise the number of species for which SDM’s were to be generated, BIEN was queried at a distance of up to 100km from our study area and all plant species records were downloaded. In order to emulate the stochasticity of botanical collecting and offset the number of records associated with the research station, this data set was bootstrap re-sampled 250 times, with 90% of samples selected, to create a testing data set. The median of the logistic regression assessing the probability of occurrence of a species record as a function of distance from the study area was used as a threshold distance, under which, to include species as candidates for distribution modelling.
+### 2.3.1 | Pollen Reference Library
 
-#### 2.1.2 Distribution Modelling
+To develop a reference library of  pollen grains which may be present in corbiculae loads, an image reference collection of fuchsin-jelly stained (@beattie1971technique) slides was assembled from slides previously prepared by the authors (n = 21), and other researchers (n = 38) (@brosi2013single). Using five years of observational data on *Bombus* Queen Bee foraging at these studies sites (Ogilvie unpublished), as well as the Vascular Plant Checklist (@fraser2007vpc), an additional 62 voucher slides for species were prepared and imaged at 400x (Leica DMLB, Leica MC170 HD Camera, Leica Application Suite V. 4.13.0) from non accessioned herbarium collections to supplement the number of species and clades covered (Appendix 3).  
+  We used Divisive Hierarchical Clustering techniques to determine which plant taxa were distinguishable via light microscopy, and to develop a dichotomous key to pollen morphotypes. Ten readily discernible categorical traits were collected from each specimen in the image collection. These traits were transformed using Gower distances, and clustered using Divisive Hierarchical clustering techniques (@cluster2022). Using the cluster dendrogram, elbow plot, and heatmaps (@fpc2022), of these results morphological groups of pollen which could not be resolved via microscopy were delineated, and a dichotomous key was prepared (APPENDIX NO.). This key was then used to identify the pollen grains sampled from corbiculae loads to morphotypes in a consistent manner. 
+  
+### 2.3.2 | Pollen Corbiculae Loads
 
-We used all occurrence records from BIEN (n = 23,919) within a 50km border of the Omernik level 3 ecoregion, which includes the study area *(No. 21 “Southern Rockies”)* to construct the species distribution model  (@omernik1987ecoregions). These records were copied into two, initially identical, sets, one for generating machine learning models (ML; Random Forest, and Boosted Regression Tree’s), and the other for Generalised Linear (GLM) and Generalized Additive Models (GAM) (@barbet2012selecting). **Ensembled predictions have been shown to outperform their constituent models, on average, and to reduce the ecological signal to the analytical noise of individual runs (@araujo2007ensemble). No single method of producing SDMs has been shown to universally outperform others when faced with a large and diverse number of applications, in our case a great number of species with differing biologies and ecologies (@elith2006novel, @qiao2015no). In the spirit of these findings, multiple families of models, which can be generated together as they have similar requirements regarding the number and ratios of Presence to Absence records were ensembled together (@barbet2012selecting).**
+  To prepare the pollen slides from corbiculae, all corbiculae loads were broken apart and rolled using dissection needlepoints to increase heterogeneity of samples. *Cerca* 0.5mm^2^ of pollen was placed onto a ~4mm^2^ fuchsin jelly cube (@beattie1971technique) atop a graticulated microscope slide, with 20 transects and 20 rows (400 quadrants) (EMS, Hartfield, PA). The jelly was melted, with stirring, until pollen grains were homogeneously spread across the microscope slide. Slides were sealed with Canada Balsam (Rublev Colours, Willits, CA) followed by sealing with nail polish to prevent oxidation; all samples are noted in *APPENDIX 3*.
+  To identify the pollen present in corbiculae loads, light microscopy at 400x (Zeiss Axioscope A1) was used. In initial sampling in three transects, each pollen grain was identified to morphotype and counted; an additional two transects were scanned for morphotypes unique to that slide, if either transect contained an unique morphotype than all grains in that transect were also identified and counted. Subsequent to the first round of sampling, non-parametric species richness rarefaction curves (@vegans2022), and non-parametric species diversity rarefaction curves were used to assess the completeness of sampling (@inextArticle, @inextPackage). Slides not approaching the asymptote of the rarefaction curve were then re-sampled, and analysed iteratively for up to a total of seven transects *APPENDIX 2*. 
+  
+### 2.4 | Molecular Barcoding
+
+#### 2.4.1 | Species reference list
+
+#### 2.4.1.1 Spatial Analyses
+
+We generate a short list of potential candidate species we downloaded from the Botanical Information and Ecology Network ‘BIEN’ (@bien2022) all records adjacent to the field sites to develop an ecologically relevant list of vascular plant species, with expected biotic pollination, which may be present at the study area. To reduce the list of species to include in the genomic sequence databases, we then generated Species Distribution Models (SDMs) for these taxa to predict their distribution throughout the study area. 
+
+In order to minimize the number of species for which SDM’s were to be generated, BIEN was queried at a distance of up to 100km from our study area and all plant species records were downloaded. To account for the stochasticity of botanical collecting and offset the number of records associated with the research station, this data set was bootstrap re-sampled 250 times, with 90% of samples selected, to create a testing data set. The median of the logistic regression assessing the probability of occurrence of a species record as a function of distance from the study area was used as a threshold distance, under which, to include species as candidates for distribution modelling.
+
+#### 2.4.1.2 Distribution Modelling
+
+We used all occurrence records from BIEN (n = 23,919) within a 50km border of the Omernik level 3 ecoregion, which includes the study area *(No. 21 “Southern Rockies”)* to construct the species distribution model  (@omernik1987ecoregions). These records were copied into two, initially identical, sets, one for generating machine learning models (ML; Random Forest, and Boosted Regression Tree’s), and the other for Generalised Linear (GLM) and Generalized Additive Models (GAM) (@barbet2012selecting). Ensembled predictions have been shown to outperform their constituent models, on average, and to reduce the ecological signal to the analytical noise of individual runs (@araujo2007ensemble). No single method of producing SDMs has been shown to universally outperform others when faced with a large and diverse number of applications, in our case a great number of species with differing biologies and ecologies (@elith2006novel, @qiao2015no). In the spirit of these findings, multiple families of models, which can be generated together as they have similar requirements regarding the number and ratios of Presence to Absence records were ensembled together (@barbet2012selecting).
 
 We then generated 4,029 absence points, locations where the focal taxon is anticipated missing, through a random stratification of 19% of the land cover in the area and included them in (@aim2019database). To achieve a larger absence data set, we generated 1,000 pseudo-absence records for each taxon by randomly selecting coordinates located at least 10km away from an occurrence record. For ML models, these pseudo-absences were reduced so that the ratio of presence to absence records were balanced (@barbet2012selecting). To achieve this, we removed absence records inside of 10% of the mean sample value of any predictor variable the presence records; the required number of absence records were then randomly sampled.
 
@@ -101,384 +119,52 @@ To predict the potential distribution of each species we used 26 environmental v
 
 Modelling: Random Forest and Boosted Regression Trees, were sub sampled with 30% test and two replicates each before weighted ensemble based on True Skill Statistics (tss) (@sdmPackage). Generalised linear models (GLM) and Generalised additive models (GAM) with 30% sub sampling and three replicates each were also ensembled using the tss (@sdmPackage, @). TSS was chosen as the ensemble criterion as it has been shown to work across a wide range of species occurrences prevalence (@allouche2006assessing). The results of these models were extracted on a cell-by-cell basis to a polygon feature derived from a minimum-spanning tree which encompasses the study sites, and species from either ensemble with greater than 50% mean habitat suitability across all cells were considered present for further purposes (@prim1957minimum).
 
-535 species were modelled using Generalized Linear Models and Generalized Additive Models. 534 species were modelled using Random Forest and Boosted Regression Trees.  To evaluate the accuracy of the species distribution models, additional presence records from GBIF (n = 61,789), and AIM (n = 12,730) were used as test and training sets (n = 74,519) for logistic regression (@gbifDL2021sdms, @aim2019database). Additional novel absence records were generated from the AIM data set to create a data set where each species has balanced presence and absences. Eleven or more paired presence and absence records were required for this testing, resulting in 334 species being included in the logistic regression (Mdn = 110.0, $\bar{x}$ = 223.1, max = 1568 record pairs used) with a 70% test split (@caret). 
+A total of 535 species were modelled using Generalized Linear Models and Generalized Additive Models and 534 species were modelled using Random Forest and Boosted Regression Trees.  To evaluate the accuracy of the species distribution models, additional presence records from GBIF (n = 61,789), and AIM (n = 12,730) were used as test and training sets (n = 74,519) for logistic regression (@gbifDL2021sdms, @aim2019database). Additional novel absence records were generated from the AIM data set to create a data set where each species has balanced presence and absences. Eleven or more paired presence and absence records were required for this testing, resulting in 334 species being included in the logistic regression (Mdn = 110.0, $\bar{x}$ = 223.1, max = 1568 record pairs used) with a 70% test split (@caret). 
 
-## 2.2 | Molecular Lab Work
+### 2.4.2 | Temporal Analyses
+
+To estimate the duration of dates in which plant species were flowering weibull estimates of several phenological parameters all spatially modelled taxa were developed (@belitz2020accuracy, @pearse2017statistical). Only BIEN records which occurred in the Omernik Level 4 Ecoregions within 15km of the study area (n = 5 Level 4 Ecoregions, or conditionally 6 ecoregions if enough records were not be found in the nearest 5), and which were from herbarium records were included. To remove temporally irrelevant herbarium records, i.e. material collected during times which flowering is impossible at the study area due to snow cover, we used the SnowUS data set (@iler2021conceptual, @tran2019cloud) from 2000-2017 were analyzed for the first three days of contiguous snow absence, and the first three days of contiguous snow cover in Fall. Herbarium records after the 3^rd^ quantile for melt, and the 1^st^ quantile for snow cover of these metrics were removed. Species with > 10 records had their weibull distributions generated for the date when 10% of individuals had begun flowering, when 50% were flowering, and when 90% of individuals had flowered, we used the initiation and cessation dates, respectively, as effective start and ends of flowering.
+
+### 2.5.2 | Barcode references library 
 
 All lab work was carried out at The Daniel F. and Ada L. Rice Plant Conservation Science Center at the Chicago Botanic Garden, Glencoe, Illinois, U.S.A. 
 
-#### 2.2.1 | Reference Plant Library Generation
+#### 2.5.2.1 | Sampling Species for Barcoding  
 
-Using five years (2015-2020) of observational data on *Bombus* Queen Bee foraging at these studies sites, we identified the plant taxa most frequently visited by Queens across all years. We sequenced the 12 most commonly visited taxa twice using samples from one site within the Gunnison Basin River Drainage and one individual from another more distal population. In addition, for any of these 12 focal species which did not have a congener pair in this filtered sample, we included a congener - or a species from a closely related genus to serve as an outgroup. We also sequenced another 15 abundant taxa commonly visited by *Bombus* workers, based on the abundances, and immediate access to plant tissue, in the aforementioned data set (*APPENDIX 4*). Plant collections were identified via a variety, and typically a combination, of dichotomous keys and primary literature as required (@flora1993flora, @hitchcock2018flora,  @ackerfield2015flora, @lesica2012manual,  @cronquist1977intermountain, @allred2012flora, @jepson2022online, @mohlenbrock2002vascular).
+Using five years (2015-2020) of observational data on *Bombus* Queen Bee foraging at these studies sites, we identified the plant taxa most frequently visited by Queens across all years. We sequenced the 12 most commonly visited taxa twice using samples collected from one site within the Gunnison Basin River Drainage and one individual collected from another more distal population. In addition we included a congener - or a species from a closely related genus to serve as an outgroup for all 12 taxa. In addition we sequenced another 15 taxa commonly visited by Bombus workers, based on the abundances, and immediate access to plant tissue, in the aforementioned data set  (*APPENDIX 4*). Plant collections were identified typically using a combination, of dichotomous keys and primary literature as required (@flora1993flora, @hitchcock2018flora,  @ackerfield2015flora, @lesica2012manual,  @cronquist1977intermountain, @allred2012flora, @jepson2022online, @mohlenbrock2002vascular).
 
-#### 2.2.2 | Plant Genomic DNA Extraction
+#### 2.5.2.2 | Plant Genomic DNA Extraction
 
 Plant genomic DNA was isolated from ~ 1 cm^2^ of leaf tissue from silica-gel dried or herbarium material using a modified cetyltrimethylammonium (CTAB) protocol (@doylesCTAB) that included two chloroform washes. DNA was quantified using a Nanodrop 2000 (Thermo Fisher Scientific, Waltham, Massachusetts, USA) and Qubit fluorometer (Thermo Fisher Scientific).
 
-#### 2.2.3 | Pollen Genomic DNA Extraction
+#### 2.5.2.3 | Pollen Genomic DNA Extraction
 
 Pollen genomic DNA was extracted from corbiculae using a CTAB based protocol modified from Lahlamgiahi et al. and Guertler et al. (2014, 2014). A SDS extraction buffer (350µL , 100mM Tris-HCl, 50 mM EDTA, 50 mM NaCl, 10% SDS v/v., pH 7.5) was added followed by vortexing to allow dissolution of corbiculae. Pollen grains were then macerated with Kontes Pellet Pestles, and the tip of these washed with 130 µL of the SDS extraction buffer, samples were then incubated for 1 hour at 30°C. This was followed by the addition of 10% CTAB solution (450ul, of 20 mM Tris-Cl pH. 8.0, 1.4 M NaCl, 10 mM EDTA pH 7.5, 10% CTAB, 5% PVP, ~85% Deionized water) and RNAse (10 uL of 10 mg/mL) and samples were incubated for 40 minutes at 37°C, on heat block (Multi-Blok, Thermo Fisher Scientific, Waltham Massachusetts) set to 40°C. After 20 minutes incubation, Proteinase K (15 µL of 20mg/ml) and  DTT (12.5 µL of 1M in water) were added, and the samples were further incubated at 60°C for 1 hour. Samples were then incubated overnight at 40°C. 500 µL of Phenol-Chloroform-Isoamyl alcohol (25:24:1) were added, vortexed, and centrifuged at 10,000 rpm for 10 minutes and the aqueous phase was pipetted to a 1.5 ml centrifuge tube.
 
 To precipitate the DNA, chilled Isopropyl alcohol & 3 mM Sodium acetate (5:1) equivalent to $\frac{2}{3}$ of the volume of sample were added, with 1 hour of chilling at -20°C, followed by 10 minutes of centrifuging at 13,000 rpm. The supernatant was pipetted to a new 1.5 ml centrifuge tube, and 70% EtOH (400 µL) were added before chilling at -20°C for 20 minutes followed by centrifugation at 13,000 rpm for 10 minutes. Both tubes were then washed with  75% EtOH (400 µL), inverted, centrifuged at 13,000 rpm for 4 minutes, and the solution discarded, then washed with 95% EtOH (400 µL) , inverted, centrifuged at 13,000 rpm for 4 minutes, and the solution discarded. Pellets were dried at room temperature overnight before resuspension in nuclease free H~2~O.  Extractions were assessed using a Nanodrop 2000 (Thermo Fisher Scientific) and Qubit fluorometer (Thermo Fisher Scientific). DNA extracts were then cleaned using 2:1 v./v. Sera-Mag beads (Cytiva, Little Chalfont, UK) to solute ratio following the manufacturer's protocol, eluted in 0.5x TE, and the eluent allowed to reduce by half volume in ambient conditions. DNA was quantified using a Qubit fluorometer. 
 
-#### 2.2.4 | Fragmentation, Library Preparation & Target Enrichment
+#### 2.5.2.4 | Fragmentation, Library Preparation & Target Enrichment
 
-Library preparation was performed using the NEBNext Ultra II FS-DNA Library Prep Kit for Illumina (New England BioLabs, Ipswich, Massachusetts, USA) using slightly modified manufacturers recommendation.  Fragmentation was performed at ½ volume of reagents and ¼ enzyme mix for 40 minutes at 37°C, with an input of 500 ng cleaned DNA. Adapter Ligation and PCR enrichment were performed with ½ volumes, while cleanup of products was performed with ½ volume of SPRI beads (Beckman Coulter, Indianapolis, Indiana, USA) and recommended volumes of 80% v./v. ethanol washes. The exception was the herbarium specimens which were not fragmented and only end repaired, with similar library preparation of all samples. Products were analysed on 4% agarose gels, and a Qubit fluorometer. 
+Library preparation was performed using the NEBNext Ultra II FS-DNA Library Prep Kit for Illumina (New England BioLabs, Ipswich, Massachusetts, USA) using slightly modified manufacturers recommendation.  Fragmentation was performed at ½ volume of reagents and ¼ enzyme mix for 40 minutes at 37°C, with an input of 500 ng cleaned DNA. Adapter Ligation and PCR enrichment were performed with ½ volumes, while cleanup of products was performed using SPRI beads (Beckman Coulter, Indianapolis, Indiana, USA) and recommended volumes of 80% v./v. ethanol washes. The exception was the herbarium specimens which were not fragmented and only end repaired, with similar library preparation of all samples. Products were analysed on 4% agarose gels, and a Qubit fluorometer. 
 Libraries were pooled and enriched with the Angiosperms 353 probe kit V.4 (Arbor Biosciences myBaits Target Sequence Capture Kit) by following the manufacturer's protocol and Brewer et al. 2019. Sequencing was performed using an Illumina mi-Seq with 150-bp end reads, (NUSeq Core, Chicago, Illinois).
 
-###  2.2.5 | Computational Processes and Analyses. 
-####  2.2.5.1 | Reference Library Data Processing
+###  2.6 | Computational Processes and Analyses. 
+####  2.6.1 | Reference Library Data Processing
 
-Sequences were processed using Trimmomatic, which removed sequence adapters, clipped the first 3 bp, discarding reads less than 36 bp, and removing reads if their average PHRED score dropped beneath 20 over a window of 5 bp (@bolger2014trimmomatic, @tange_2022_6377950). Contigs were generated using HybPiper using target files created by M353 (@johnson2016hybpiper, @mclay2021new). 
+Sequences were processed using Trimmomatic, which removed sequence adapters, clipped the first 3 bp, discarding reads less than 36 bp, and removing reads if their average PHRED score dropped beneath 20 over a window of 5 bp (@bolger2014trimmomatic, @tange_2022_6377950). Contigs generated were mapped to a reference with HybPiper with using target files created by M353 (@johnson2016hybpiper, @mclay2021new). 
 
-#### 2.2.5.2 | Sequence Identification
+#### 2.6.2 | Sequence Identification
 
-A custom Kraken2 database was created by downloading representative species of each genus indicated as being present in the study area by the spatial analyses from the Sequence Read Archive (SRA) NCBI (@wood2019improved). These sequences were processed in the same manner as our novel sequences. The Kraken2 database was built using default parameters. Kraken2 was run on sequences using default parameters (*APPENDIX 5*). 
+A custom Kraken2 database was created by downloading representative species indicated as being present in the study area by the spatial analyses from the Sequence Read Archive (SRA) NCBI (@wood2019improved). These sequences were processed in the same manner as our novel sequences. The Kraken2 database was built using default parameters. Kraken2 was run on sequences using default parameters (*APPENDIX 5*). 
   Following Kraken2, Bracken was used to classify sequences to terminal taxa (@lu2017bracken). Results from both Kraken2 and Bracken, results were reclassified manually to identify terminal taxa. For example, when only a single species of a genus was known in the study area, but our database used a representative of another taxon in the genus, this species was coded as the result. The re-coding of sequences from another representative species for the genus to the sole RMBL representative allowed the identification of *XX & %* more species. 
 
-#### 2.2.5.3 | Identification of Sequence Matching Loci
+#### 2.6.3 | Identification of Sequence Matching Loci
 
 A local NCBI database was built using the same processed novel and downloaded sequences as the previous database (@camacho2009blast). 
 
-## 2.2.5.4 | Morphological Pollen identification
-
-To develop a reference library of  pollen grains which may be present in corbiculae loads, an image reference collection of fuchsin-jelly stained (@beattie1971technique) slides was assembled from slides previously prepared by the authors (n = 21), and other researchers (n = 38) (@brosi2013single). Using five years of observational data on *Bombus* Queen Bee foraging at these studies sites (Ogilvie unpublished), as well as the Vascular Plant Checklist (@fraser2007vpc), an additional 62 voucher slides for species were prepared and imaged at 400x (Leica DMLB, Leica MC170 HD Camera, Leica Application Suite V. 4.13.0) from non accessioned herbarium collections to supplement the number of species and clades covered (Appendix 3).  
-  We used Divisive Hierarchical Clustering techniques to determine which plant taxa were distinguishable via light microscopy, and to develop a dichotomous key to pollen morphotypes. Ten readily discernible categorical traits were collected from each specimen in the image collection. These traits were transformed using Gower distances, and clustered using Divisive Hierarchical clustering techniques (@cluster2022). Using the cluster dendrogram, elbow plot, and heatmaps (@fpc2022), of these results morphological groups of pollen which could not be resolved via microscopy were delineated, and a dichotomous key was prepared (APPENDIX NO.). This key was then used to identify the pollen grains sampled from corbiculae loads to morphotypes in a consistent manner. 
-  To prepare the pollen slides from corbiculae, all corbiculae loads were broken apart and rolled using dissection needlepoints to increase heterogeneity of samples. *Cerca* 0.5mm^2^ of pollen was placed onto a ~4mm^2^ fuchsin jelly cube (@beattie1971technique) atop a graticulated microscope slide, with 20 transects and 20 rows (400 quadrants) (EMS, Hartfield, PA). The jelly was melted, with stirring, until pollen grains were homogeneously spread across the microscope slide. Slides were sealed with Canada Balsam (Rublev Colours, Willits, CA) followed by sealing with nail polish to prevent oxidation; all samples are noted in *APPENDIX 3*.
-  To identify the pollen present in corbiculae loads, light microscopy at 400x (Zeiss Axioscope A1) was used. In initial sampling in three transects, each pollen grain was identified to morphotype and counted; an additional two transects were scanned for morphotypes unique to that slide, if either transect contained an unique morphotype than all grains in that transect were also identified and counted. Subsequent to the first round of sampling, non-parametric species richness rarefaction curves (@vegans2022), and non-parametric species diversity rarefaction curves were used to assess the completeness of sampling (@inextArticle, @inextPackage). Slides not approaching the asymptote of the rarefaction curve were then re-sampled, and analysed iteratively for up to a total of seven transects *APPENDIX 2*. 
-
-### 2.3 | Temporal Analyses
-
-To estimate the duration of dates in which plant species were flowering weibull estimates of several phenological parameters all spatially modelled taxa were developed (@belitz2020accuracy, @pearse2017statistical). Only BIEN records which occurred in the Omernik Level 4 Ecoregions within 15km of the study area (n = 5 Level 4 Ecoregions, or conditionally 6 ecoregions if enough records were not be found in the nearest 5), and which were from herbarium records were included. To remove temporally irrelevant herbarium records, i.e. material collected during times which flowering is impossible at the study area due to snow cover, we used the SnowUS data set (@iler2021conceptual, @tran2019cloud) from 2000-2017 were analyzed for the first three days of contiguous snow absence, and the first three days of contiguous snow cover in Fall. Herbarium records after the 3^rd^ quantile for melt, and the 1^st^ quantile for snow cover of these metrics were removed. Species with > 10 records had their weibull distributions generated for the date when 10% of individuals had begun flowering, when 50% were flowering, and when 90% of individuals had flowered, we used the initiation and cessation dates, respectively, as effective start and ends of flowering.
-
-### 2.4 | Floral Observations
-
 # 3 | RESULTS
 
-## 3.1 | Spatial Analyses
-
-```{r Results for SA Modelling}
-
-files <- list.files('/hdd/MS_SDM_RMBL/SDMS_RMBL/results/maps', pattern = 'tif$')
-ml <- files[grep( '_ml_', files)]
-ml <- unique(sub('_ml.*$', '', ml)) # ensure we do not have dupes
-linear <- files[grep('_glm_', files)]
-linear <- unique(sub('_glm.*$', '', linear))
-
-# setdiff(linear, ml) # Barbarea vulgaris, epilobium lactiflorum not modelled with ml
-# setdiff(ml, linear) # ericameria parryi not modelled with 'linear regression'
-
-rm(files, ml, linear)
-```
-
-```{r Results for SA Logistic Regression Metrics}
-
-logR_dat <- read.csv('../data/PA_records_logistic_regression.csv')[,2:4] %>% 
-  filter(occurrence == 0) 
-# summary(logR_dat$n)
-# sum(logR_dat$n)
-
-dat <- read.csv('../data/evaluation_table.csv')[,2:3]
-data.frame(Metric  = dat[1:5,1],
-                   Value   = dat[1:5,2],
-                   Metric1 = dat[6:10,1],
-                   Value1  = dat[6:10,2]
-                   ) %>% 
-  knitr::kable(caption = "Logistic regression assessing accuracy of SDMs",
-    col.names = c('Metric', 'Value', 'Metric', 'Value'),
-    booktabs = T) #%>% 
-  #kableExtra::kable_styling(position = "float_right")
-```
-
-```{r Results for SA Logistic Regression Contingency table}
-read.csv('../data/Pa_conting_table.csv') %>% 
-    knitr::kable(caption = "Species Distribution Modeling evaluation contingency table",
-    col.names = c('', ' Absence ', '  Presence  ', ' Absence ', ' Presence '), align = "lrrrr",
-    booktabs = T) %>%
-    add_header_above(c(" " = 1, "Training" = 2, "Testing" = 2))
-
-rm(logR_dat, dat)
-```
-
-The median (25.009 km) of the logistic regression assessing the probability of occurrence of a species record as a function of distance from the study area was used as a threshold distance to include species for distribution modelling. A 2-sample test for equality of proportions with continuity correction (X-squared = 13.254, df = 1, p-value = 0.000136, 95% CI 0.04-1.00) was used to test whether more of the records located in the broad ecological sites present at the field station, between the distance of the median (25.009 km) to the third quantile (ca 43.830 km) of the regression distance, were true presences at the field station. Including these records would have resulted in modelling an additional 222 species distributions of which 30 are true presences, these taxa were not modelled.  
-
-Across the entire spatial domain of modelling all ensembled models (n = 968) had an accuracy of 0.84 (95% CI 0.8356 - 0.8443), kappa = 0.68, p-value < 0.001, sensitivity = 0.80, specificity = 0.87, AUC = 0.92.
-
-In the area of the minimum-spanning tree encompassing the field sites, of the 554 vascular plants with biotic pollination syndromes, the 493 ML ensembles accurately predicted the presence of 362 (65.3%), incorrectly predicted the presence of 64 (11.6%), incorrectly predicted 34 true presences (6.1%) as being absent, and correctly predicted the true absence of 33 (6.0%). The balanced accuracy of the ensembled models is 0.627 (Sensitivity = 0.340, Specificity 0.914). Of the 554 vascular plants with biotic pollination syndromes, the 475 LM ensembles accurately predicted the presence of 286 (51.6%), incorrectly predicted the presence of 41 (14.3%), incorrectly predicted 93 true presences (16.8%) as being absent, and correctly predicted the true absence of 55 (9.9%). The balanced accuracy of the ensembled models is 0.664 (Sensitivity = 0.573, Specificity 0.754). Of the 554 vascular plants with biotic pollination syndromes in the flora 13 (2.3%) were in the Orchid family and 41 (7.4%) are non-natives, both of which are restricted from the database, and can only reduce the number of true predicted presences by roughly 10%. 
-
-At the six study plots, of the 117 plant species identified to the species level across the spatial extents of all plots and duration of queen bee activity, the ML ensembles predicted the presence of 105 (89.7%) of them, and LM ensembles 102 (87.2%). Of the missing species two (1.7%) are Orchids, six (5.1%) are non-native, and one (0.85%) is of contested taxonomic standing, all of which (7.65%) are restricted from the initial query database. 
-
-## 3.2 | Microscopic Pollen identification
-
-```{r compare microscopic to molecular Pollen ID, eval = T}
-
-# are mertensia and Asteraceae 1 & 2 detected in all Pollen samples where the bee was COLLECTED ON THEM ?
-
-pmorph <- read.csv('../data/morpho_pollen.csv') 
-blst <- read.csv('../data/Post_Classified_BLAST_sqs.csv') %>% 
-  rename(sample.id = Sample, Family = FAMILY, Genus = GENUS) %>% 
-  group_by(sample.id) %>% 
-  mutate(Prcnt_Seqs_Class = sum(Prcnt_seqs)) %>% 
-  ungroup()
-blst_seqs <- distinct(blst, sample.id) 
-
-pmorph <- filter(pmorph, sample.id %in% blst$sample.id) %>% 
-  group_by(sample.id) %>% 
-  mutate(Prop = sum/sum(sum)) 
-
-mertensia_samples <- pmorph %>% 
-  filter(morphotype == 'MERTENSIA') %>% 
-  select(sample.id, morphotype, Prop, sum)
-
-mertensia_samples <- filter(mertensia_samples, sample.id %in% blst_seqs$sample.id)
-
-blst_mertensia <- blst %>% 
-  filter(Family == 'Boraginaceae') %>% 
-  select(sample.id,  Prcnt_seqs, Seqs_pr_taxon, Total_seqs, Prcnt_Seqs_Class) %>% 
-  group_by(sample.id) %>% 
-  mutate(Prcnt_seqs = sum(Prcnt_seqs),
-         morphotype = 'MERTENSIA') %>% 
-  distinct(sample.id, .keep_all = T)
-
-mertensia_detected <- mertensia_samples %>% 
-  mutate(DETECTED = if_else(sample.id %in% blst_mertensia$sample.id, 1, 0)) 
- # sample 26 - very strange !!!! this needs investigation - ALSO THE ERICOID IS LIKELY ONAGRAD !?
-
-blst_aster <- blst %>% 
-  filter(Family == 'Asteraceae') %>% 
-  group_by(sample.id) %>% 
-  distinct(sample.id, .keep_all = T)
-
-# PERFORM FOR ERICACEAE TOO - A single record maybe come out?
-ericaceae_samples <- pmorph %>% 
-  filter(morphotype == 'ERICACEAE') %>% 
-  select(sample.id, Prop, morphotype) 
-
-blst_ericoid <- filter(blst, Family == 'Ericaceae') %>% # 44 might be Epilobium anagallidolium
-  mutate(morphotype = 'ERICACEAE')
-ericaceae_detected <- ericaceae_samples %>% 
-  mutate(DETECTED = if_else(sample.id %in% blst_ericoid$sample.id, 1, 0)) 
-
-# ASTER 2 HERE...
-aster2_samples <- pmorph %>% 
-  filter(morphotype == 'ASTERACEAE_2') 
-
-blst_aster2 <- filter(blst_aster, Genus %in% 
-                            c('Taraxacum', 'Helianthella', 'Scabrethia')) %>% 
-  mutate(morphotype = 'ASTERACEAE_2')
-aster2_detected <- aster2_samples %>% 
-  mutate(DETECTED = if_else(sample.id %in% blst_aster2$sample.id, 1, 0)) 
-
-# ASTER 1 HERE... ? WERE ALL OF THESE SPECIES PRUNED... ?
-aster1_samples <- pmorph %>% 
-  filter(morphotype == 'ASTERACEAE_1') 
-
-blst_aster1 <- filter(blst_aster, !Genus %in% c('Taraxacum', 'Helianthella', 
-                                                'Scabrethia') ) %>% 
-  mutate(morphotype = 'ASTERACEAE_1')
-aster1_detected <- aster1_samples %>% 
-  mutate(DETECTED = if_else(sample.id %in% blst_aster1$sample.id, 1, 0)) 
-
-# ALL HIGH NUMBER ASTERACEAE 
-
-aster_samples <- pmorph %>% 
-  filter(str_detect(morphotype, 'ASTER.*'))
-aster_detected <- aster_samples %>% 
-  mutate(DETECTED = if_else(sample.id %in% blst_aster$sample.id, 1, 0)) 
-
-
-aa <- prcnt_detect(mertensia_detected, Lprop = 0.01, Hprop = 1)
-bb <- prcnt_detect(aster1_detected, Lprop = 0.001, Hprop = 0.01)
-cc <- prcnt_detect(aster2_detected, Lprop = 0.001, Hprop = 0.01)
-dd <- prcnt_detect(aster_detected, Lprop = 0.01, Hprop = 1)
-ee <- prcnt_detect(ericaceae_detected, Lprop = 0.001, Hprop = 0.1)
-ff <- prcnt_detect(aster_detected, Lprop = 0.001, Hprop = 0.01)
-
-# Semi-quantitative accord between sequence % and Grain Count
-palyn_cnt <- bind_rows(aster1_samples, aster2_samples, ericaceae_samples, mertensia_samples) %>% 
-  select(morphotype, countProp = Prop) 
-
-pollen_props <- bind_rows(blst_aster1, blst_aster2, blst_mertensia, blst_ericoid) %>% 
-  select(morphotype, sequenceProp = Prcnt_seqs, Seqs_pr_taxon, Total_seqs, Prcnt_Seqs_Class) %>% 
-  left_join(., palyn_cnt, by = c('sample.id', 'morphotype')) %>% 
-  drop_na()
-
-rm(mertensia_samples, blst_aster, blst_aster1,
-   blst_aster2, aster1_samples,  aster2_samples, a, b, c, d, palyn_cnt,
-   blst_mertensia, aster_samples, ericaceae_samples, blst_ericoid)
-```
-
-Using the fuchsin jelly preparation and light microscopic analyses of grains and scoring of 10 character states resulted in the establishment of 28 morphotypes which grains could be classified into. *APPENDIX 7*. 60 samples were counted and based on rarefaction **had over % of expected morphotypes found** (morphotype richness, $\bar{x}$ = 4.5, Mdn = 4, min = 1, max = 9), all samples had expected morphotype diversity reach the asymptote *APPENDIX 8*. The number of counted pollen grains in each sample range from (*MIN* - 16,293, $\bar{x}$ = 2788.685, Mdn = 1453). 
-
-```{r}
-rm(mertensia_detected, aster1_detected, aster2_detected, aster_detected)
-```
-
-
-```{r Sequence and Morphological Vouchers, out.width = "65%", fig.cap="Phylogenetic tree of all biotically pollinated plant genera in the study area. The innermost ring indicates every genus which Queen Bee's were observed to visit. The intermediate ring indicates that at least a single morphological pollen voucher slide was prepared for a member of the genus. The outermost ring indicates that sequence data were available for at least a member of that genus. Branch colors follow APG 4."}
-knitr::include_graphics("../graphics/plots/rmbl_draft_tree.png")
-```
-
-## 3.3 | Metabarcoding Pollen identification
-
-```{sh Get number of raw and trimmed reads for metagenome samples, eval = F}
-
-cd ~/sequenceData/Original_zip
-files=$(find -type f -name "[0-9]_S[0-9]*_paired.fastq.gz") # doesnt support {2}
-files1=$(find -type f -name '[0-9][0-9]_S[0-9]*_paired.fastq.gz')
-files="${files} ${files1}"
-echo $files
-# seqs per each sample , need divide by 4 on import
-wc -l  $files > '/hdd/yun master/MEE_manuscript/data/raw_reads_metagenome_seq.txt'
-
-cd ../trimmed_metagenomic
-files=$(find  -maxdepth 1 -name '*gz')
-wc -l  $files  > '/hdd/yun master/MEE_manuscript/data/trimmed_reads_metagenome_seq.txt'
-```
-
-```{r Summary statistics of sequence numbers}
-
-raw_seqs <- read.delim('../data/raw_reads_metagenome_seq.txt', header = F) %>% 
-  mutate(V1 = str_trim(V1)) %>% 
-  separate(V1, c('seq', 'sampleFR'), sep = ' ') %>% 
-  mutate(seq = round(as.numeric(seq)/4),
-         sample = str_extract(sampleFR, '.*L002_')) %>% 
-  filter(sampleFR != 'total') %>% 
-  group_by(sample) %>% 
-  mutate(totalReads = sum(seq)) %>% 
-  distinct(totalReads) %>% 
-  pull(totalReads)
-
-trimmed_seqs <- read.delim('../data/trimmed_reads_metagenome_seq.txt', header = F) %>% 
-  mutate(V1 = str_trim(V1)) %>% 
-  separate(V1, c('seq', 'sampleFR'), sep = ' ') %>% 
-  mutate(seq = round(as.numeric(seq)/4),
-         sample = str_extract(sampleFR, '.*paired')) %>% 
-  filter(sampleFR != 'total') %>% 
-  group_by(sample) %>% 
-  mutate(totalReads = sum(seq)) %>% 
-  distinct(totalReads) %>% 
-  pull(totalReads)
-
-krak <- read.csv('../data/kraken_proc_reads.csv')
-brack <- read.csv('../data/bracken_proc_reads.csv')
-blast <- read.csv('../data/blast_proc_reads.csv')
-loci <- read.csv('../data/reads_per_loci.csv') %>% group_by(Sample)
-  
-no_loci <- loci %>% group_by(Sample) %>% count(name = 'no_loci')
-no_reads <- loci %>% group_by(loci) %>% summarize(readsLoci = sum(n))
-```
-
-54 corbiculae loads had DNA extracted and underwent various steps towards hyb-seq, in the end a total of `r toString(length(raw_seqs))` corbiculae samples were sequenced, `r pNumC(sum(raw_seqs))` reads were recovered from sequencing. The number of reads per sequence varied widely (range = `r pNumC(min(raw_seqs))` - `r pNumC(max(raw_seqs))`, $\bar{x}$ = `r pNumC(round(mean(raw_seqs),1))`, Mdn = `r pNumC(median(raw_seqs))`). Of the possible 353 loci, the number which were recovered from each sample, and informative to BLAST were range = `r toString(min(no_loci$no_loci))` - `r toString(max(no_loci$no_loci))`, $\bar{x}$ = `r toString(round(mean(no_loci$no_loci), 1))`, Mdn = `r toString(median(no_loci$no_loci))`. The number of reads per loci from across all samples had a range of `r min(no_reads$readsLoci)` - `r pNumC(max(no_reads$readsLoci))`, $\bar{x}$ = `r pNumC(round(mean(no_reads$readsLoci), 1))`, Mdn = `r pNumC(median(no_reads$readsLoci))`. **APPENDIX X Reads Per Loci**.
-
-... with samples 22, and 41 both having < 100 reads indicates, virtual failure of these records (REMOVE from analyses).
-
-After trimming `r pNumC(sum(trimmed_seqs))` sequences remained. `r pNumC(sum(krak[krak$Classified == 'C',]$n))` reads were matched using Kraken, of the reads classified by Kraken `r pNumC(sum(brack$reads))` reads were matched using Bracken, of the reads classified by Kraken `r pNumC(sum(blast$Total_seqs))` reads were matched using BLAST. Based upon subjective review of the three classifiers **APPENDIX X MOLECULAR NETWORKS - 3 DIFFERENT ONES**, BLAST was chosen as the classification method which yielded the most probable results by the field ecologist, and it's values were used for all subsequent analyses. 
-
-
-```{r Read Post Processing}
-
-pp_seqs_t <- read.csv( file.path('../data', 'Sequence_Reclass_table.csv') )
-
-knitr::kable(pp_seqs_t, align = "c", 
-             col.names = c('Condition', 'No. Class.', 'Prcnt. Class.', 'Total Seqs', 'Rank'),
-             caption = "Post classification of Sequences via Taxonomy and Ecology") %>% 
-  kableExtra::kable_styling(
-      latex_options = "striped",
-      stripe_color = "gray!10")
-
-seqs_sp <- sum (pp_seqs_t[pp_seqs_t$Rank=='Species','Prcnt_Records'] )
-seqs_ge <- sum (pp_seqs_t[pp_seqs_t$Rank=='Genus','Prcnt_Records'] )
-seqs_fa <- sum (pp_seqs_t[pp_seqs_t$Rank=='Family','Prcnt_Records'] )
-
-sp_total_seqs <- sum (pp_seqs_t[pp_seqs_t$Rank=='Species','Total_Prcnt_Seqs'] )
-sp_total_seqs <- sum (pp_seqs_t[pp_seqs_t$Rank=='Genus','Total_Prcnt_Seqs'] )
-fa_total_seqs <- sum (pp_seqs_t[pp_seqs_t$Rank=='Family','Total_Prcnt_Seqs'] )
-
-byhand <- blst %>% 
-  filter(TAXON_NEW != TAXON_NEW2)
-
-j <- toString(paste0(names(table(byhand$Condition)), ": ",
-                     as.vector (table(byhand$Condition))))
-gen <- byhand[byhand$TAXON_NEW2==c('Salix'),]
-spp <- byhand[byhand$TAXON_NEW2==c('Sorbus scopulina', 'Pseudostellaria jamesiana'),]
-```
-
-The initial classification of sequences which were made by BLAST were reviewed programmatically, using predicted presence of the species (from spatial modelling), modelled flowering time (from temporal modelling), and taxonomy (from existing sources). A sequential process was utilized which reassigned sequences based on binary combinations of the factors above (Appendix XX). Given the relative sparsity of the number, and relatedness, of species represented in the sequence database this was performed to: 1) Identify locally present species represented by surrogates in the DB 2) Reduce false classifications of focal species 3) Identify high confidence sequence matches. Each of the top ten taxa which were identified by BLAST from the aforementioned process composed `r sum(pp_seqs_t$Samples_Classified)` distinct records, of these `r seqs_sp`% of the reads were classified to species `r sp_total_seqs`% representing of all classified reads, `r seqs_ge`% of the reads were classified to genus representing `r sp_total_seqs`% of all classified reads, and `r seqs_fa`% of the records were classified to genus `r fa_total_seqs`%  of all total sequences.
-
-`r nrow(byhand)` classifications which were assigned to genera without any species predicted by spatial analyses, were investigated by hand after post-processing steps. These were all assigned via post-processing conditions (`r j`). These were manually assigned to a variety of ranks, occasionally to genus `r nrow(gen)` and species `r nrow(spp)`, by consultation of the alpha-taxonomic literature (@sadeghian2015molecular, @sennikov2017phylogenetic, @rabeler2016new, @pusalkar2015taxonomic, @moore2003its,  @weber1998new).
-
-To determine at which level species in pollen loads could be detected the results of light microscopy were compared to the molecular results. The pollen samples contained three morphotypes which could readily be identified via microscopy. Two of these mapped to the clades (Boraginaceae & Heliantheae Alliance), and one to a Asteraceae less Heliantheae. Boraginaceae grains `r toString(aa)`.  Asteraceae type 1, non-helianthoids, `r toString(bb)` Asteraceae type 2, Helianthoids, `r toString(cc)`; however, Asteraceae `r toString(ff)`. Both morphotypes of Asteraceae pollen `r toString(dd)`, and Ericaceae `r toString(ee)`.
-
-```{r clean sequence numbers from environment}
-rm( krak, brack, blast, loci, no_loci, aa, bb, cc, dd, fa_total_seqs, j, byhand,
-    ge_total_seqs, sp_total_seqs, seqs_sp, seqs_ge, seqs_fa, pp_seqs_t, spp)
-```
-
-```{r Correlation between Number of Grains and Number of Sequences}
-
-pol_p <- pollen_props %>% 
-  mutate(sequenceProp = sequenceProp/100, 
-         adjSeqProp = sequenceProp * (100/Prcnt_Seqs_Class))
-
-ct <-cor.test(pol_p$countProp, pol_p$adjSeqProp, method = "kendall")
-# ct[["p.value"]] too small to write out. tau > 0.4 strong relationship
-model <-  lm(adjSeqProp ~ countProp, data = pol_p)
-
-par(pty="s")
-plot(x = pol_p$countProp,  pol_p$adjSeqProp, 
-      xlim = c(0,1), ylim = c(0,1), axes = F, main = 'Correlation of Proportion Counted\nGrains and Sequence Reads',
-     xlab = 'Grains Counted', ylab = 'Classified Sequences',
-     pch=18, slty = 3, gap = 0.025)
-axis(1)
-axis(2)
-abline(model)
-text(0.3, 0.9, paste0("tau = ", round(ct[["estimate"]][["tau"]], 3)))
-text(0.3, 0.8, "p < 0.001") 
-
-rm( newdat)
-```
-
-To detect whether the sequencing reads were semi-quantitative the subset of all pollen morphotypes distinguishable by microscopy were compared to the sequence reads. In all instances sequence reads were pooled to the highest taxonomic rank associated with the morphotype, e.g. if both species of *Mertensia* Huth, or one species and read only classified to genus were present in a sample, the reads were summed. The total percentage of the ten most abundant grains per sample were then were then relativize to constitute the entire sample. 
-
-The relationship between the number of pollen grains in a sample and the number of sequence reads is roughly *curvilinear*, where grains which are present in trace amounts are overestimated by sequence counts, while grains present in high amounts are underestimated. This is likely due to the proportion of high false positives which occur in the classification process with NGS (BELL NOVEMEBER 2021). There was evidence of a strong correlation between the proportion of grains per morphotype and the number of sequences per group (`r round(ct[["estimate"]][["tau"]], 3)`, p < 0.0001, n = `r nrow(pol_p)`). 
-
-```{r}
-rm(pol_p, ct)
-```
-
-
-```{r Co-occurrence of splash drop sequences, eval = F}
-
-e <- blst %>% 
-  filter(Family %in% c('Boraginaceae', 'Hydrophyllaceae', 'Ranunculaceae', 
-                       'Celastraceae')) %>% 
-  select(sample.id, Genus) %>% 
-  mutate(Present = 1) %>% 
-  group_by(Genus) %>% 
-  distinct() %>% 
-  pivot_wider(names_from = Genus, values_from = Present) %>% 
-  mutate(across(.col = everything(), ~replace_na(.,  0))) %>% 
-  column_to_rownames('sample.id')
-
-myout <- CooccurrenceAffinity::affinity(data = e, row.or.col = "col", squarematrix = c("all"))
-CooccurrenceAffinity::plotgg(data = myout, variable = "alpha_mle", legendlimit = "datarange")
-```
-
-To ascertain the extent to which records of multiple species in a family, which were suspected to be sampling artefacts occurred in molecular samples an index of similarity, ala jaccard, $\alpha$ index was used to assess co-occurrence (@mainali2022better, @mainali2022alpha). Numerous taxa from the family Ranunculaceae Jussieu (*Caltha* L. sp., *Thalictrum* L. spp., *Trollius* L. sp., *Aquilegia* L. spp.), had ... $\alpha$ scores which indicated that they are only present when a more common confamilial taxa *Delphinium barbeyi* (Huth) Huth *nuttallianum* Pritz. were recorded. A similar relationship was observed in the Hydrophyllaceae R.Br. with samples placed in *Nemophila* Nutt., which only occurred when the more abundant *Hydrophyllum* L. species were present.
-
-## 3.4 | Temporal Analyses
-
-The first date of modeled snow melt in the Gothic area (n = 17, $\bar{x}$ = 137.9, Mdn = 135, 3^rd^ quantile = 151), and the first date of a consistent winter snow base (n = 17, $\bar{x}$ = 299.9, Mdn = 300, 1^st^ quantile = 291) from 2000-2017, were used as delimiters for the inclusions of herbarium records in modelling. Of the 439 species predicted likely present in the area via logistic regression, 332 species (64.4%) with more than 10 records in the focal level 4 ecoregions ($\bar{x}$ = 35.016, Mdn = 35, max = 96) had weibull estimates calculated, an additional 56 species (11.2%) with enough contributing records from the "Sedimentary Mid-Elevation Forests", a large ecoregion generally just beneath the elevation bands occupied by the five ecoregions around the study area had weibull estimates also calculated ($\bar{x}$ = 13.868, Mdn = 13, max = 24).
-
-Only 58 of these 388 species (n = 34.568, Mdn = 31) were able to be compared to plot based observational data from the long term (1974–2012) data set (@caradonna2014shifts). Of these species relatively high accord was observed between the long-term ground truthed data set, and the modelled species. There was very strong evidence that the weibull estimates were positively associated with the observed onset (r^2^ = 0.72, p < 0.0001, tau = 0.61) and peak (r^2^ = 0.70, p < 0.0001, tau = 0.65) of flowering, and that the number of herbarium samples had a moderate effect on the estimates (p = 0.004 and p = 0.034 respectively). There was very strong evidence that the weibull estimates had a positive association with the observed cessation of flowering (r^2^ =  0.4339,  p < 0.0001, tau = 0.489), however their was no evidence that sample size had an effect (p = 0.349). There was moderate evidence that the weibull estimates, with an effect of sample size, had a weak positive association with the observed duration of flowering (p = 0.0401, r^2^ = 0.07, tau = 0.17).
-
-```{r plot phenology estimates, echo=F, fig.cap="Modelled dates of when major flowering events occurred", out.width = '100%'}
-knitr::include_graphics("../graphics/plots/phenology_estimates_10_90.png")
-# these are the tenth and nintey  percent non-parametric confidence intervals. 
-```
-
-## 3.5 | Floral Observations 
+## 3.1 | Floral Observations 
 
 ```{r Floral Observations Summary Statistics }
 
@@ -530,6 +216,7 @@ A total of 66 corbiculae loads were collected from Bees, 64 of them from Queens.
 rm(bee_obs, flr_ranks, obs_time, t_b_b, t_b_wk, t_b_pl, t_b_wk_pl, e, s, files, t_spp_i)
 ```
 
+**NEED (AT LEAST) TABLE OF TOP VISITED PLANTS**
 
 ```{r Most used resources by species, fig.cap = 'Number of the ten most commonly visited plants which are also in the top ten most common sequences', out.width = "45%"}
 
@@ -663,11 +350,342 @@ prop_obs <- obs %>%
 rm(bee_cols, correct, family, genus, tblist, oblist, gf_lkp, gf_lkp2)
 ```
 
+
+## 3.1 | Spatial Analyses
+
+```{r Results for SA Modelling}
+
+files <- list.files('/hdd/MS_SDM_RMBL/SDMS_RMBL/results/maps', pattern = 'tif$')
+ml <- files[grep( '_ml_', files)]
+ml <- unique(sub('_ml.*$', '', ml)) # ensure we do not have dupes
+linear <- files[grep('_glm_', files)]
+linear <- unique(sub('_glm.*$', '', linear))
+
+# setdiff(linear, ml) # Barbarea vulgaris, epilobium lactiflorum not modelled with ml
+# setdiff(ml, linear) # ericameria parryi not modelled with 'linear regression'
+
+rm(files, ml, linear)
+```
+
+```{r Results for SA Logistic Regression Metrics}
+
+logR_dat <- read.csv('../data/PA_records_logistic_regression.csv')[,2:4] %>% 
+  filter(occurrence == 0) 
+# summary(logR_dat$n)
+# sum(logR_dat$n)
+
+dat <- read.csv('../data/evaluation_table.csv')[,2:3]
+data.frame(Metric  = dat[1:5,1],
+                   Value   = dat[1:5,2],
+                   Metric1 = dat[6:10,1],
+                   Value1  = dat[6:10,2]
+                   ) %>% 
+  knitr::kable(caption = "Logistic regression assessing accuracy of SDMs",
+    col.names = c('Metric', 'Value', 'Metric', 'Value'),
+    booktabs = T) #%>% 
+  #kableExtra::kable_styling(position = "float_right")
+```
+
+```{r Results for SA Logistic Regression Contingency table}
+read.csv('../data/Pa_conting_table.csv') %>% 
+    knitr::kable(caption = "Species Distribution Modeling evaluation contingency table",
+    col.names = c('', ' Absence ', '  Presence  ', ' Absence ', ' Presence '), align = "lrrrr",
+    booktabs = T) %>%
+    add_header_above(c(" " = 1, "Training" = 2, "Testing" = 2))
+
+rm(logR_dat, dat)
+```
+
+
+## 3.2 | Microscopic Pollen identification
+
+```{r compare microscopic to molecular Pollen ID, eval = T}
+
+# are mertensia and Asteraceae 1 & 2 detected in all Pollen samples where the bee was COLLECTED ON THEM ?
+
+pmorph <- read.csv('../data/morpho_pollen.csv') 
+blst <- read.csv('../data/Post_Classified_BLAST_sqs.csv') %>% 
+  rename(sample.id = Sample, Family = FAMILY, Genus = GENUS) %>% 
+  group_by(sample.id) %>% 
+  mutate(Prcnt_Seqs_Class = sum(Prcnt_seqs)) %>% 
+  ungroup()
+blst_seqs <- distinct(blst, sample.id) 
+
+pmorph <- filter(pmorph, sample.id %in% blst$sample.id) %>% 
+  group_by(sample.id) %>% 
+  mutate(Prop = sum/sum(sum)) 
+
+mertensia_samples <- pmorph %>% 
+  filter(morphotype == 'MERTENSIA') %>% 
+  select(sample.id, morphotype, Prop, sum)
+
+mertensia_samples <- filter(mertensia_samples, sample.id %in% blst_seqs$sample.id)
+
+blst_mertensia <- blst %>% 
+  filter(Family == 'Boraginaceae') %>% 
+  select(sample.id,  Prcnt_seqs, Seqs_pr_taxon, Total_seqs, Prcnt_Seqs_Class) %>% 
+  group_by(sample.id) %>% 
+  mutate(Prcnt_seqs = sum(Prcnt_seqs),
+         morphotype = 'MERTENSIA') %>% 
+  distinct(sample.id, .keep_all = T)
+
+mertensia_detected <- mertensia_samples %>% 
+  mutate(DETECTED = if_else(sample.id %in% blst_mertensia$sample.id, 1, 0)) 
+ # sample 26 - very strange !!!! this needs investigation - ALSO THE ERICOID IS LIKELY ONAGRAD !?
+
+blst_aster <- blst %>% 
+  filter(Family == 'Asteraceae') %>% 
+  group_by(sample.id) %>% 
+  distinct(sample.id, .keep_all = T)
+
+# PERFORM FOR ERICACEAE TOO - A single record maybe come out?
+ericaceae_samples <- pmorph %>% 
+  filter(morphotype == 'ERICACEAE') %>% 
+  select(sample.id, Prop, morphotype) 
+
+blst_ericoid <- filter(blst, Family == 'Ericaceae') %>% # 44 might be Epilobium anagallidolium
+  mutate(morphotype = 'ERICACEAE')
+ericaceae_detected <- ericaceae_samples %>% 
+  mutate(DETECTED = if_else(sample.id %in% blst_ericoid$sample.id, 1, 0)) 
+
+# ASTER 2 HERE...
+aster2_samples <- pmorph %>% 
+  filter(morphotype == 'ASTERACEAE_2') 
+
+blst_aster2 <- filter(blst_aster, Genus %in% 
+                            c('Taraxacum', 'Helianthella', 'Scabrethia')) %>% 
+  mutate(morphotype = 'ASTERACEAE_2')
+aster2_detected <- aster2_samples %>% 
+  mutate(DETECTED = if_else(sample.id %in% blst_aster2$sample.id, 1, 0)) 
+
+# ASTER 1 HERE... ? WERE ALL OF THESE SPECIES PRUNED... ?
+aster1_samples <- pmorph %>% 
+  filter(morphotype == 'ASTERACEAE_1') 
+
+blst_aster1 <- filter(blst_aster, !Genus %in% c('Taraxacum', 'Helianthella', 
+                                                'Scabrethia') ) %>% 
+  mutate(morphotype = 'ASTERACEAE_1')
+aster1_detected <- aster1_samples %>% 
+  mutate(DETECTED = if_else(sample.id %in% blst_aster1$sample.id, 1, 0)) 
+
+# ALL HIGH NUMBER ASTERACEAE 
+
+aster_samples <- pmorph %>% 
+  filter(str_detect(morphotype, 'ASTER.*'))
+aster_detected <- aster_samples %>% 
+  mutate(DETECTED = if_else(sample.id %in% blst_aster$sample.id, 1, 0)) 
+
+
+aa <- prcnt_detect(mertensia_detected, Lprop = 0.01, Hprop = 1)
+bb <- prcnt_detect(aster1_detected, Lprop = 0.001, Hprop = 0.01)
+cc <- prcnt_detect(aster2_detected, Lprop = 0.001, Hprop = 0.01)
+dd <- prcnt_detect(aster_detected, Lprop = 0.01, Hprop = 1)
+ee <- prcnt_detect(ericaceae_detected, Lprop = 0.001, Hprop = 0.1)
+ff <- prcnt_detect(aster_detected, Lprop = 0.001, Hprop = 0.01)
+
+# Semi-quantitative accord between sequence % and Grain Count
+palyn_cnt <- bind_rows(aster1_samples, aster2_samples, ericaceae_samples, mertensia_samples) %>% 
+  select(morphotype, countProp = Prop) 
+
+pollen_props <- bind_rows(blst_aster1, blst_aster2, blst_mertensia, blst_ericoid) %>% 
+  select(morphotype, sequenceProp = Prcnt_seqs, Seqs_pr_taxon, Total_seqs, Prcnt_Seqs_Class) %>% 
+  left_join(., palyn_cnt, by = c('sample.id', 'morphotype')) %>% 
+  drop_na()
+
+rm(mertensia_samples, blst_aster, blst_aster1,
+   blst_aster2, aster1_samples,  aster2_samples, a, b, c, d, palyn_cnt,
+   blst_mertensia, aster_samples, ericaceae_samples, blst_ericoid)
+```
+
+Using the fuchsin jelly preparation and light microscopic analyses of grains and scoring of 10 character states resulted in the establishment of 28 morphotypes which grains could be classified into. *APPENDIX 7*. From the 60 samples that were counted and based on rarefaction we **had over % of expected morphotypes found** (morphotype richness, $\bar{x}$ = 4.5, Mdn = 4, min = 1, max = 9), all samples had expected morphotype diversity reach the asymptote *APPENDIX 8*. The number of counted pollen grains in each sample range from (*MIN* - 16,293, $\bar{x}$ = 2788.685, Mdn = 1453).
+
+**SUMMARY REQUIRED - Number of species from number of families, and how many species are identified to species versus number only to genera **
+
+```{r}
+rm(mertensia_detected, aster1_detected, aster2_detected, aster_detected)
+```
+
+
+```{r Sequence and Morphological Vouchers, out.width = "65%", fig.cap="Phylogenetic tree of all biotically pollinated plant genera in the study area. The innermost ring indicates every genus which Queen Bee's were observed to visit. The intermediate ring indicates that at least a single morphological pollen voucher slide was prepared for a member of the genus. The outermost ring indicates that sequence data were available for at least a member of that genus. Branch colors follow APG 4."}
+knitr::include_graphics("../graphics/plots/rmbl_draft_tree.png")
+```
+
+### 3.3 | Metabarcoding Pollen Indentification
+
+### 3.3.1 | Spatial Analyses to identify candidate taxa
+
+The median (25.009 km) of the logistic regression assessing the probability of occurrence of a species record as a function of distance from the study area was used as a threshold distance to include species for distribution modelling. A 2-sample test for equality of proportions with continuity correction (X-squared = 13.254, df = 1, p-value = 0.000136, 95% CI 0.04-1.00) was used to test whether more of the records located in the broad ecological sites present at the field station, between the distance of the median (25.009 km) to the third quantile (ca 43.830 km) of the regression distance, were true presences at the field station. Including these records would have resulted in modelling an additional 222 species distributions of which 30 are true presences, these taxa were not modelled.  
+
+Across the entire spatial domain of modelling all ensembled models (n = 968) had an accuracy of 0.84 (95% CI 0.8356 - 0.8443), kappa = 0.68, p-value < 0.001, sensitivity = 0.80, specificity = 0.87, AUC = 0.92.
+
+In the area of the minimum-spanning tree encompassing the field sites, of the 554 vascular plants with biotic pollination syndromes, the 493 ML ensembles accurately predicted the presence of 362 (65.3%), incorrectly predicted the presence of 64 (11.6%), incorrectly predicted 34 true presences (6.1%) as being absent, and correctly predicted the true absence of 33 (6.0%). The balanced accuracy of the ensembled models is 0.627 (Sensitivity = 0.340, Specificity 0.914). Of the 554 vascular plants with biotic pollination syndromes, the 475 LM ensembles accurately predicted the presence of 286 (51.6%), incorrectly predicted the presence of 41 (14.3%), incorrectly predicted 93 true presences (16.8%) as being absent, and correctly predicted the true absence of 55 (9.9%). The balanced accuracy of the ensembled models is 0.664 (Sensitivity = 0.573, Specificity 0.754). Of the 554 vascular plants with biotic pollination syndromes in the flora 13 (2.3%) were in the Orchid family and 41 (7.4%) are non-natives, both of which are restricted from the database, and can only reduce the number of true predicted presences by roughly 10%. 
+
+At the six study plots, of the 117 plant species identified to the species level across the spatial extents of all plots and duration of queen bee activity, the ML ensembles predicted the presence of 105 (89.7%) of them, and LM ensembles 102 (87.2%). Of the missing species two (1.7%) are Orchids, six (5.1%) are non-native, and one (0.85%) is of contested taxonomic standing, all of which (7.65%) are restricted from the initial query database. 
+
+
+### 3.3.2 | Temporal Analysis
+
+The first date of modeled snow melt in the Gothic area (n = 17, $\bar{x}$ = 137.9, Mdn = 135, 3^rd^ quantile = 151), and the first date of a consistent winter snow base (n = 17, $\bar{x}$ = 299.9, Mdn = 300, 1^st^ quantile = 291) from 2000-2017, were used as delimiters for the inclusions of herbarium records in modelling. Of the 439 species predicted likely present in the area via logistic regression, 332 species (64.4%) with more than 10 records in the focal level 4 ecoregions ($\bar{x}$ = 35.016, Mdn = 35, max = 96) had weibull estimates calculated, an additional 56 species (11.2%) with enough contributing records from the "Sedimentary Mid-Elevation Forests", a large ecoregion generally just beneath the elevation bands occupied by the five ecoregions around the study area had weibull estimates also calculated ($\bar{x}$ = 13.868, Mdn = 13, max = 24).
+
+Only 58 of these 388 species (n = 34.568, Mdn = 31) were able to be compared to plot based observational data from the long term (1974–2012) data set (@caradonna2014shifts). Of these species relatively high accord was observed between the long-term ground truthed data set, and the modelled species. There was very strong evidence that the weibull estimates were positively associated with the observed onset (r^2^ = 0.72, p < 0.0001, tau = 0.61) and peak (r^2^ = 0.70, p < 0.0001, tau = 0.65) of flowering, and that the number of herbarium samples had a moderate effect on the estimates (p = 0.004 and p = 0.034 respectively). There was very strong evidence that the weibull estimates had a positive association with the observed cessation of flowering (r^2^ =  0.4339,  p < 0.0001, tau = 0.489), however their was no evidence that sample size had an effect (p = 0.349). There was moderate evidence that the weibull estimates, with an effect of sample size, had a weak positive association with the observed duration of flowering (p = 0.0401, r^2^ = 0.07, tau = 0.17).
+
+```{r plot phenology estimates, echo=F, fig.cap="Modelled dates of when major flowering events occurred", out.width = '100%'}
+knitr::include_graphics("../graphics/plots/phenology_estimates_10_90.png")
+# these are the tenth and nintey  percent non-parametric confidence intervals. 
+```
+
+```{sh Get number of raw and trimmed reads for metagenome samples, eval = F}
+
+cd ~/sequenceData/Original_zip
+files=$(find -type f -name "[0-9]_S[0-9]*_paired.fastq.gz") # doesnt support {2}
+files1=$(find -type f -name '[0-9][0-9]_S[0-9]*_paired.fastq.gz')
+files="${files} ${files1}"
+echo $files
+# seqs per each sample , need divide by 4 on import
+wc -l  $files > '/hdd/yun master/MEE_manuscript/data/raw_reads_metagenome_seq.txt'
+
+cd ../trimmed_metagenomic
+files=$(find  -maxdepth 1 -name '*gz')
+wc -l  $files  > '/hdd/yun master/MEE_manuscript/data/trimmed_reads_metagenome_seq.txt'
+```
+
+```{r Summary statistics of sequence numbers}
+
+raw_seqs <- read.delim('../data/raw_reads_metagenome_seq.txt', header = F) %>% 
+  mutate(V1 = str_trim(V1)) %>% 
+  separate(V1, c('seq', 'sampleFR'), sep = ' ') %>% 
+  mutate(seq = round(as.numeric(seq)/4),
+         sample = str_extract(sampleFR, '.*L002_')) %>% 
+  filter(sampleFR != 'total') %>% 
+  group_by(sample) %>% 
+  mutate(totalReads = sum(seq)) %>% 
+  distinct(totalReads) %>% 
+  pull(totalReads)
+
+trimmed_seqs <- read.delim('../data/trimmed_reads_metagenome_seq.txt', header = F) %>% 
+  mutate(V1 = str_trim(V1)) %>% 
+  separate(V1, c('seq', 'sampleFR'), sep = ' ') %>% 
+  mutate(seq = round(as.numeric(seq)/4),
+         sample = str_extract(sampleFR, '.*paired')) %>% 
+  filter(sampleFR != 'total') %>% 
+  group_by(sample) %>% 
+  mutate(totalReads = sum(seq)) %>% 
+  distinct(totalReads) %>% 
+  pull(totalReads)
+
+krak <- read.csv('../data/kraken_proc_reads.csv')
+brack <- read.csv('../data/bracken_proc_reads.csv')
+blast <- read.csv('../data/blast_proc_reads.csv')
+loci <- read.csv('../data/reads_per_loci.csv') %>% group_by(Sample)
+  
+no_loci <- loci %>% group_by(Sample) %>% count(name = 'no_loci')
+no_reads <- loci %>% group_by(loci) %>% summarize(readsLoci = sum(n))
+```
+
+## 3.3.1 | Molecular analysis of corbiculae loads
+
+The 54 corbiculae loads had DNA extracted and underwent various steps towards hyb-seq, in the end a total of `r toString(length(raw_seqs))` corbiculae samples were sequenced, `r pNumC(sum(raw_seqs))` reads were recovered from sequencing. The number of reads per sequence varied widely (range = `r pNumC(min(raw_seqs))` - `r pNumC(max(raw_seqs))`, $\bar{x}$ = `r pNumC(round(mean(raw_seqs),1))`, Mdn = `r pNumC(median(raw_seqs))`). Of the possible 353 loci, the number which were recovered from each sample, and informative to BLAST were range = `r toString(min(no_loci$no_loci))` - `r toString(max(no_loci$no_loci))`, $\bar{x}$ = `r toString(round(mean(no_loci$no_loci), 1))`, Mdn = `r toString(median(no_loci$no_loci))`. The number of reads per loci from across all samples had a range of `r min(no_reads$readsLoci)` - `r pNumC(max(no_reads$readsLoci))`, $\bar{x}$ = `r pNumC(round(mean(no_reads$readsLoci), 1))`, Mdn = `r pNumC(median(no_reads$readsLoci))`. **APPENDIX X Reads Per Loci**.
+
+... with samples 22, and 41 both having < 100 reads indicates, virtual failure of these records (REMOVE from analyses).
+
+After trimming `r pNumC(sum(trimmed_seqs))` sequences remained. `r pNumC(sum(krak[krak$Classified == 'C',]$n))` reads were matched using Kraken, of the reads classified by Kraken `r pNumC(sum(brack$reads))` reads were matched using Bracken, of the reads classified by Kraken `r pNumC(sum(blast$Total_seqs))` reads were matched using BLAST. Based upon subjective review of the three classifiers **APPENDIX X MOLECULAR NETWORKS - 3 DIFFERENT ONES**, BLAST was chosen as the classification method which yielded the most probable results by the field ecologist, and it's values were used for all subsequent analyses. 
+
+```{r Read Post Processing}
+
+pp_seqs_t <- read.csv( file.path('../data', 'Sequence_Reclass_table.csv') )
+
+knitr::kable(pp_seqs_t, align = "c", 
+             col.names = c('Condition', 'No. Class.', 'Prcnt. Class.', 'Total Seqs', 'Rank'),
+             caption = "Post classification of Sequences via Taxonomy and Ecology") %>% 
+  kableExtra::kable_styling(
+      latex_options = "striped",
+      stripe_color = "gray!10")
+
+seqs_sp <- sum (pp_seqs_t[pp_seqs_t$Rank=='Species','Prcnt_Records'] )
+seqs_ge <- sum (pp_seqs_t[pp_seqs_t$Rank=='Genus','Prcnt_Records'] )
+seqs_fa <- sum (pp_seqs_t[pp_seqs_t$Rank=='Family','Prcnt_Records'] )
+
+sp_total_seqs <- sum (pp_seqs_t[pp_seqs_t$Rank=='Species','Total_Prcnt_Seqs'] )
+sp_total_seqs <- sum (pp_seqs_t[pp_seqs_t$Rank=='Genus','Total_Prcnt_Seqs'] )
+fa_total_seqs <- sum (pp_seqs_t[pp_seqs_t$Rank=='Family','Total_Prcnt_Seqs'] )
+
+byhand <- blst %>% 
+  filter(TAXON_NEW != TAXON_NEW2)
+
+j <- toString(paste0(names(table(byhand$Condition)), ": ",
+                     as.vector (table(byhand$Condition))))
+gen <- byhand[byhand$TAXON_NEW2==c('Salix'),]
+spp <- byhand[byhand$TAXON_NEW2==c('Sorbus scopulina', 'Pseudostellaria jamesiana'),]
+```
+
+The initial classification of sequences which were made by BLAST were reviewed programmatically, using predicted presence of the species (from spatial modelling), modelled flowering time (from temporal modelling), and taxonomy (from existing sources). A sequential process was utilized which reassigned sequences based on binary combinations of the factors above (Appendix XX). Given the relative sparsity of the number, and relatedness, of species represented in the sequence database this was performed to: 1) Identify locally present species represented by surrogates in the DB 2) Reduce false classifications of focal species 3) Identify high confidence sequence matches. Of the top ten taxa which were identified by BLAST for the `r sum(pp_seqs_t$Samples_Classified)` distinct records, `r seqs_sp`% of the reads were classified to a species `r sp_total_seqs`% representing of all classified reads, `r seqs_ge`% of the reads were classified to genus representing `r sp_total_seqs`% of all classified reads, and `r seqs_fa`% of the records were classified to family `r fa_total_seqs`%  of all total sequences.
+
+Of the `r nrow(byhand)` classifications which were assigned to genera without any species predicted by spatial analyses, were investigated by hand after post-processing steps. These were all assigned via post-processing conditions (`r j`, APPENDIX XX). These were manually assigned to a variety of ranks, occasionally to genus - `r nrow(gen)`, and species - `r nrow(spp)`, by consultation of the alpha-taxonomic literature (@sadeghian2015molecular, @sennikov2017phylogenetic, @rabeler2016new, @pusalkar2015taxonomic, @moore2003its,  @weber1998new).
+
+To determine at which level species in pollen loads could be detected the results of light microscopy were compared to the molecular results. The pollen samples contained three morphotypes which could readily be identified via microscopy. Two of these mapped to the clades (Boraginaceae & Heliantheae Alliance), and one to a Asteraceae less Heliantheae. Boraginaceae grains `r toString(aa)`.  Asteraceae type 1, non-helianthoids, `r toString(bb)` Asteraceae type 2, Helianthoids, `r toString(cc)`; however, Asteraceae `r toString(ff)`. Both morphotypes of Asteraceae pollen `r toString(dd)`, and Ericaceae `r toString(ee)`.
+
+```{r clean sequence numbers from environment}
+rm( krak, brack, blast, loci, no_loci, aa, bb, cc, dd, fa_total_seqs, j, byhand,
+    ge_total_seqs, sp_total_seqs, seqs_sp, seqs_ge, seqs_fa, pp_seqs_t, spp)
+```
+
+```{r Correlation between Number of Grains and Number of Sequences}
+
+pol_p <- pollen_props %>% 
+  mutate(sequenceProp = sequenceProp/100, 
+         adjSeqProp = sequenceProp * (100/Prcnt_Seqs_Class))
+
+ct <-cor.test(pol_p$countProp, pol_p$adjSeqProp, method = "kendall")
+# ct[["p.value"]] too small to write out. tau > 0.4 strong relationship
+model <-  lm(adjSeqProp ~ countProp, data = pol_p)
+
+par(pty="s")
+plot(x = pol_p$countProp,  pol_p$adjSeqProp, 
+      xlim = c(0,1), ylim = c(0,1), axes = F, main = 'Correlation of Proportion Counted\nGrains and Sequence Reads',
+     xlab = 'Grains Counted', ylab = 'Classified Sequences',
+     pch=18, slty = 3, gap = 0.025)
+axis(1)
+axis(2)
+abline(model)
+text(0.3, 0.9, paste0("tau = ", round(ct[["estimate"]][["tau"]], 3)))
+text(0.3, 0.8, "p < 0.001") 
+
+rm( newdat)
+```
+
+To detect whether the sequencing reads were semi-quantitative the subset of all pollen morphotypes distinguishable by microscopy were compared to the sequence reads. In all instances sequence reads were pooled to the highest taxonomic rank associated with the morphotype, e.g. if both species of *Mertensia* Huth, or one species and read only classified to genus were present in a sample, the reads were summed. The total percentage of the ten most abundant grains per sample were then were then relativized to constitute the entire sample. 
+
+The relationship between the number of pollen grains in a sample and the number of sequence reads is roughly *curvilinear*, where grains which are present in trace amounts are overestimated by sequence counts, while grains present in high amounts are underestimated. This is likely due to the proportion of high false positives which occur in the classification process with NGS (BELL NOVEMEBER 2021). There was evidence of a strong correlation between the proportion of grains per morphotype and the number of sequences per group (`r round(ct[["estimate"]][["tau"]], 3)`, p < 0.0001, n = `r nrow(pol_p)`). 
+
+```{r}
+rm(pol_p, ct)
+```
+
+
+```{r Co-occurrence of splash drop sequences, eval = F}
+
+e <- blst %>% 
+  filter(Family %in% c('Boraginaceae', 'Hydrophyllaceae', 'Ranunculaceae', 
+                       'Celastraceae')) %>% 
+  select(sample.id, Genus) %>% 
+  mutate(Present = 1) %>% 
+  group_by(Genus) %>% 
+  distinct() %>% 
+  pivot_wider(names_from = Genus, values_from = Present) %>% 
+  mutate(across(.col = everything(), ~replace_na(.,  0))) %>% 
+  column_to_rownames('sample.id')
+
+myout <- CooccurrenceAffinity::affinity(data = e, row.or.col = "col", squarematrix = c("all"))
+CooccurrenceAffinity::plotgg(data = myout, variable = "alpha_mle", legendlimit = "datarange")
+```
+
+To ascertain the extent to which records of multiple species in a family, which were suspected to be sampling artefacts occurred in molecular samples an index of similarity, ala jaccard, $\alpha$ index was used to assess co-occurrence (@mainali2022better, @mainali2022alpha). Numerous taxa from the family Ranunculaceae Jussieu (*Caltha* L. sp., *Thalictrum* L. spp., *Trollius* L. sp., *Aquilegia* L. spp.), had ... $\alpha$ scores which indicated that they are only present when a more common confamilial taxa *Delphinium barbeyi* (Huth) Huth *nuttallianum* Pritz. were recorded. A similar relationship was observed in the Hydrophyllaceae R.Br. with samples placed in *Nemophila* Nutt., which only occurred when the more abundant *Hydrophyllum* L. species were present.
+
 ## 3.6 | Integrated Observational, Molecular, and Palynological Network
 
 While the spatial results were used to declare the taxonomic composition of the sequence database, temporal results were used in consideration with plant phylogeny to retroactively, reassign the assignment of sequences to taxa. Essentially, if a sequence was identified to a taxon which was not known from the field site 
 
-For example a common UNKNOWN sequence mapped to the Asteraceae family, but which was flagged by temporal filters and is present in both *B. nevadensis* Cresson and *B. rufocinctus* Cresson pollen is most likely *Frasera* Walter, failed extraction. A similar likely mismatch could be between what was fide molecular evidence as *Agastache pallidiflora* (A. Heller) Rydb. but where feeding was infrequently observed on *Pedicularis* L., likely due to this entire order being represented by only a single molecular reference species. 
+For example a many sequences which mapped to the Asteraceae family, but which was flagged by temporal filters and is present in both *B. nevadensis* Cresson and *B. rufocinctus* Cresson pollen is most likely *Frasera* Walter, which failed extractions for the reference library failed (APPENDIX XX). A similar likely mismatch could be between what was fide molecular evidence as *Agastache pallidiflora* (A. Heller) Rydb. but where feeding was infrequently observed on *Pedicularis* L., likely due to this entire order being represented by only a single molecular reference species. 
 
 ```{r}
 
@@ -922,6 +940,8 @@ knitr::include_graphics('../graphics/plots/Loci_Reference_Samples.png')
 ```{r READS PER LOCI - METAGENOMICS, echo = F, out.width = '98%'}
 knitr::include_graphics('../graphics/plots/Percent_loci_matched_by_sample.png')
 ```
+
+\newpage 
 
 Appendix XX - Comparison of Kraken2, Bracken, and BLAST
 

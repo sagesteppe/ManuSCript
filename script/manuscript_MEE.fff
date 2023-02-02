@@ -1,13 +1,13 @@
 \begin{figure}
+\includegraphics[width=0.45\linewidth]{manuscript_MEE_files/figure-latex/Most used resources by species-1} \caption{Number of the ten most commonly visited plants which are also in the top ten most common sequences}\label{fig:Most used resources by species}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
 \includegraphics[width=0.65\linewidth]{../graphics/plots/rmbl_draft_tree} \caption{Phylogenetic tree of all biotically pollinated plant genera in the study area. The innermost ring indicates every genus which Queen Bee's were observed to visit. The intermediate ring indicates that at least a single morphological pollen voucher slide was prepared for a member of the genus. The outermost ring indicates that sequence data were available for at least a member of that genus. Branch colors follow APG 4.}\label{fig:Sequence and Morphological Vouchers}
 \end{figure}
 \efloatseparator
  
 \begin{figure}
 \includegraphics[width=1\linewidth]{../graphics/plots/phenology_estimates_10_90} \caption{Modelled dates of when major flowering events occurred}\label{fig:plot phenology estimates}
-\end{figure}
-\efloatseparator
- 
-\begin{figure}
-\includegraphics[width=0.45\linewidth]{manuscript_MEE_files/figure-latex/Most used resources by species-1} \caption{Number of the ten most commonly visited plants which are also in the top ten most common sequences}\label{fig:Most used resources by species}
 \end{figure}
