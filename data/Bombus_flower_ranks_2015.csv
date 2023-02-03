@@ -1,4 +1,4 @@
-﻿site,site.code,year,date,doy,week,observer,obs.start,obs.end,tot.obs.length,weather,habitat,habitat.code,plant.species,abun.rank,notes
+site,site.code,year,date,doy,week,observer,obs.start,obs.end,tot.obs.length,weather,habitat,habitat.code,plant.species,abun.rank,notes
 Avery.Wash,AW,2015,29-May-15,149,3,JEO,4:08:00 pm,5:08:00 pm,60,cloudy.mild,aspen,a,Androsace.septentrionalis,4,rank estimated
 Avery.Wash,AW,2015,29-May-15,149,3,JEO,4:08:00 pm,5:08:00 pm,60,cloudy.mild,aspen,a,Claytonia.lanceolata,1,rank estimated
 Avery.Wash,AW,2015,29-May-15,149,3,JEO,4:08:00 pm,5:08:00 pm,60,cloudy.mild,aspen,a,Erythronium.grandiflorum,4,rank estimated
