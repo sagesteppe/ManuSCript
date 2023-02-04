@@ -1,12 +1,12 @@
 --- 
 title: Metagenomic Barcoding of Pollen Loads Offers Insights on the Foraging Patterns of Queen Bumble Bees
 author:  |
-    |  Reed Clark Benkendorf$^1$$^,$$^2$^[Correspondence: reedbenkendorf2021@u.northwestern.edu], Jane E. Ogilive$^3$$^,$$^4$, Emily J. Woodworth$^1$$^,$$^2$,
     |  Sophie Taddeo$^1$$^,$$^2$, Paul J. CaraDonna$^1$$^,$$^2$$^,$$^3$, Jeremie B. Fant$^1$$^,$$^2$  
     |  $^1$Chicago Botanic Garden, 1000 Lake Cook Road, Glencoe, Illinois 60022, USA  
     |  $^2$Plant Biology and Conservation, Northwestern University, Evanston, Illinois 60208, USA  
     |  $^3$ Rocky Mountain Biological Laboratory, P.O. Box 519, Crested Butte, Colorado 81224, USA
     |  $^4$ Australia post fire project, ----, ----, ----, AU  
+    |  Reed Clark Benkendorf$^1$$^,$$^2$^[Correspondence: reedbenkendorf2021@u.northwestern.edu], Jane E. Ogilive$^3$$^,$$^4$, Emily J. Woodworth$^1$$^,$$^2$,
 abstract:  |  
   |
   1) DNA Barcoding has been successful for the rapid analysis of ecological assemblages. Although barcoding in the plant kingdom barcoding has been more difficult than others, and hence may begin to lag behind other kingdoms. 
@@ -18,9 +18,9 @@ abstract:  |
 keywords: |
   DNA baroding, metagenomics, hyb-seq, Angiosperms353, plant metagenomics, bombus queens, subalpine, species distribution model
 output:
-  pdf_document: default
-  toc: no
   word_document: default
+  toc: no
+  pdf_document: default
 csl: "../citations/methods-in-ecology-and-evolution.csl"
 bibliography: ../citations/citations.bib
 link-citations: yes
@@ -394,6 +394,15 @@ read.csv('../data/Pa_conting_table.csv') %>%
 
 rm(logR_dat, dat)
 ```
+
+
+The median (25.009 km) of the logistic regression assessing the probability of occurrence of a species record as a function of distance from the study area was used as a threshold distance to include species for distribution modelling. A 2-sample test for equality of proportions with continuity correction (X-squared = 13.254, df = 1, p-value = 0.000136, 95% CI 0.04-1.00) was used to test whether more of the records located in the broad ecological sites present at the field station, between the distance of the median (25.009 km) to the third quantile (ca 43.830 km) of the regression distance, were true presences at the field station. Including these records would have resulted in modelling an additional 222 species distributions of which 30 are true presences, these taxa were not modelled.  
+
+Across the entire spatial domain of modelling all ensembled models (n = 968) had an accuracy of 0.84 (95% CI 0.8356 - 0.8443), kappa = 0.68, p-value < 0.001, sensitivity = 0.80, specificity = 0.87, AUC = 0.92.
+
+In the area of the minimum-spanning tree encompassing the field sites, of the 554 vascular plants with biotic pollination syndromes, the 493 ML ensembles accurately predicted the presence of 362 (65.3%), incorrectly predicted the presence of 64 (11.6%), incorrectly predicted 34 true presences (6.1%) as being absent, and correctly predicted the true absence of 33 (6.0%). The balanced accuracy of the ensembled models is 0.627 (Sensitivity = 0.340, Specificity 0.914). Of the 554 vascular plants with biotic pollination syndromes, the 475 LM ensembles accurately predicted the presence of 286 (51.6%), incorrectly predicted the presence of 41 (14.3%), incorrectly predicted 93 true presences (16.8%) as being absent, and correctly predicted the true absence of 55 (9.9%). The balanced accuracy of the ensembled models is 0.664 (Sensitivity = 0.573, Specificity 0.754). Of the 554 vascular plants with biotic pollination syndromes in the flora 13 (2.3%) were in the Orchid family and 41 (7.4%) are non-natives, both of which are restricted from the database, and can only reduce the number of true predicted presences by roughly 10%. 
+
+At the six study plots, of the 117 plant species identified to the species level across the spatial extents of all plots and duration of queen bee activity, the ML ensembles predicted the presence of 105 (89.7%) of them, and LM ensembles 102 (87.2%). Of the missing species two (1.7%) are Orchids, six (5.1%) are non-native, and one (0.85%) is of contested taxonomic standing, all of which (7.65%) are restricted from the initial query database. 
 
 
 ## 3.2 | Microscopic Pollen identification
