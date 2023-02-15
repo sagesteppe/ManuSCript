@@ -122,26 +122,33 @@ pollen_df_new.1 <- pollen_df_new.1 %>%
   group_by(sample.id) %>% # form groups of each microscope slide. 
   mutate(count = as.numeric(count)) %>% # ensure that the values in this columns are represented as numbers to the computer
   mutate(count = replace_na(count, 0)) %>% # remember in our sample design NA's are 0's
-  filter(transect >= 4, transect <= 17) %>%  # remove the 1st and 20th transects which we stopped counting. 
   mutate(group_sum = sum(count)) %>% # see which slides have been counted...
   drop_na(morphotype) %>% 
   filter(group_sum >= 1) %>% # find only the slides which we have counted pollen grains in .
-  mutate(morphotype = str_replace(morphotype, "CAN\'T_DISTINGUISH", "UNKNOWN")) %>% 
-  mutate(morphotype = str_replace(morphotype, "INDISTINGUISHABLE_CLUMP", "UNKNOWN")) %>% 
-  mutate(morphotype = str_replace(morphotype, "NER", "UNKNOWN")) %>% 
-  mutate(morphotype = str_replace(morphotype, "DEHYDRATED", "UNKNOWN")) %>% 
-  
-  mutate(morphotype = str_replace(morphotype, "SALIX", "D")) %>% 
-  mutate(morphotype = str_replace(morphotype, "C\\_\\(LINUM\\)", "LINUM")) %>% 
-  mutate(morphotype = str_replace_all(morphotype, " ", "_")) %>% # replace white spaces 
-  mutate(morphotype = str_to_upper(morphotype)) %>% # R is case sensitive
-  mutate(morphotype = str_remove_all(morphotype, "\\_\\(11B\\)")) %>% # while good to know, unknown will be it's own class. 
-  mutate(morphotype = if_else(str_detect(morphotype, "\\?"), "UNKNOWN", morphotype)) %>% # make all unknown observations the same format. 
-  mutate(morphotype = str_replace(morphotype, "UNK$", "UNKNOWN")) %>% # make all unknown observations the same format. 
-  mutate(morphotype = str_replace_all(morphotype, "UNKNWOWN", "UNKNOWN")) %>% 
-  filter(!morphotype %in% c("NO_FJ", "LOW_FJ", "LITTLE_FJ", "LESS_FJ")) %>%  # we cannot say we counted or scored these cells. 
-  filter(!sample.id %in% c(28, 29, 59))  %>%  # THIS SLIDES ARE PURELY OF A SINGLE TAXON, AND CANNOT BE ANALYZED. 
-  filter(!morphotype %in% c(4,8)) %>% 
+  mutate(
+    morphotype = str_to_upper(morphotype),
+    morphotype = str_replace(morphotype, "CAN\'T_DISTINGUISH", "UNKNOWN"),
+    morphotype = str_replace(morphotype, "INDISTINGUISHABLE_CLUMP", "UNKNOWN"),
+    morphotype = str_replace(morphotype, "NER", "UNKNOWN"),
+    morphotype = str_replace(morphotype, "DEHYDRATED", "UNKNOWN"),
+    morphotype = str_replace(morphotype, 'UNKNOWN_[(]5B[)]', 'UNKNOWN'),
+    morphotype = str_replace(morphotype, '5B', 'UNKNOWN'),
+    morphotype = str_replace(morphotype, 'ASTERACEAE-2', 'ASTERACEAE_2'),
+    morphotype = str_replace(morphotype, "SALIX", "D"),
+    morphotype = str_replace(morphotype, 'C4', 'C'),
+    morphotype = str_replace(morphotype, 'OENOTHERA', 'ONAGRACEAE'),
+    morphotype = str_replace(morphotype, 'UNKNOWN_[(]D[)]', 'D'),
+    morphotype = str_replace(morphotype, 'OTHER_B', 'B'),
+    morphotype = str_replace(morphotype, 'OTHER_C', 'C'),
+    morphotype = str_replace(morphotype, "C\\_\\(LINUM\\)", "LINUM"),
+    morphotype = str_replace(morphotype, 'UNKNOWN_[(]RANUNCULUS[)]', 'UNKNOWN'),
+    morphotype = str_replace(morphotype, 'UNKNOWN_[(]11B[/]D[)]', 'UNKNOWN'),
+    morphotype = str_replace(morphotype, 'UNKNOWN_[(]4_APERTURES[)]', 'UNKNOWN'),
+    morphotype = str_replace_all(morphotype, " ", "_"),
+    morphotype = str_remove(morphotype, "\\_\\(11B\\)"),
+    morphotype = str_replace_all(morphotype, "UNKNWOWN", "UNKNOWN")) %>% 
+  filter(!morphotype %in% c("NO_FJ", "LOW_FJ", "LITTLE_FJ", "LESS_FJ", 'LILTTLE_FJ')) %>%  # we cannot say we counted or scored these cells. 
+  filter(!morphotype %in% c(4,8, 11)) %>% 
   mutate(plot.id = rleid(sample.id, transect, cell))
 
 table(pollen_df_new.1$morphotype)
@@ -170,7 +177,7 @@ pollen_results <- pollen_df_new.1 %>%
   distinct(sample.id, morphotype, .keep_all = T) %>% 
   select(site:sample.id, morphotype, sum )
 
-write.csv(pollen_results, '/hdd/yun master/MEE_manuscript/data/morpho_pollen.csv', row.names = F)
+write.csv(pollen_results, '../data/morpho_pollen.csv', row.names = F)
 ```
 
 
@@ -206,8 +213,13 @@ raw_vegan <- function(x){
   
 }
 
+#[c(1:41,43:44,46:60)]
+# 45 does not work
+u <- lapply(lapply(to_rare, rowSums), sum)
 
-rich_rare <- data.table::rbindlist(lapply(to_rare[c(1:41,43:44,46:60)], raw_vegan), idcol = T) # a couple still not working, 
+to_rare <- to_rare[u > 1]
+rich_rare <- data.table::rbindlist(lapply(to_rare, raw_vegan), idcol = T)
+
 rich_rare <- rich_rare %>% rename(sample.id = '.id') %>% 
   mutate(sample.id = as.numeric(sample.id))
 
@@ -231,7 +243,7 @@ ggplot(rich_rare, aes(x = sites, y = richness, colour = "purple")) +
   y = "Morphotype Richness",
   x = "No. of Cells ")
 
-#   Samples 45 and 48 missing due to only a single morphotype being present per slide. 
+#   Samples 45 iz missing due to only a single morphotype being present per slide. 
 ggsave(
    "../graphics/plots/species_richness_rarefaction.png",
    plot = last_plot(),

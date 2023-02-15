@@ -25,7 +25,7 @@ csl: "../citations/methods-in-ecology-and-evolution.csl"
 bibliography: ../citations/citations.bib
 link-citations: yes
 fig_caption: yes
-always_allow_html: true
+always_allow_html: yes
 header-includes:
 - \usepackage{endfloat}
 - \usepackage{setspace}\doublespacing
@@ -416,8 +416,8 @@ blst <- read.csv('../data/Post_Classified_BLAST_sqs.csv') %>%
   rename(sample.id = Sample, Family = FAMILY, Genus = GENUS) %>% 
   group_by(sample.id) %>% 
   mutate(Prcnt_Seqs_Class = sum(Prcnt_seqs)) %>% 
-  ungroup()
-blst_seqs <- distinct(blst, sample.id) 
+  slice_max( n = 10, with_ties = F, order_by = Prcnt_seqs)
+blst_seqs <- distinct(blst, sample.id)
 
 pmorph <- filter(pmorph, sample.id %in% blst$sample.id) %>% 
   group_by(sample.id) %>% 
@@ -445,16 +445,6 @@ blst_aster <- blst %>%
   filter(Family == 'Asteraceae') %>% 
   group_by(sample.id) %>% 
   distinct(sample.id, .keep_all = T)
-
-# PERFORM FOR ERICACEAE TOO - A single record maybe come out?
-ericaceae_samples <- pmorph %>% 
-  filter(morphotype == 'ERICACEAE') %>% 
-  select(sample.id, Prop, morphotype) 
-
-blst_ericoid <- filter(blst, Family == 'Ericaceae') %>% # 44 might be Epilobium anagallidolium
-  mutate(morphotype = 'ERICACEAE')
-ericaceae_detected <- ericaceae_samples %>% 
-  mutate(DETECTED = if_else(sample.id %in% blst_ericoid$sample.id, 1, 0)) 
 
 # ASTER 2 HERE...
 aster2_samples <- pmorph %>% 
@@ -488,21 +478,20 @@ aa <- prcnt_detect(mertensia_detected, Lprop = 0.01, Hprop = 1)
 bb <- prcnt_detect(aster1_detected, Lprop = 0.001, Hprop = 0.01)
 cc <- prcnt_detect(aster2_detected, Lprop = 0.001, Hprop = 0.01)
 dd <- prcnt_detect(aster_detected, Lprop = 0.01, Hprop = 1)
-ee <- prcnt_detect(ericaceae_detected, Lprop = 0.001, Hprop = 0.1)
 ff <- prcnt_detect(aster_detected, Lprop = 0.001, Hprop = 0.01)
 
 # Semi-quantitative accord between sequence % and Grain Count
-palyn_cnt <- bind_rows(aster1_samples, aster2_samples, ericaceae_samples, mertensia_samples) %>% 
+palyn_cnt <- bind_rows(aster1_samples, aster2_samples, mertensia_samples) %>% 
   select(morphotype, countProp = Prop) 
 
-pollen_props <- bind_rows(blst_aster1, blst_aster2, blst_mertensia, blst_ericoid) %>% 
+pollen_props <- bind_rows(blst_aster1, blst_aster2, blst_mertensia) %>% 
   select(morphotype, sequenceProp = Prcnt_seqs, Seqs_pr_taxon, Total_seqs, Prcnt_Seqs_Class) %>% 
   left_join(., palyn_cnt, by = c('sample.id', 'morphotype')) %>% 
   drop_na()
 
 rm(mertensia_samples, blst_aster, blst_aster1,
    blst_aster2, aster1_samples,  aster2_samples, a, b, c, d, palyn_cnt,
-   blst_mertensia, aster_samples, ericaceae_samples, blst_ericoid)
+   blst_mertensia, aster_samples)
 ```
 
 Using the fuchsin jelly preparation and light microscopic analyses of grains and scoring of 10 character states resulted in the establishment of 28 morphotypes which grains could be classified into. *APPENDIX 7*. From the 60 samples that were counted and based on rarefaction we **had over % of expected morphotypes found** (morphotype richness, $\bar{x}$ = 4.5, Mdn = 4, min = 1, max = 9), all samples had expected morphotype diversity reach the asymptote *APPENDIX 8*. The number of counted pollen grains in each sample range from (*MIN* - 16,293, $\bar{x}$ = 2788.685, Mdn = 1453).
@@ -604,7 +593,7 @@ pp_seqs_t <- read.csv( file.path('../data', 'Sequence_Reclass_table.csv') )
 
 knitr::kable(pp_seqs_t, align = "c", 
              col.names = c('Condition', 'No. Class.', 'Prcnt. Class.', 'Total Seqs', 'Rank'),
-             caption = "Post classification of Sequences via Taxonomy and Ecology") %>% 
+             caption = "Post classification of Sequences via Taxonomy and Ecology,\ntop 15 most abundant reads") %>% 
   kableExtra::kable_styling(
       latex_options = "striped",
       stripe_color = "gray!10")
@@ -630,7 +619,7 @@ The initial classification of sequences which were made by BLAST were reviewed p
 
 Of the `r nrow(byhand)` classifications which were assigned to genera without any species predicted by spatial analyses, were investigated by hand after post-processing steps. These were all assigned via post-processing conditions (`r j`, APPENDIX XX). These were manually assigned to a variety of ranks, occasionally to genus - `r nrow(gen)`, and species - `r nrow(spp)`, by consultation of the alpha-taxonomic literature (@sadeghian2015molecular, @sennikov2017phylogenetic, @rabeler2016new, @pusalkar2015taxonomic, @moore2003its,  @weber1998new).
 
-To determine at which level species in pollen loads could be detected the results of light microscopy were compared to the molecular results. The pollen samples contained three morphotypes which could readily be identified via microscopy. Two of these mapped to the clades (Boraginaceae & Heliantheae Alliance), and one to a Asteraceae less Heliantheae. Boraginaceae grains `r toString(aa)`.  Asteraceae type 1, non-helianthoids, `r toString(bb)` Asteraceae type 2, Helianthoids, `r toString(cc)`; however, Asteraceae `r toString(ff)`. Both morphotypes of Asteraceae pollen `r toString(dd)`, and Ericaceae `r toString(ee)`.
+To determine at which level species in pollen loads could be detected the results of light microscopy were compared to the molecular results. The pollen samples contained three morphotypes which could readily be identified via microscopy. Two of these mapped to the clades (Boraginaceae & Heliantheae Alliance), and one to a Asteraceae less Heliantheae. Boraginaceae grains `r toString(aa)`.  Asteraceae type 1, non-helianthoids, `r toString(bb)` Asteraceae type 2, Helianthoids, `r toString(cc)`; however, Asteraceae `r toString(ff)`. Both morphotypes of Asteraceae pollen `r toString(dd)`.
 
 ```{r clean sequence numbers from environment}
 rm( krak, brack, blast, loci, no_loci, aa, bb, cc, dd, fa_total_seqs, j, byhand,
@@ -647,18 +636,18 @@ ct <-cor.test(pol_p$countProp, pol_p$adjSeqProp, method = "kendall")
 # ct[["p.value"]] too small to write out. tau > 0.4 strong relationship
 model <-  lm(adjSeqProp ~ countProp, data = pol_p)
 
-par(pty="s")
-plot(x = pol_p$countProp,  pol_p$adjSeqProp, 
-      xlim = c(0,1), ylim = c(0,1), axes = F, main = 'Correlation of Proportion Counted\nGrains and Sequence Reads',
-     xlab = 'Grains Counted', ylab = 'Classified Sequences',
-     pch=18, slty = 3, gap = 0.025)
-axis(1)
-axis(2)
-abline(model)
-text(0.3, 0.9, paste0("tau = ", round(ct[["estimate"]][["tau"]], 3)))
-text(0.3, 0.8, "p < 0.001") 
+# par(pty="s")
+# plot(x = pol_p$countProp,  pol_p$adjSeqProp, 
+#       xlim = c(0,1), ylim = c(0,1), axes = F, main = 'Correlation of Proportion Counted\nGrains and Sequence Reads',
+#      xlab = 'Grains Counted', ylab = 'Classified Sequences',
+#      pch=18, slty = 3, gap = 0.025)
+# axis(1)
+# axis(2)
+# abline(model)
+# text(0.3, 0.9, paste0("tau = ", round(ct[["estimate"]][["tau"]], 3)))
+#text(0.3, 0.8, "p < 0.001") 
 
-rm( newdat)
+# rm( newdat)
 ```
 
 To detect whether the sequencing reads were semi-quantitative the subset of all pollen morphotypes distinguishable by microscopy were compared to the sequence reads. In all instances sequence reads were pooled to the highest taxonomic rank associated with the morphotype, e.g. if both species of *Mertensia* Huth, or one species and read only classified to genus were present in a sample, the reads were summed. The total percentage of the ten most abundant grains per sample were then were then relativized to constitute the entire sample. 
@@ -815,7 +804,7 @@ Layer   LM                     Description                              Source
 4.      Y            Cloudiness seasonality 3 - MODIS              Wilson et al. 2016
 5.      N           Beginning of the frost-free period                 Wang et al.
 6.      N              Climatic moisture deficit                       Wang et al.
-7.      N              Degree-days above 5C from                       Wang et al.
+7.      N               Degree-days above 5C                           Wang et al.
 8.      N              Mean annual precipitation                       Wang et al.
 9.      Y           Mean annual precipitation as snow                  Wang et al.
 10.     Y               Temperature seasonality                        Wang et al.
@@ -827,7 +816,7 @@ Layer   LM                     Description                              Source
 16.     Y               Surface soil percent sand                       SoilGrids
 17.     Y                     Soil USDA class                           SoilGrids
 18.     N                   Topographic elevation                      EarthEnv DEM
-19.     Y             Topographic elevation, moving window.            EarthEnv DEM
+19.     Y           Topographic elevation, moving window.              EarthEnv DEM
 20.     Y               Topographic percent slope                      EarthEnv DEM 
 21.     Y               Topographic wetness index                      EarthEnv DEM 
 22.     Y                  Topographic aspect                          EarthEnv DEM
