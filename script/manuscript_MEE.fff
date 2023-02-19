@@ -9,5 +9,10 @@
 \efloatseparator
  
 \begin{figure}
-\includegraphics[width=1\linewidth]{../graphics/plots/phenology_estimates_10_90} \caption{Modelled dates of when major flowering events occurred}\label{fig:plot phenology estimates}
+\includegraphics[width=1\linewidth]{../graphics/plots/phenology_estimates_10_90} \caption{Modelled dates of when major flowering events occurred compared between long term and modelled data}\label{fig:plot phenology estimates}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+\includegraphics[width=1\linewidth]{../graphics/plots/phenology_estimates-jeo_10_90} \caption{Modelled dates of when major flowering events occurred compared between 2015 and modelled data}\label{fig:plot phenology estimates JEO}
 \end{figure}
