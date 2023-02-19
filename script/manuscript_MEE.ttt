@@ -42,19 +42,17 @@ top 15 most abundant reads}
 \hline
 Condition & No. Class. & Prcnt. Class. & Total Seqs & Rank\\
 \hline
-\cellcolor{gray!10}{A} & \cellcolor{gray!10}{145} & \cellcolor{gray!10}{21.35} & \cellcolor{gray!10}{31.59} & \cellcolor{gray!10}{Species}\\
+\cellcolor{gray!10}{A} & \cellcolor{gray!10}{143} & \cellcolor{gray!10}{21.0294118} & \cellcolor{gray!10}{31.9746800} & \cellcolor{gray!10}{Species}\\
 \hline
-B & 210 & 30.93 & 10.45 & Species\\
+B & 205 & 30.1470588 & 10.5327892 & Species\\
 \hline
-\cellcolor{gray!10}{C} & \cellcolor{gray!10}{247} & \cellcolor{gray!10}{36.38} & \cellcolor{gray!10}{42.49} & \cellcolor{gray!10}{Genus}\\
+\cellcolor{gray!10}{C} & \cellcolor{gray!10}{5} & \cellcolor{gray!10}{0.7352941} & \cellcolor{gray!10}{0.4244234} & \cellcolor{gray!10}{Genus}\\
 \hline
-D & 6 & 0.88 & 0.81 & Species\\
+G & 29 & 4.2647059 & 7.8110952 & Species\\
 \hline
-\cellcolor{gray!10}{E} & \cellcolor{gray!10}{26} & \cellcolor{gray!10}{3.83} & \cellcolor{gray!10}{2.01} & \cellcolor{gray!10}{Family}\\
+\cellcolor{gray!10}{H} & \cellcolor{gray!10}{280} & \cellcolor{gray!10}{41.1764706} & \cellcolor{gray!10}{47.8819158} & \cellcolor{gray!10}{Genus}\\
 \hline
-F & 14 & 2.06 & 0.55 & Species\\
-\hline
-\cellcolor{gray!10}{X} & \cellcolor{gray!10}{31} & \cellcolor{gray!10}{4.57} & \cellcolor{gray!10}{12.09} & \cellcolor{gray!10}{Species}\\
+None met & 18 & 2.6470588 & 1.3750963 & Multiple\\
 \hline
 \end{tabular}
 \end{table}

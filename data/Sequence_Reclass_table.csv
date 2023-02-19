@@ -1,8 +1,7 @@
-"Condition","Samples_Classified","Prcnt_Records","Total_Prcnt_Seqs","Rank"
-"A",145,21.35,31.59,"Species"
-"B",210,30.93,10.45,"Species"
-"C",247,36.38,42.49,"Genus"
-"D",6,0.88,0.81,"Species"
-"E",26,3.83,2.01,"Family"
-"F",14,2.06,0.55,"Species"
-"X",31,4.57,12.09,"Species"
+Condition,Samples_Classified,Prcnt_Records,Total_Prcnt_Seqs,Rank
+A,143,21.0294117647059,31.9746800325505,Species
+B,205,30.1470588235294,10.5327892281573,Species
+C,5,0.735294117647059,0.424423382319501,Genus
+G,29,4.26470588235294,7.81109523613036,Species
+H,280,41.1764705882353,47.8819157710817,Genus
+None met,18,2.64705882352941,1.37509634976064,Multiple
