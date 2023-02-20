@@ -750,132 +750,163 @@ blst_expert <- blst %>%
   left_join(., week_tab, by = 'doy') %>% 
   left_join(., flr_date_ranges, by = c('site', 'Genus', 'week')) %>% 
   relocate(sample.id, .before = plant.species) 
+
+rm(corb, week_tab, flr_date_ranges, pollen_sample_info, blst)
   
   # reduce to temporally similar results
-  
-ranunc_splash <- c('Caltha', 'Trollius', 'Thalictrum', 'Aquilegia')
 
-# all samples with duplicate genera in them # be careful these are not easy mappings
+
+
+######## SAMPLE 55 SHOULD BE SOMEWHERE HERE. 
 duplicate_reps_in_sample <- blst_expert %>% 
   
   # identify the duplicate samples
   drop_na(plant.species) %>% 
-  group_by(sample.id, TAXON_NEW) %>% 
-  ungroup(TAXON_NEW)  %>% 
+  group_by(RecordID) %>% 
   distinct(plant.species, .keep_all = T) %>% 
   group_by(sample.id, TAXON_NEW) %>% 
-  filter(n() >= 2) %>% 
-  
-  # now split the reads assigned to them into each constituent taxon ~ 'unwise King Soloman'
+  filter(n() >= 2) 
+
+dupe_ids <- duplicate_reps_in_sample %>% pull(RecordID) %>% unique()
+dupe_samples <- duplicate_reps_in_sample %>% pull(sample.id) %>% unique()
+
+  # now split the reads assigned to them into each constituent taxon ~ 'unwise King Solomon'
+duplicate_reps_in_sample <- duplicate_reps_in_sample %>% 
   ungroup() %>% 
-  group_by(RecordID) %>% 
-  mutate(Prcnt_seqs_Reclass = Prcnt_seqs/n())
+  group_by(sample.id, Genus) %>% 
+  mutate(Prcnt_seqs_Reclass = 
+           ifelse(n() == 2, Prcnt_seqs/2, sum(Prcnt_seqs)/n_distinct(plant.species)/2 ),
+         TAXON_EXPERT = plant.species) %>% 
+  distinct(sample.id, TAXON_EXPERT, .keep_all = T)
+
+
+ranunc_splash <- c('Caltha', 'Trollius', 'Thalictrum', 'Aquilegia')
   
-
-
 blst_reclass_expert <- blst_expert %>% 
-  filter(!RecordID %in% duplicate_reps_in_sample$RecordID) %>% 
+  filter(!RecordID %in% dupe_ids) %>% 
+  distinct() %>% 
   rowwise() %>% 
   mutate(Genus = str_trim(Genus))  %>% 
 
   mutate(TAXON_EXPERT = case_when(
     sample.id == 3 & Genus == 'Delphinium' ~ plant.species,
-    sample.id == 4 ~ plant.species, # 4 has a viola split
     sample.id == 4 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
+    sample.id == 4 ~ plant.species, # 4 has a viola split
+    
     sample.id == 6 ~ plant.species, # has a delphinium split
-    sample.id == 6 & Genus %in% ranunc_splash ~ 'Delphinium.barbeyi',
-
+    
     sample.id == 9 ~ plant.species, # has both Delphinium
     sample.id == 10 ~ plant.species,
     
     sample.id == 14 ~ plant.species,
     
+    sample.id == 18 & Genus == 'Cynoglossum' ~ 'Mertensia.fusiformis',
     sample.id == 18 ~ plant.species,
+    
+    sample.id == 19 & Genus == 'Nemophila' ~ 'Hydrophyllum.fendleri', 
     sample.id == 19 ~ plant.species,
+    
+    sample.id == 20 & TAXON_NEW == 'Hydrophyllum canadense' ~ 'Hydrophyllum fendleri',
     sample.id == 20 ~ plant.species,
     sample.id == 21 ~ plant.species,
-    sample.id == 23 ~ plant.species, # has both Viola
+    
     sample.id == 23 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
-    sample.id == 24 ~ plant.species,
+    sample.id == 23 ~ plant.species, # has both Viola
+    
     sample.id == 24 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
-    sample.id == 25 ~ plant.species,
+    sample.id == 24 ~ plant.species,
+    
     sample.id == 25 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
-    sample.id == 26 ~ plant.species,
+    sample.id == 25 ~ plant.species,
+    
     sample.id == 26 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
-  #  sample.id == 27 ~ plant.species, # has both Hydrophyllum
+    sample.id == 26 ~ plant.species,
+    
     sample.id == 27 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
-    sample.id == 28 ~ plant.species,
+    sample.id == 27 ~ plant.species, # has both Hydrophyllum
+    
     sample.id == 28 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
+    sample.id == 28 ~ plant.species,
+    
+    
     sample.id == 29 ~ plant.species,
-    sample.id == 30 ~ plant.species,
+
     sample.id == 30 & Genus == 'Cynoglossum' ~ 'Mertensia.fusiformis', 
+    sample.id == 30 ~ plant.species,
+
+    sample.id == 32 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
     sample.id == 32 ~ plant.species,
-    sample.id == 32 & TAXON_NEW %in% ranunc_splash ~ 'Delphinium.nuttallianum',
+    
     sample.id == 33 ~ plant.species, # has both Viola
     
+    sample.id == 35 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
+    sample.id == 36 & Genus == 'Cynoglossum' ~ 'Mertensia.fusiformis',  # 7.99
     sample.id == 35 ~ plant.species, # has both Viola
-    sample.id == 35 & TAXON_NEW %in% ranunc_splash ~ 'Delphinium.nuttallianum',
-    
     sample.id == 36 ~ plant.species,
     
+    
+    sample.id == 39 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
     sample.id == 39 ~ plant.species, # has both hydrophyllum
-    sample.id == 39 & TAXON_NEW %in% ranunc_splash ~ 'Delphinium.nuttallianum',
+    sample.id == 40 ~ plant.species,
     
-    
-    sample.id == 41 ~ plant.species,
     sample.id == 41 & Genus == 'Cynoglossum' ~ 'Mertensia.ciliata', 
+    sample.id == 41 ~ plant.species,
     
     sample.id == 42 ~ plant.species,
     sample.id == 43 ~ plant.species,
-    #sample.id == 44 ~ plant.species, # 44 has both delphinium 
+    sample.id == 44 ~ plant.species, # 44 has both delphinium 
     
+    sample.id == 46 & Genus == 'Cynoglossum' ~ 'Mertensia.fusiformis', 
     sample.id == 46 ~ plant.species,
+    
+    sample.id == 49 & Genus %in% ranunc_splash ~ 'Delphinium.barbeyi',
     sample.id == 49 ~ plant.species,
-    sample.id == 49 & TAXON_NEW %in% ranunc_splash ~ 'Delphinium.barbeyi',
-  #  sample.id == 51 ~ plant.species, # 51 has a viola split
-    sample.id == 51 & TAXON_NEW %in% ranunc_splash ~ 'Delphinium.nuttallianum',
+    
+    sample.id == 51 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
+    sample.id == 51 ~ plant.species, # 51 has a viola split
   
     sample.id == 52 ~ plant.species,
     sample.id == 54 ~ plant.species,
+    
+    ######### 55 SHOULD NOT BE IN HERE, HOW IS NOT CAUGHT IN THE ABOVE EXCEPTION???? ####
+    sample.id == 55 & Genus == 'Cynoglossum' ~ 'Mertensia.fusiformis', 
     sample.id == 55 ~ plant.species,
 
-    sample.id == 56 ~ plant.species,
     sample.id == 56 & Genus == 'Nemophila' ~ 'Hydrophyllum fendleri',
+    sample.id == 56 ~ plant.species,
 
     sample.id == 60 ~ plant.species,
     sample.id == 65 ~ plant.species, # 65 has a mertensia split
 
-   TRUE ~ TAXON_NEW
+   TRUE ~ as.character(TAXON_NEW)
   )) %>% 
+  mutate(
+    TAXON_EXPERT = str_replace_all(TAXON_EXPERT, '[.]', ' '),
+    TAXON_EXPERT = if_else(is.na(TAXON_EXPERT), TAXON_NEW, TAXON_EXPERT),
+    TAXON_EXPERT = str_replace(TAXON_EXPERT, 'Arenaria globiflora', 'Eremogone congesta'),
+    TAXON_EXPERT = if_else(doy < 190 & TAXON_EXPERT == 'Lupinus argenteus', 
+                           'Lupinus sericeus', TAXON_EXPERT),) %>% 
   
   # use this to sum up the total sequences by original read record
   distinct(sample.id, TAXON_NEW, .keep_all = T) %>% 
-  group_by(sample.id, plant.species) %>% 
+  group_by(sample.id, TAXON_EXPERT) %>% 
   mutate(Prcnt_seqs_Reclass = sum(Prcnt_seqs)) %>% 
   
   # now reduce to the amount of rows of the proper classification
   ungroup() %>% 
-  distinct(sample.id, TAXON_EXPERT, .keep_all = T)
+  distinct(sample.id, TAXON_EXPERT, .keep_all = T) %>% # what is going on with sample 56 then?
+
+  # add back on the multiple groups
+  bind_rows(., duplicate_reps_in_sample)  %>% 
+  arrange(sample.id, -Prcnt_seqs_Reclass)
 
 
+# now we split up the reads assigned to conflicted groups  # e.g. Cynoglossum amplifolium in sample 65
+b <- blst_reclass_expert %>% 
+  filter(sample.id %in% dupe_samples) %>% 
+  group_by(sample.id, Family) %>% 
+  filter(n() >= 3)
 
-
-  mutate(TAXON_EXPERTS = case_when(
-      TAXON_NEW %in% c('Cynoglossum amplifolium', 'Cynoglossum anchusoides', 
-      'Cynoglossum officinale', 'Cynoglossum pringlei') ~ 'Mertensia',
-      TAXON_NEW %in% c('Caltha leptosepala', 'Caltha palustris', 'Trollius europaeus', 'Trollius', 
-                       'Thalictrum thalictroides', 'Aquilegia ecalcarata', 
-                       'Thalictrum tuberosum') ~ 'Delphinium',
-      TAXON_NEW == 'Erigeron' ~ 'Erigeron grandiflorus', 
-      TAXON_NEW == 'Scabrethia scabra' ~ 'Wyethia arizonica',
-      TAXON_NEW == 'Nemophila breviflora' ~ 'Hydrophyllum',
-      TAXON_NEW == 'Epilobium canum' ~ 'Chamaenerion angustifolia',
-      TAXON_NEW == 'Paxistima myrsinites' ~ 'Parnassia palustris', #, 
-      TAXON_NEW == 'Taraxacum cucullatum' ~ 'Taraxaum oficinale'
-    # original was probably right !!! shows the consequence of bad time estimates.#, 
-  #   TRUE ~ as.character(TAXON_NEW)
-  )) %>% 
-  select(TAXON, TAXON_NEW, TAXON_EXPERTS)
 
 rm(pollen_sample_info)
 ```
