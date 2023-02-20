@@ -755,8 +755,6 @@ rm(corb, week_tab, flr_date_ranges, pollen_sample_info, blst)
   
   # reduce to temporally similar results
 
-
-
 ######## SAMPLE 55 SHOULD BE SOMEWHERE HERE. 
 duplicate_reps_in_sample <- blst_expert %>% 
   
@@ -777,7 +775,7 @@ duplicate_reps_in_sample <- duplicate_reps_in_sample %>%
   mutate(Prcnt_seqs_Reclass = 
            ifelse(n() == 2, Prcnt_seqs/2, sum(Prcnt_seqs)/n_distinct(plant.species)/2 ),
          TAXON_EXPERT = plant.species) %>% 
-  distinct(sample.id, TAXON_EXPERT, .keep_all = T)
+  distinct(sample.id, plant.species, .keep_all = T)
 
 
 ranunc_splash <- c('Caltha', 'Trollius', 'Thalictrum', 'Aquilegia')
@@ -789,6 +787,7 @@ blst_reclass_expert <- blst_expert %>%
   mutate(Genus = str_trim(Genus))  %>% 
 
   mutate(TAXON_EXPERT = case_when(
+    
     sample.id == 3 & Genus == 'Delphinium' ~ plant.species,
     sample.id == 4 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
     sample.id == 4 ~ plant.species, # 4 has a viola split
@@ -805,38 +804,27 @@ blst_reclass_expert <- blst_expert %>%
     
     sample.id == 19 & Genus == 'Nemophila' ~ 'Hydrophyllum.fendleri', 
     sample.id == 19 ~ plant.species,
-    
     sample.id == 20 & TAXON_NEW == 'Hydrophyllum canadense' ~ 'Hydrophyllum fendleri',
     sample.id == 20 ~ plant.species,
     sample.id == 21 ~ plant.species,
     
     sample.id == 23 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
     sample.id == 23 ~ plant.species, # has both Viola
-    
     sample.id == 24 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
     sample.id == 24 ~ plant.species,
-    
     sample.id == 25 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
     sample.id == 25 ~ plant.species,
-    
     sample.id == 26 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
     sample.id == 26 ~ plant.species,
-    
     sample.id == 27 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
     sample.id == 27 ~ plant.species, # has both Hydrophyllum
-    
     sample.id == 28 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
     sample.id == 28 ~ plant.species,
-    
-    
     sample.id == 29 ~ plant.species,
-
     sample.id == 30 & Genus == 'Cynoglossum' ~ 'Mertensia.fusiformis', 
     sample.id == 30 ~ plant.species,
-
     sample.id == 32 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
     sample.id == 32 ~ plant.species,
-    
     sample.id == 33 ~ plant.species, # has both Viola
     
     sample.id == 35 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
@@ -848,10 +836,8 @@ blst_reclass_expert <- blst_expert %>%
     sample.id == 39 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
     sample.id == 39 ~ plant.species, # has both hydrophyllum
     sample.id == 40 ~ plant.species,
-    
     sample.id == 41 & Genus == 'Cynoglossum' ~ 'Mertensia.ciliata', 
     sample.id == 41 ~ plant.species,
-    
     sample.id == 42 ~ plant.species,
     sample.id == 43 ~ plant.species,
     sample.id == 44 ~ plant.species, # 44 has both delphinium 
@@ -864,11 +850,9 @@ blst_reclass_expert <- blst_expert %>%
     
     sample.id == 51 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
     sample.id == 51 ~ plant.species, # 51 has a viola split
-  
     sample.id == 52 ~ plant.species,
     sample.id == 54 ~ plant.species,
     
-    ######### 55 SHOULD NOT BE IN HERE, HOW IS NOT CAUGHT IN THE ABOVE EXCEPTION???? ####
     sample.id == 55 & Genus == 'Cynoglossum' ~ 'Mertensia.fusiformis', 
     sample.id == 55 ~ plant.species,
 
@@ -883,9 +867,13 @@ blst_reclass_expert <- blst_expert %>%
   mutate(
     TAXON_EXPERT = str_replace_all(TAXON_EXPERT, '[.]', ' '),
     TAXON_EXPERT = if_else(is.na(TAXON_EXPERT), TAXON_NEW, TAXON_EXPERT),
-    TAXON_EXPERT = str_replace(TAXON_EXPERT, 'Arenaria globiflora', 'Eremogone congesta'),
+    TAXON_EXPERT = str_replace(TAXON_EXPERT, 'Geum ternatum', 'Geum triflorum'),
+    TAXON_EXPERT = str_replace(
+      TAXON_EXPERT, 'Arenaria globiflora|Minuartia recurva|Sagina procumbens', 'Eremogone congesta'),
+    TAXON_EXPERT = if_else(doy < 171 & Genus == 'Cynoglossum', 
+                           'Mertensia fusiformis', TAXON_EXPERT), 
     TAXON_EXPERT = if_else(doy < 190 & TAXON_EXPERT == 'Lupinus argenteus', 
-                           'Lupinus sericeus', TAXON_EXPERT),) %>% 
+                           'Lupinus sericeus', TAXON_EXPERT)) %>% 
   
   # use this to sum up the total sequences by original read record
   distinct(sample.id, TAXON_NEW, .keep_all = T) %>% 
@@ -900,13 +888,55 @@ blst_reclass_expert <- blst_expert %>%
   bind_rows(., duplicate_reps_in_sample)  %>% 
   arrange(sample.id, -Prcnt_seqs_Reclass)
 
+rm(ranunc_splash, blst_expert)
 
 # now we split up the reads assigned to conflicted groups  # e.g. Cynoglossum amplifolium in sample 65
 b <- blst_reclass_expert %>% 
   filter(sample.id %in% dupe_samples) %>% 
   group_by(sample.id, Family) %>% 
-  filter(n() >= 3)
+  filter(n() >= 3) %>% 
+  mutate(plant.species = na_if(plant.species, "Thalictrum.fendleri")) %>% 
+  mutate(Seqs2distribute = sum(Prcnt_seqs_Reclass)) 
 
+records2drop <- b %>% pull(RecordID)
+
+b <- b %>% 
+  drop_na(plant.species) %>% 
+  mutate(Prcnt_seqs_Reclass = Seqs2distribute/n_distinct(TAXON_EXPERT)) %>% 
+  select(-Seqs2distribute)
+
+blst_reclass_expert <- blst_reclass_expert %>% 
+  filter(!RecordID %in% records2drop) %>% 
+  bind_rows(., b) %>% 
+  arrange(sample.id, -Prcnt_seqs_Reclass)
+
+rm(records2drop, b)
+
+# 55 SHOULD NOT BE IN HERE, HOW IS NOT CAUGHT IN THE ABOVE EXCEPTION???? #
+# seems i may not have either delphinium present in that week? and  if falls between two. 
+# deal with sample 55 one off, split the delphinium gracile
+
+s55 <- blst_reclass_expert %>% 
+  filter(sample.id == 55) %>% 
+  group_by(Genus) %>% 
+  mutate(Seqs2distribute = sum(Prcnt_seqs_Reclass)) %>% 
+  filter(TAXON_EXPERT != 'Delphinium gracile') %>% 
+  mutate(Prcnt_seqs_Reclass = Seqs2distribute/n_distinct(TAXON_EXPERT)) %>% 
+  select(-Seqs2distribute)
+
+blst_reclass_expert <- blst_reclass_expert %>% 
+  filter(sample.id != 55) %>% 
+  bind_rows(., s55)  %>% 
+  arrange(sample.id, -Prcnt_seqs_Reclass)
+  
+rm(s55)
+
+# re class the totals to sum to 100%
+
+blst_reclass_expert <- blst_reclass_expert %>% 
+  group_by(sample.id) %>% 
+  mutate(multiplier = 100/ sum(Prcnt_seqs_Reclass),
+         Prcnt_seqs_Reclass2 = Prcnt_seqs_Reclass * multiplier)
 
 rm(pollen_sample_info)
 ```
