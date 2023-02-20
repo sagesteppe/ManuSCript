@@ -1,12 +1,12 @@
 --- 
 title: Metagenomic Barcoding of Pollen Loads Offers Insights on the Foraging Patterns of Queen Bumble Bees
 author:  |
-    | Reed Clark Benkendorf$^1$$^,$$^2$^[Correspondence: reedbenkendorf2021@u.northwestern.edu], Jane E. Ogilive$^3$$^,$$^4$, Emily J. Woodworth$^1$$^,$$^2$,
     |  Sophie Taddeo$^1$$^,$$^2$, Paul J. CaraDonna$^1$$^,$$^2$$^,$$^3$, Jeremie B. Fant$^1$$^,$$^2$  
     |  $^1$Chicago Botanic Garden, 1000 Lake Cook Road, Glencoe, Illinois 60022, USA  
     |  $^2$Plant Biology and Conservation, Northwestern University, Evanston, Illinois 60208, USA  
     |  $^3$ Rocky Mountain Biological Laboratory, P.O. Box 519, Crested Butte, Colorado 81224, USA
     |  $^4$ Australia post fire project, ----, ----, ----, AU  
+    | Reed Clark Benkendorf$^1$$^,$$^2$^[Correspondence: reedbenkendorf2021@u.northwestern.edu], Jane E. Ogilive$^3$$^,$$^4$, Emily J. Woodworth$^1$$^,$$^2$,
 abstract:  |  
   |  
   1) DNA Barcoding has been successful for the rapid analysis of ecological assemblages. Although barcoding in the plant kingdom barcoding has been more difficult than others, and hence may begin to lag behind other kingdoms. 
@@ -18,9 +18,9 @@ abstract:  |
 keywords: |
   DNA baroding, metagenomics, hyb-seq, Angiosperms353, plant metagenomics, bombus queens, subalpine, species distribution model
 output:
-  pdf_document: default
-  toc: no
   word_document: default
+  toc: no
+  pdf_document: default
 csl: "../citations/methods-in-ecology-and-evolution.csl"
 bibliography: ../citations/citations.bib
 link-citations: yes
@@ -751,7 +751,7 @@ blst_expert <- blst %>%
   left_join(., flr_date_ranges, by = c('site', 'Genus', 'week')) %>% 
   relocate(sample.id, .before = plant.species) 
 
-rm(corb, week_tab, flr_date_ranges, pollen_sample_info, blst)
+rm(corb, week_tab, flr_date_ranges, pollen_sample_info)
   
   # reduce to temporally similar results
 
@@ -784,96 +784,111 @@ blst_reclass_expert <- blst_expert %>%
   filter(!RecordID %in% dupe_ids) %>% 
   distinct() %>% 
   rowwise() %>% 
-  mutate(Genus = str_trim(Genus))  %>% 
+  mutate(Genus = str_trim(Genus)) %>% 
 
   mutate(TAXON_EXPERT = case_when(
     
     sample.id == 3 & Genus == 'Delphinium' ~ plant.species,
     sample.id == 4 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
-    sample.id == 4 ~ plant.species, # 4 has a viola split
+    sample.id == 4 ~ plant.species,                               ## COMPLETE ##
     
     sample.id == 6 ~ plant.species, # has a delphinium split
+    # Symphyotrichum foliaceum check on day 173
     
-    sample.id == 9 ~ plant.species, # has both Delphinium
-    sample.id == 10 ~ plant.species,
+    sample.id == 9 ~ plant.species, # has both Delphinium # Symphyotrichum foliaceum check on day 176
     
-    sample.id == 14 ~ plant.species,
+    sample.id == 10 ~ plant.species, # has many late season taxa
     
-    sample.id == 18 & Genus == 'Cynoglossum' ~ 'Mertensia.fusiformis',
-    sample.id == 18 ~ plant.species,
+    sample.id == 14 ~ plant.species,  # # Symphyotrichum foliaceum check on day 165
     
-    sample.id == 19 & Genus == 'Nemophila' ~ 'Hydrophyllum.fendleri', 
-    sample.id == 19 ~ plant.species,
+    sample.id == 15 ~ plant.species, ## has many mysterious Rosids @ Gothic Spires  - call potentilla?
+    
+    sample.id == 18 & Genus == 'Cynoglossum' ~ 'Mertensia.fusiformis', # & Ericaceae
+    sample.id == 18 ~ plant.species, # Erigeron grandiflorus on day 166 @ Frogs Pond
+    sample.id == 19 & Genus == 'Nemophila' ~ 'Hydrophyllum.fendleri', # multiple Onagraceae
+    sample.id == 19 ~ plant.species, # 
     sample.id == 20 & TAXON_NEW == 'Hydrophyllum canadense' ~ 'Hydrophyllum fendleri',
-    sample.id == 20 ~ plant.species,
-    sample.id == 21 ~ plant.species,
+    sample.id == 20 ~ plant.species, # Erigeron grandiflorus doy 165 @ Avery Wash
+    sample.id == 21 ~ plant.species, # Erigeron grandiflorus & cirsium parryi doy 165 @ Gothic Spires
     
     sample.id == 23 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
-    sample.id == 23 ~ plant.species, # has both Viola
+    sample.id == 23 ~ plant.species, # has both Viola             ## COMPLETE ##
     sample.id == 24 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
-    sample.id == 24 ~ plant.species,
+    sample.id == 24 ~ plant.species,                              ## COMPLETE ##
     sample.id == 25 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
-    sample.id == 25 ~ plant.species,
+    sample.id == 25 ~ plant.species,                              ## COMPELTE ##
     sample.id == 26 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
-    sample.id == 26 ~ plant.species,
+    sample.id == 26 ~ plant.species,                              ## COMPLETE ##
     sample.id == 27 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
-    sample.id == 27 ~ plant.species, # has both Hydrophyllum
+    sample.id == 27 ~ plant.species, # has both Hydrophyllum      ## COMPLETE ##
     sample.id == 28 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
-    sample.id == 28 ~ plant.species,
-    sample.id == 29 ~ plant.species,
+    sample.id == 28 ~ plant.species,                              ## COMPLETE ##
+    sample.id == 29 ~ plant.species,                              ## COMPLETE ##
     sample.id == 30 & Genus == 'Cynoglossum' ~ 'Mertensia.fusiformis', 
-    sample.id == 30 ~ plant.species,
+    sample.id == 30 ~ plant.species,                              ## COMPLETE ##
+    sample.id == 30 & Genus == 'Erigeron' ~ 'Erigeron elatior',
     sample.id == 32 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
-    sample.id == 32 ~ plant.species,
+    sample.id == 32 ~ plant.species,                              ## COMPLETE ##
     sample.id == 33 ~ plant.species, # has both Viola
+    # Symphyotrichum foliaceum check on day 166
     
     sample.id == 35 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
-    sample.id == 36 & Genus == 'Cynoglossum' ~ 'Mertensia.fusiformis',  # 7.99
-    sample.id == 35 ~ plant.species, # has both Viola
-    sample.id == 36 ~ plant.species,
-    
+    sample.id == 35 ~ plant.species, # has both Viola             ## COMPLETE ##
+
+    sample.id == 36 & Genus == 'Cynoglossum' ~ 'Mertensia.fusiformis',  
+    sample.id == 36 ~ plant.species,                              ## COMPLETE ##
     
     sample.id == 39 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
-    sample.id == 39 ~ plant.species, # has both hydrophyllum
-    sample.id == 40 ~ plant.species,
+    sample.id == 39 ~ plant.species, # has both hydrophyllum      ## COMPLETE ##
+    sample.id == 40 ~ plant.species,                              ## COMPLETE ##
     sample.id == 41 & Genus == 'Cynoglossum' ~ 'Mertensia.ciliata', 
-    sample.id == 41 ~ plant.species,
+    sample.id == 41 & Genus == 'Viola' ~ 'Viola adunca',          ## COMPLETE ##
+    sample.id == 41 ~ plant.species,                              ## COMPLETE ##
     sample.id == 42 ~ plant.species,
-    sample.id == 43 ~ plant.species,
+    sample.id == 43 ~ plant.species,                             ## COMPLETE  ##
     sample.id == 44 ~ plant.species, # 44 has both delphinium 
     
+    sample.id == 45 ~ plant.species,         ## EARLY ASTER DAY 163 @ FROGS.POND ##
     sample.id == 46 & Genus == 'Cynoglossum' ~ 'Mertensia.fusiformis', 
-    sample.id == 46 ~ plant.species,
+    sample.id == 46 ~ plant.species,         ## EARLY ASTER DAY 163 @ FROGS.POND ##
     
     sample.id == 49 & Genus %in% ranunc_splash ~ 'Delphinium.barbeyi',
-    sample.id == 49 ~ plant.species,
+    sample.id == 49 & Genus == 'Viola' ~ 'Viola.adunca',
+    sample.id == 49 ~ plant.species,                              ## COMPLETE ##
     
     sample.id == 51 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
-    sample.id == 51 ~ plant.species, # 51 has a viola split
-    sample.id == 52 ~ plant.species,
-    sample.id == 54 ~ plant.species,
+    sample.id == 51 ~ plant.species,  ## Helianthella quinquenervis @ DOY 166 ##
+    sample.id == 52 ~ plant.species,    ## Erigeron elatior  on DOY 163 @ AVERY WASH ##
+    sample.id == 54 ~ plant.species,                             ## COMPLETE ##
     
     sample.id == 55 & Genus == 'Cynoglossum' ~ 'Mertensia.fusiformis', 
-    sample.id == 55 ~ plant.species,
+    sample.id == 55 ~ plant.species,                              ## COMPLETE ##
 
     sample.id == 56 & Genus == 'Nemophila' ~ 'Hydrophyllum fendleri',
-    sample.id == 56 ~ plant.species,
-
+    sample.id == 56 ~ plant.species,          ## DOY 169 FROGS.POND Symphyotrichum foliaceum
+                                              ## & Erigeron elatior ##
+    sample.id == 60 & Genus == 'Viola' ~ 'Viola.adunca',          ## COMPLETE ##
     sample.id == 60 ~ plant.species,
-    sample.id == 65 ~ plant.species, # 65 has a mertensia split
+    sample.id == 60 & Genus == 'Viola' ~ 'Viola',                 ## COMPLETE ##
+    sample.id == 65 ~ plant.species, 
 
    TRUE ~ as.character(TAXON_NEW)
   )) %>% 
   mutate(
     TAXON_EXPERT = str_replace_all(TAXON_EXPERT, '[.]', ' '),
     TAXON_EXPERT = if_else(is.na(TAXON_EXPERT), TAXON_NEW, TAXON_EXPERT),
+    TAXON_EXPERT = str_replace(TAXON_EXPERT, 'Holodiscus argenteus', 'Potentilla pulcherrima'),
+    TAXON_EXPERT = str_replace(TAXON_EXPERT, 'Scabrethia scabra', 'Wyethia arizonica'),
     TAXON_EXPERT = str_replace(TAXON_EXPERT, 'Geum ternatum', 'Geum triflorum'),
-    TAXON_EXPERT = str_replace(
-      TAXON_EXPERT, 'Arenaria globiflora|Minuartia recurva|Sagina procumbens', 'Eremogone congesta'),
-    TAXON_EXPERT = if_else(doy < 171 & Genus == 'Cynoglossum', 
+    TAXON_EXPERT = str_replace(TAXON_EXPERT, 'Erigeron grandiflorus', 'Erigeron elatior'),
+    TAXON_EXPERT = str_replace(TAXON_EXPERT, 'Agastache pallidiflora', 'Pedicularis'),
+    TAXON_EXPERT = str_replace(TAXON_EXPERT, 'Lithophragma parviflorum', 'Lithophragma glabrum'),
+    TAXON_EXPERT = str_replace(TAXON_EXPERT, 
+                               'Arenaria globiflora|Minuartia recurva|Sagina procumbens', 'Eremogone congesta'),
+    TAXON_EXPERT = if_else(doy <= 171 & Genus == 'Cynoglossum', 
                            'Mertensia fusiformis', TAXON_EXPERT), 
     TAXON_EXPERT = if_else(doy < 190 & TAXON_EXPERT == 'Lupinus argenteus', 
-                           'Lupinus sericeus', TAXON_EXPERT)) %>% 
+                           'Lupinus sericeus', TAXON_EXPERT))  %>% 
   
   # use this to sum up the total sequences by original read record
   distinct(sample.id, TAXON_NEW, .keep_all = T) %>% 
@@ -931,12 +946,14 @@ blst_reclass_expert <- blst_reclass_expert %>%
   
 rm(s55)
 
-# re class the totals to sum to 100%
+# re class the totals percent of all sequences to sum to 100%
 
 blst_reclass_expert <- blst_reclass_expert %>% 
   group_by(sample.id) %>% 
   mutate(multiplier = 100/ sum(Prcnt_seqs_Reclass),
          Prcnt_seqs_Reclass2 = Prcnt_seqs_Reclass * multiplier)
+
+yargh <- split(blst_reclass_expert, f = blst_reclass_expert$sample.id)
 
 rm(pollen_sample_info)
 ```
@@ -968,7 +985,7 @@ Results from palynological analyses show that several species of bee show near p
 
   We have concerns regarding the number of persons training to become and practice botany, and grave concerns regarding the funding mechanisms for floristic and field based botanical research and for centralized authorities to produce consensus opinions on alpha taxonomy (@prather2004decline, @kramer2015report, @prather2004implications, @crisci2020end, @manzano2021flippant, @stroud2022botanical). To reduce the effects of a low population density of botanists on the maintenance of and production of Flora's and to foster meta-genomics across landscapes without field stations we utilized Species Distribution Modelling to generate predictive species lists. In this proof of concept example we performed several iterations of modelling runs, and several approaches (i.e. the 'linear models', and the 'machine learning'), which took notable amounts of compute power. We suspect the possible deleterious nature of this endeavor may be reduced by: 1) more field surveying by crews will reduce the need to generate as many species 2) fewer runs of models, 3) only running machine learning models which do not require an explicitly process to reduce spatial autocorrelation. However, given the time required to perform all aspects of a study, even our amount of computation was negligible. Further, we are very optimistic about the possibility for persons to perform these tasks, as mentioned we utilized roughly only one quarter of the records which were digitally available for presence, and we suspect others will have enough records to perform this process nearly anywhere else in the temperate. In certain scenarios modelling of predicted species via more formally tailored S(tacked)-SDM or J(oint)-SDM approaches may be beneficial (@wilkinson2021defining, @pinto2021predicting, @schmitt2017ssdm). 
   
-  Tandem to the lack of continued expertise required to generate and maintain species lists, is the expertise required to continue tracking when major phenological events occur in many plant species at relatively fine scales or under novel climates. Knowledge of these events is currently limited to general time periods of only a handful of phenological events and groups of organisms (e.g. flowering initiation, or trees) (@prather2004implications, @li2016responses). While many programs and initiatives exist to collect phenological information on subsets of easily identifiable charismatic species to detect major trends in phenology, these capture only a subset of the extent diversity (@betancourt2005implementing, @havens2007chicago). In many instances it appears that while landscapes respond similarly to environmental variables which predict phenological responses, that individual species vary widely in their responses to similar environmental cues, or respond to different cues (@augspurger2020concordance, @xie2015deciduous, @xie2018predicting, @caradonna2014shifts).  **As can be seen here, predictions of when a single, major phenological event occurs is already data limited, with sample size having an effect on the subset of species which we could even generate weibull estimates for. ; check assumptions of model again and just do a quasi something** A more promising approach for the tropics may lay in circular statistics (@park2022herbarium). 
+  Tandem to the lack of continued expertise required to generate and maintain species lists, is the expertise required to continue tracking when major phenological events occur in many plant species at relatively fine scales or under novel climates. Knowledge of these events is currently limited to general time periods of only a handful of phenological events and groups of organisms (e.g. flowering initiation, or trees) (@prather2004implications, @li2016responses). While many programs and initiatives exist to collect phenological information on subsets of easily identifiable charismatic species to detect major trends in phenology, these capture only a subset of the extent diversity (@betancourt2005implementing, @havens2007chicago). In many instances it appears that while landscapes respond similarly to environmental variables which predict phenological responses, that individual species vary widely in their responses to similar environmental cues, or respond to different cues (@augspurger2020concordance, @xie2015deciduous, @xie2018predicting, @caradonna2014shifts). As can be seen here, predictions of when a single, major phenological event occurs is already data limited. A more promising approach for the tropics may lay in utilizing circular statistics (@park2022herbarium). 
 
   The nearly complete Plant and Fungal Tree of Life (PAFTOL) will provide a comprehensive phylogenetic backbone of the entire plant kingdom, and the inclusion of A353 probes with lineage specific probe sets is common in producing massive genetic datasets (@baker2021exploring).  We predict that the A353 probes which it is utilizing to work nearly immediately for DNA barcoding of whole plant material, and that more elaborate validation studies in controlled metabarcoding settings, utilizing existing experimental designs, will have favorable results (@bell2017applying, @bell2019quantitative, @bell2021comparing, @lamb2019quantitative). In particular the harvesting of loci with more variation in certain lineages, and or with more variable flanking regions, will prove promising for identifying closely related plant material (CITE). We suspect that conserved reaches of genes resulted in the high amounts of reads in somewhat obscure species. Given that the A353 loci are nuclear, single copy, and a variety are present the possibility of identifying target loci for quantitative purposes is high, without continual PCR enrichment is possible; this would align with relatively high efficacy of WGS (@lang2019genome, @peel2019semi, @bell2021comparing). Recent evidence indicates that the potential for identifying nearly cryptic taxa and even infra-specific inference, of either whole plant material, and perhaps in metagenomic context are possible (@ottenlips2021resolving, @wenzell2021incomplete, Loke et al. in prep,  @slimp2021potential, @beck2021palmer). We further believe that in synthetic phylogenetic trees - with incorporation of NGS backbones - will allow in automatic reassignment of reads as a function of phylogenetic distance with measures of uncertainty (@hinchliff2015synthesis, @smith2018constructing, @baker2021PAFTOL).
   
