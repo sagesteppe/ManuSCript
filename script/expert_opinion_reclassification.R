@@ -335,7 +335,6 @@ pmorpho <- pmorpho %>%
   mutate(Percent = (sum / sum(sum)) * 100) %>% 
   ungroup()
 
-
 a <- c('Trifolium', 'Lupinus', 'Glyccrrhiza', 'Mitella', 'Geum')
 b <- c('Lupinus', 'Lathyrus', 'Potentilla', 'Androsace', 'Bistorta', 'Vicia',
        'Dasiphora') # while not prepared, we include this with Potentilla
@@ -436,6 +435,8 @@ quant_read_final <- bind_rows(quant_read_low, quant_read_high) %>%
 
 rm(quant_read_low, quant_read_high, quant_read)
 # PROCESS
+
+write.csv(quant_read_final, '../data/Fully_Integrated_Corbiculae.csv', row.names = F)
 
 # 1) Round up all counted morphotypes from < 0.5 to 0.5 to serve as TRACE quantities
 # 2) Join Pollen count data with sequence data

@@ -6,7 +6,7 @@ author:  |
     |  $^2$Plant Biology and Conservation, Northwestern University, Evanston, Illinois 60208, USA  
     |  $^3$ Rocky Mountain Biological Laboratory, P.O. Box 519, Crested Butte, Colorado 81224, USA
     |  $^4$ Australia post fire project, ----, ----, ----, AU  
-    | Reed Clark Benkendorf$^1$$^,$$^2$^[Correspondence: reedbenkendorf2021@u.northwestern.edu], Jane E. Ogilive$^3$$^,$$^4$, Emily J. Woodworth$^1$$^,$$^2$,
+    |  Reed Clark Benkendorf$^1$$^,$$^2$^[Correspondence: reedbenkendorf2021@u.northwestern.edu], Jane E. Ogilive$^3$$^,$$^4$, Emily J. Woodworth$^1$$^,$$^2$, 
 abstract:  |  
   |  
   1) DNA Barcoding has been successful for the rapid analysis of ecological assemblages. Although barcoding in the plant kingdom barcoding has been more difficult than others, and hence may begin to lag behind other kingdoms. 
@@ -162,6 +162,12 @@ A custom Kraken2 database was created by downloading representative species indi
 
 A local NCBI database was built using the same processed novel and downloaded sequences as the previous database (@camacho2009blast). 
 
+### 2.7 | Integrated Observational, Molecular, and Palynological Corbiculae
+
+In order to precisely classify the contents of each corbiculae load the sequences classified by molecular methods were compared with the fieldwork which at a very fine resolution, recorded the presence and absence of species and their duration of flowering, and was interpreted ala the computer derived temporal and spatial data sets. The quantitative counts of grains from microscopy, were combined with the semi-quantitative sequencing results, to estimate the abundance of each identified species in each corbiculae load.
+
+To reclassify the sequence reads, these data were combined with the flora observation data, and mapped by genus. If more than one species in the genus was flowering at that time and site, than the reads were split evenly between the taxa. For sequence data which did not match at the genus level, a user subjectively scored them based on the species composition and phenological activity at each plot, the Queen interaction data, and pollen assignments. To estimate the abundance of each of these species in the corbiculae loads, these data were combined with the microscopy data. For each morphotype detected in pollen, and each classified sequence read which was not detected via microscopy, they were given a value of 0.5% to indicate there trace presences. When more than a single species belonged to a morphotype group in a single sample, the quantitative values from the morphological work were multiplied by the relative sequence abundance of each species in the load. All final compositions were standardized to a sum of 100%, by adding or subtracting the differences (induced by classifying records as 'trace') to all species with abundances > 1%. 
+
 # 3 | RESULTS
 
 ## 3.1 | Floral Observations 
@@ -184,7 +190,7 @@ bee_obs <- read.csv(
   mutate(species = gsub('\\..*$', '', species)) %>% 
   select(site, doy, week, tot.obs.length, species, plant.species,
          resource.coll:pollen.collected, fl.switch.1:fl.switch.2.resource.coll) %>% 
-  mutate(across(resource.coll:fl.switch.2.resource.coll, ~ na_if(.x, ''))) %>% 
+  mutate(across(where(is.character), ~ na_if(., ''))) %>% 
   pivot_longer(c(plant.species, fl.switch.1, fl.switch.2), names_to = 'observation', values_to = 'plant.species') %>% 
   drop_na(plant.species) %>% 
   group_by(site, week, species, plant.species) %>% 
@@ -704,7 +710,7 @@ myout <- CooccurrenceAffinity::affinity(data = e, row.or.col = "col", squarematr
 CooccurrenceAffinity::plotgg(data = myout, variable = "alpha_mle", legendlimit = "datarange")
 ```
 
-To ascertain the extent to which records of multiple species in a family, which were suspected to be sampling artefacts occurred in molecular samples an index of similarity, ala jaccard, the affinity index was used to assess co-occurrence (@mainali2022better, @mainali2022alpha). Numerous taxa from the family Ranunculaceae Jussieu (*Caltha* L. sp., *Thalictrum* L. spp., *Trollius* L. sp., *Aquilegia* L. spp.), had $\alpha$ scores which indicated that they are only present when a more common confamilial taxa *Delphinium barbeyi* (Huth) Huth *nuttallianum* Pritz. were recorded. A similar relationship was observed in the Hydrophyllaceae R.Br. with samples placed in *Nemophila* Nutt., which only occurred when the more abundant *Hydrophyllum* L. species were present. The size of flower of *Nemophila breviflora* A. Gray make it unlikely to be visited by Bumble Bees, and it is a false positive. The floral morphology of *Thalictrum*  spp. also makes it unlikely to be visited (BELEIVE JANE SAID THIS- IF NOT STRIKE OUT), and while evidence of visits to Caltha and Trollius are lacking, due to the association between the reads these results appear unlikely. 
+To ascertain the extent to which records of multiple species in a family, which were suspected to be sampling artefacts occurred in molecular samples an index of similarity, ala jaccard, the affinity index was used to assess co-occurrence (@mainali2022better, @mainali2022alpha). Numerous taxa from the family Ranunculaceae Jussieu (*Caltha* L. sp., *Thalictrum* L. spp., *Trollius* L. sp., *Aquilegia* L. spp.), had $\alpha$ scores which indicated that they are only present when a more common confamilial taxa *Delphinium barbeyi* (Huth) Huth *nuttallianum* Pritz. were recorded. A similar relationship was observed in the Hydrophyllaceae R.Br. with samples placed in *Nemophila* Nutt., which only occurred when the more abundant *Hydrophyllum* L. species were present. The size of flower of *Nemophila breviflora* A. Gray make it unlikely to be visited by Bumble Bees, and it is a false positive. The floral morphology of *Thalictrum*  spp. also makes it unlikely to be visited (BELEIVE JANE SAID THIS- IF NOT STRIKE OUT), and while evidence of visits to *Caltha* and *Trollius* are lacking, due to the association between the reads these results appear unlikely. 
 
 ## 3.6 | Integrated Observational, Molecular, and Palynological Network
 
@@ -713,277 +719,7 @@ While the spatial results were used to declare the taxonomic composition of the 
 For example a many sequences which mapped to the Asteraceae family, but which was flagged by temporal filters and is present in both *B. nevadensis* Cresson and *B. rufocinctus* Cresson pollen is most likely *Frasera* Walter, which failed extractions for the reference library failed (APPENDIX XX). A similar likely mismatch could be between what was fide molecular evidence as *Agastache pallidiflora* (A. Heller) Rydb. but where feeding was infrequently observed on *Pedicularis* L., likely due to this entire order being represented by only a single molecular reference species. 
 
 ```{r Build reference dataset for reclassification process}
-
-# write.csv(blst, '../data/blst4experts.csv' , row.names = F)
-
-pollen_sample_info <- readxl::read_xlsx(file.path('../data', 
-  list.files(path = '../data', pattern = 'xlsx') )) %>% 
-  select(site, date, sample.id) %>% 
-  distinct() %>% 
-  filter(!date %in% c('42170', '42169'))
-
-files <- list.files(path = '../data')
-
-flr_date_ranges <- read.csv(
-  file.path('../data',  files[grep('flower_ranks', files)] )) %>% 
-  select(site, doy, week, plant.species:abun.rank) %>% 
-  group_by(plant.species, site) %>% 
-  select(site, week, doy, plant.species) %>% 
-  mutate(Genus = str_extract(plant.species, '^.+?(?=[.]|$)')) %>% 
-  mutate(Genus = case_when(
-    Genus == 'Erythrocoma' ~ 'Geum', 
-    Genus == 'Amerosedum' ~ 'Sedum', 
-    Genus == 'Pentaphylloides' ~ 'Dasiphora',
-    TRUE ~ Genus
-    )) %>% 
-  mutate(plant.species = case_when(
-    plant.species == 'Lathyrus.leucanthus' ~ 'Lathyrus.lanszwertii',
-    plant.species == 'Lupinus.bakeri' ~ 'Lupinus.sericeus',
-    TRUE ~ plant.species
-  )) %>% distinct()
- # this provides us with a data.frame of the ACTUAL flowering dates!
-
-week_tab <- flr_date_ranges %>% 
-  ungroup() %>% 
-  select(doy, week) %>% 
-  distinct()
-
-flr_date_ranges <- select(flr_date_ranges, -doy)
-
-blst_expert <- blst %>% 
-  select(species, sample.id, TAXON_NEW, Genus, Family, Prcnt_seqs, Prcnt_Seqs_Class) %>% 
-  mutate(RecordID = 1:n()) %>% 
-  left_join(., pollen_sample_info,  by = 'sample.id') %>% 
-  relocate(site:date, .before = TAXON_NEW) %>% 
-  mutate(doy = lubridate::yday(date)) %>% 
-  left_join(., week_tab, by = 'doy') %>% 
-  left_join(., flr_date_ranges, by = c('site', 'Genus', 'week')) %>% 
-  relocate(sample.id, .before = plant.species) 
-
-rm(corb, week_tab, flr_date_ranges, pollen_sample_info)
-  
-  # reduce to temporally similar results
-
-######## SAMPLE 55 SHOULD BE SOMEWHERE HERE. 
-duplicate_reps_in_sample <- blst_expert %>% 
-  
-  # identify the duplicate samples
-  drop_na(plant.species) %>% 
-  group_by(RecordID) %>% 
-  distinct(plant.species, .keep_all = T) %>% 
-  group_by(sample.id, TAXON_NEW) %>% 
-  filter(n() >= 2) 
-
-dupe_ids <- duplicate_reps_in_sample %>% pull(RecordID) %>% unique()
-dupe_samples <- duplicate_reps_in_sample %>% pull(sample.id) %>% unique()
-
-  # now split the reads assigned to them into each constituent taxon ~ 'unwise King Solomon'
-duplicate_reps_in_sample <- duplicate_reps_in_sample %>% 
-  ungroup() %>% 
-  group_by(sample.id, Genus) %>% 
-  mutate(Prcnt_seqs_Reclass = 
-           ifelse(n() == 2, Prcnt_seqs/2, sum(Prcnt_seqs)/n_distinct(plant.species)/2 ),
-         TAXON_EXPERT = plant.species) %>% 
-  distinct(sample.id, plant.species, .keep_all = T)
-
-
-ranunc_splash <- c('Caltha', 'Trollius', 'Thalictrum', 'Aquilegia')
-  
-blst_reclass_expert <- blst_expert %>% 
-  filter(!RecordID %in% dupe_ids) %>% 
-  distinct() %>% 
-  rowwise() %>% 
-  mutate(Genus = str_trim(Genus)) %>% 
-
-  mutate(TAXON_EXPERT = case_when(
-    
-    sample.id == 3 & Family == 'Asteraceae' ~  'Taraxacum.officinale',
-    sample.id == 3 & Family %in% c('Rosaceae', 'Onagraceae') ~  'Potentilla.pulcherrima',
-    sample.id == 3 & Genus == 'Delphinium' ~ plant.species,       ## COMPLETE ##
-    sample.id == 4 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
-    sample.id == 4 ~ plant.species,                               ## COMPLETE ##
-    sample.id == 6 ~ plant.species,                               ## COMPLETE ##
-    sample.id == 9 & TAXON_NEW == 'Symphyotrichum foliaceum' ~ 'Erigeron speciosus',
-    sample.id == 9 ~ plant.species,                               ## COMPLETE ##
-    
-    sample.id == 10 & Family == 'Asteraceae' ~  'Taraxacum.officinale',
-  #  sample.id == 10 & Family == 'Onagraceae' ~ ''
-    sample.id == 10 ~ plant.species, # has many late season taxa
-    
-    sample.id == 14 & Genus == 'Symphyotrichum' ~ 'Senecio.integerrimus',
-    sample.id == 14 ~ plant.species,                              ## COMPLETE ##
-    sample.id == 15 & Family %in% c('Onagraceae', 'Rosaceae')  ~ 'Potential pulcherrima',
-    sample.id == 15 & Family == 'Asteraceae' ~ 'Senecio.integerrimus',
-    sample.id == 15 ~ plant.species,                              ## COMPLETE ## 
-    sample.id == 18 & Family == 'Ericaceae' ~ 'Ericaceae', # ONLY TO FAMILY
-    sample.id == 18 & Genus == 'Cynoglossum' ~ 'Mertensia.fusiformis', 
-    sample.id == 18 & Family == 'Asteraceae' ~ 'Senecio.integerrimus',
-    sample.id == 18 ~ plant.species,                              ## COMPLETE ##
-    
-    sample.id == 19 & Family == 'Onagraceae' ~ 'Epilobium',
-    sample.id == 19 & Genus == 'Pseudognaphalium' ~ 'Senecio.integerrimus',
-    sample.id == 19 & Genus == 'Nemophila' ~ 'Hydrophyllum.fendleri',
-    sample.id == 19 ~ plant.species,                              ## COMPLETE ##
-    sample.id == 20 & TAXON_NEW == 'Hydrophyllum canadense' ~ 'Hydrophyllum fendleri',
-    sample.id == 20 & Family == 'Asteraceae' ~ 'Senecio.integerrimus',
-    sample.id == 20 ~ plant.species,                              ## COMPLETE ##
-    sample.id == 21 & Family == 'Asteraceae' ~ 'Senecio.integerrimus',
-    sample.id == 21 ~ plant.species,                              ## COMPLETE ##
-    sample.id == 23 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
-    sample.id == 23 ~ plant.species,                              ## COMPLETE ##
-    sample.id == 24 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
-    sample.id == 24 ~ plant.species,                              ## COMPLETE ##
-    sample.id == 25 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
-    sample.id == 25 ~ plant.species,                              ## COMPELTE ##
-    sample.id == 26 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
-    sample.id == 26 ~ plant.species,                              ## COMPLETE ##
-    sample.id == 27 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
-    sample.id == 27 ~ plant.species,                              ## COMPLETE ##
-    sample.id == 28 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
-    sample.id == 28 ~ plant.species,                              ## COMPLETE ##
-    sample.id == 29 ~ plant.species,                              ## COMPLETE ##
-    sample.id == 30 & Genus == 'Cynoglossum' ~ 'Mertensia.fusiformis', 
-    sample.id == 30 ~ plant.species,                              ## COMPLETE ##
-    sample.id == 30 & Genus == 'Erigeron' ~ 'Erigeron elatior',
-    sample.id == 32 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
-    sample.id == 32 ~ plant.species,                              ## COMPLETE ##
-    
-    sample.id == 33 ~ plant.species, # Symphyotrichum foliaceum check on day 166
-    
-    sample.id == 35 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
-    sample.id == 35 ~ plant.species,                              ## COMPLETE ##
-    sample.id == 36 & Genus == 'Cynoglossum' ~ 'Mertensia.fusiformis',  
-    sample.id == 36 ~ plant.species,                              ## COMPLETE ##
-    sample.id == 39 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
-    sample.id == 39 ~ plant.species,                              ## COMPLETE ##
-    sample.id == 40 ~ plant.species,                              ## COMPLETE ##
-    sample.id == 41 & Genus == 'Cynoglossum' ~ 'Mertensia.ciliata', 
-    sample.id == 41 & Genus == 'Viola' ~ 'Viola adunca',          ## COMPLETE ##
-    sample.id == 41 ~ plant.species,                              ## COMPLETE ##
-    sample.id == 42 ~ plant.species,
-    sample.id == 43 ~ plant.species,                              ## COMPLETE ##
-    sample.id == 44 ~ plant.species,
-    sample.id == 45 & Family == 'Asteraceae' ~ 'Senecio.integerrimus',
-    sample.id == 45 ~ plant.species,                              ## COMPLETE ##
-    sample.id == 46 & Family == 'Asteraceae' ~ 'Senecio.integerrimus',
-    sample.id == 46 & Genus == 'Cynoglossum' ~ 'Mertensia.fusiformis', 
-    sample.id == 46 ~ plant.species,                              ## COMPLETE ##
-    sample.id == 49 & Genus %in% ranunc_splash ~ 'Delphinium.barbeyi',
-    sample.id == 49 & Genus == 'Viola' ~ 'Viola.adunca',
-    sample.id == 49 ~ plant.species,                              ## COMPLETE ##
-    
-    sample.id == 51 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
-    sample.id == 51 ~ plant.species,  ## Helianthella quinquenervis @ DOY 166 ##
-    sample.id == 52 ~ plant.species,    ## Erigeron elatior  on DOY 163 @ AVERY WASH ##
-    
-    sample.id == 54 ~ plant.species,                              ## COMPLETE ##
-    sample.id == 55 & Genus == 'Cynoglossum' ~ 'Mertensia.fusiformis', 
-    sample.id == 55 ~ plant.species,                              ## COMPLETE ##
-    sample.id == 56 & Genus == 'Nemophila' ~ 'Hydrophyllum fendleri',
-    sample.id == 56 & Family == 'Asteraceae' ~ 'Senecio.integerrimus',
-    sample.id == 56 ~ plant.species,                              ## COMPLETE ##
-    sample.id == 60 & Genus == 'Viola' ~ 'Viola.adunca',          ## COMPLETE ##
-    sample.id == 60 ~ plant.species,
-    sample.id == 65 & Genus == 'Viola' ~ 'Viola.praemorsa',       ## COMPLETE ##
-    sample.id == 65 ~ plant.species, 
-
-   TRUE ~ as.character(TAXON_NEW)
-  ))  %>% 
-  mutate( 
-    TAXON_EXPERT = str_replace_all(TAXON_EXPERT, '[.]', ' '),
-    TAXON_EXPERT = if_else(is.na(TAXON_EXPERT), TAXON_NEW, TAXON_EXPERT),
-    TAXON_EXPERT = str_replace(TAXON_EXPERT, 'Holodiscus argenteus', 'Potentilla pulcherrima'),
-    TAXON_EXPERT = str_replace(TAXON_EXPERT, 'Scabrethia scabra', 'Wyethia arizonica'),
-    TAXON_EXPERT = str_replace(TAXON_EXPERT, 'Geum ternatum', 'Geum triflorum'),
-    TAXON_EXPERT = str_replace(TAXON_EXPERT, 'Erigeron grandiflorus', 'Erigeron elatior'),
-    TAXON_EXPERT = str_replace(TAXON_EXPERT, 'Agastache pallidiflora', 'Pedicularis'),
-    TAXON_EXPERT = str_replace(TAXON_EXPERT, 'Lithophragma parviflorum', 'Lithophragma glabrum'),
-    TAXON_EXPERT = str_replace(TAXON_EXPERT, 
-                               'Arenaria globiflora|Minuartia recurva|Sagina procumbens', 'Eremogone congesta'),
-    TAXON_EXPERT = if_else(doy <= 171 & Genus == 'Cynoglossum', 
-                           'Mertensia fusiformis', TAXON_EXPERT), 
-    TAXON_EXPERT = if_else(doy < 190 & TAXON_EXPERT == 'Lupinus argenteus', 
-                           'Lupinus sericeus', TAXON_EXPERT))  %>% 
-  
-  # use this to sum up the total sequences by original read record
-  distinct(sample.id, TAXON_NEW, .keep_all = T) %>% 
-  group_by(sample.id, TAXON_EXPERT) %>% 
-  mutate(Prcnt_seqs_Reclass = sum(Prcnt_seqs)) %>% 
-  
-  # now reduce to the amount of rows of the proper classification
-  ungroup() %>% 
-  distinct(sample.id, TAXON_EXPERT, .keep_all = T) %>% # what is going on with sample 56 then?
-
-  # add back on the multiple groups
-  bind_rows(., duplicate_reps_in_sample)  %>% 
-  arrange(sample.id, -Prcnt_seqs_Reclass)
-
-rm(ranunc_splash)
-
-# now we split up the reads assigned to conflicted groups  # e.g. Cynoglossum amplifolium in sample 65
-b <- blst_reclass_expert %>% 
-  filter(sample.id %in% dupe_samples) %>% 
-  group_by(sample.id, Family) %>% 
-  filter(n() >= 3) %>% 
-  mutate(plant.species = na_if(plant.species, "Thalictrum.fendleri")) %>% 
-  mutate(Seqs2distribute = sum(Prcnt_seqs_Reclass)) 
-
-records2drop <- b %>% pull(RecordID)
-
-b <- b %>% 
-  drop_na(plant.species) %>% 
-  mutate(Prcnt_seqs_Reclass = Seqs2distribute/n_distinct(TAXON_EXPERT)) %>% 
-  select(-Seqs2distribute)
-
-blst_reclass_expert <- blst_reclass_expert %>% 
-  filter(!RecordID %in% records2drop) %>% 
-  bind_rows(., b) %>% 
-  arrange(sample.id, -Prcnt_seqs_Reclass)
-
-rm(records2drop, b)
-
-# 55 SHOULD NOT BE IN HERE, HOW IS NOT CAUGHT IN THE ABOVE EXCEPTION???? #
-# seems i may not have either delphinium present in that week? and  if falls between two. 
-# deal with sample 55 one off, split the delphinium gracile
-
-s55 <- blst_reclass_expert %>% 
-  filter(sample.id == 55) %>% 
-  group_by(Genus) %>% 
-  mutate(Seqs2distribute = sum(Prcnt_seqs_Reclass)) %>% 
-  filter(TAXON_EXPERT != 'Delphinium gracile') %>% 
-  mutate(Prcnt_seqs_Reclass = Seqs2distribute/n_distinct(TAXON_EXPERT)) %>% 
-  select(-Seqs2distribute)
-
-blst_reclass_expert <- blst_reclass_expert %>% 
-  filter(sample.id != 55) %>% 
-  bind_rows(., s55)  %>% 
-  arrange(sample.id, -Prcnt_seqs_Reclass)
-  
-rm(s55)
-
-# we will split the reads for the Cynoglossum detected in sample 3. 
-
-blst_reclass_expert <- blst_reclass_expert %>% 
-  filter(sample.id == 3 & TAXON_EXPERT == 'Cynoglossum pringlei') %>% 
-  slice(rep(1:n(), each=2)) %>% 
-  mutate(Prcnt_seqs_Reclass = Prcnt_seqs_Reclass/2,
-         dummyID = 1:n(),
-         TAXON_EXPERT = if_else(dummyID == 1, 'Mertensia fusiformis', 'Mertensia cilita')) %>% 
-  select(-dummyID) %>% 
-  bind_rows(., filter(
-              blst_reclass_expert, sample.id == 3 & TAXON_EXPERT != 'Cynoglossum pringlei'),
-            filter(blst_reclass_expert, sample.id != 3)) 
-
-# re class the totals percent of all sequences to sum to 100%
-
-blst_reclass_expert <- blst_reclass_expert %>% 
-  group_by(sample.id) %>% 
-  mutate(multiplier = 100/ sum(Prcnt_seqs_Reclass),
-         Prcnt_seqs_Reclass2 = Prcnt_seqs_Reclass * multiplier)
-
-yargh <- split(blst_reclass_expert, f = blst_reclass_expert$sample.id)
-
-rm(pollen_sample_info)
+reclassified <- read.csv('../data/Fully_Integrated_Corbiculae.csv')
 ```
 
 Situations where SDM's led to incorrect results at the species level are evident with classification to *Scabrethia Scabra* (Hooker) W.A. Weber, this match almost certainly representing *Wyethia arizonica* A. Gray (@weber1998new), a taxon known to be visited by Queen bee's via our floral observations. An expected inaccuracy of the classification scheme is in genus level placements, e.g. were *Epilobium* L. (Onagraceae Juss.) spp. were classified. However, given the small size of their flowers in the study area, these results more likely indicate that a species of *Chamaenerion* Seg. (a segregate genus) such as *C. angustifolium* (L.) Scop.  or *latifolium* (L.) Sweet is occasionally utilized, as it supported by limited palynology data. An issue with reclassification within the family level in combination with time included reclassifying *Parnassia palustris* L. to *Paxistima myrsinites* (Pursh) Rafinesque. However, based on flower size it is more likely that the visited taxon was *P. palustris*. 
@@ -1026,8 +762,7 @@ We believe that the combination of spatial and temporal models, united and guide
 **AUTHOR CONTRIBUTIONS:**  R.C.B conducted botanical collections, conducted all molecular lab work, lead all analyses, and writing. J.E.O conceived, designed, and conducted all ecological fieldwork, assisted with analyses, and writing. E.J.W. prepared, imaged, and collected trait data on pollen reference slides, and assisted with analysis of trait data and writing a dichotomous key. S.T. assisted with spatial analyses and writing. P.J.C assisted with ecological analyses and writing. J.B.F. conceived, and designed all lab work, analyses, and integration of approaches, assisted with writing, and secured funding for molecular work. 
 
 ```{r}
-a <- read.csv('../data/herbaria_4_acknowledgements.csv') %>% 
-  pull() 
+a <- pull(read.csv('../data/herbaria_4_acknowledgements.csv'))
 ```
 
 **ACKNOWLEDGMENTS:** Nyree Zerega for assistance obtaining herbaria loans and accessioning our collections at CHIC. Pat Herendeen for assistance with virtually all aspects of preparing pollen vouchers and the identification process. Hilary Noble, Zoe Diaz-Martinez, Angela McDonnell, & Elena Loke for assistance with genomic library preparation. Ian Breckheimer for sharing the SDM predictor variables. We thank the curators at the following herbaria for supplying tissue: Ben Legler at Stillinger (ID), Charles (Rick) Williams at Ray J. Davis (IDS), (B)Ernie Nelson at Rocky Mountain (RM); and the collectors: D. Knoke, L. Brummer, J. Boyd, C. Davidson, I. Gilman, M. Kirkpatrick, S. McCauley, J. Smith, K. Taylor, & C. Williams. David Giblin & Mare Nazaire for sharing relevant sections of an advanced draft of FNA V. 15. The Bureau of Land Management is thanked as many plant specimens were collected by R.C.B as a partner or contractor to the agency; Sarah Burnett and Lauren Price are thanked for sharing AIM data. Sanda and New England Biotech are gratefully acknowledged for technical support and generously sharing samples. T.C.H. Cole for sharing the Angiosperm Phylogeny 4 colour palette. The Program in Plant Biology and Conservation is thanked for funding. The holdings of the following herbaria were essential for this project: `r toString(a)`.
