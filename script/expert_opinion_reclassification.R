@@ -7,7 +7,10 @@ pmorpho <- read.csv('../data/morpho_pollen.csv')
 # this is an export of the variable 'blst' as would be expected on line 717  of the
 # manuscript 
 
-blst <- read.csv('../data/blst4experts.csv')
+blst <- read.csv('../data/Post_Classified_BLAST_sqs.csv') %>% 
+  group_by(Sample) %>% 
+  slice_max(Prcnt_seqs, n = 10) %>% 
+  ungroup()
 
 ################################################################################
 ##############       RECLASIFY READS USING EXPERT DATA SET      ################
@@ -55,7 +58,7 @@ flr_date_ranges <- select(flr_date_ranges, -doy)
 ## Create a data frame which contains the sample provenance and sequencing data
 ## information
 blst_expert <- blst %>% 
-  select(species, sample.id, TAXON_NEW, Genus, Family, Prcnt_seqs, Prcnt_Seqs_Class) %>% 
+  select(species = TAXON, sample.id = Sample, TAXON_NEW, Genus = GENUS, Family = FAMILY, Prcnt_seqs) %>% 
   mutate(RecordID = 1:n()) %>% 
   left_join(., pollen_sample_info,  by = 'sample.id') %>% 
   relocate(site:date, .before = TAXON_NEW) %>% 
@@ -94,8 +97,7 @@ duplicate_reps_in_sample <- duplicate_reps_in_sample %>%
 
 ## define a list of splash out sequences, note the lsat 2 are not obligates with
 ## delphinium, and will not always be substituted out!!
-ranunc_splash <- c('Caltha', 'Trollius', 'Thalictrum', 'Aquilegia')
-
+ranunc_splash <- c('Caltha', 'Trollius', 'Thalictrum', 'Aquilegia', 'Corydalis')
 
 # we will now manually reconsider EVERY single sequence classification in 
 # light of the field based data. AND floral interactions observations
@@ -109,38 +111,50 @@ blst_reclass_expert <- blst_expert %>%
     
     sample.id == 3 & Family == 'Asteraceae' ~  'Taraxacum.officinale',
     sample.id == 3 & Family %in% c('Rosaceae', 'Onagraceae') ~  'Potentilla.pulcherrima',
-    sample.id == 3 & Genus == 'Delphinium' ~ plant.species,       ## COMPLETE ##
+    sample.id == 3 & Genus == 'Delphinium' ~ 'Delphinium.barbeyi',       ## COMPLETE ##
     sample.id == 4 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
     sample.id == 4 ~ plant.species,                               ## COMPLETE ##
+    sample.id == 6 & Genus %in% ranunc_splash ~ 'Delphinium barbeyi',
     sample.id == 6 ~ plant.species,                               ## COMPLETE ##
-    sample.id == 9 & TAXON_NEW == 'Symphyotrichum foliaceum' ~ 'Erigeron speciosus',
+    sample.id == 9 & Genus %in% ranunc_splash ~ 'Delphinium barbeyi',
+    sample.id == 9 & plant.species == 'Symphyotrichum eatonii' ~ 'Erigeron speciosus',
     sample.id == 9 ~ plant.species,                               ## COMPLETE ##
     
     sample.id == 10 & Family == 'Asteraceae' ~  'Taraxacum.officinale',
-    #  sample.id == 10 & Family == 'Onagraceae' ~ ''
+    sample.id == 10 & Family == 'Onagraceae' ~ 'Pedicularis bracteosa',
     sample.id == 10 ~ plant.species, # has many late season taxa
     
-    sample.id == 14 & Genus == 'Symphyotrichum' ~ 'Senecio.integerrimus',
+    sample.id == 12 & Family == 'Oagraceae' ~ 'Dodecatheon pulchellum', 
+    sample.id == 12 & Family == 'Boraginaceae' ~ 'Mertensia ciliata', 
+    sample.id == 12 & Genus == 'Hydrophyllum' ~ 'Hydrophyllum fendleri', 
+    sample.id == 12 & Family == 'Asteraceae' ~ 'Symphyotrichum foliaceum', 
+    sample.id == 12 ~ plant.species,
+    
+    sample.id == 14 & Genus == 'Nemophila' ~ 'Mertensia fusiformis',
     sample.id == 14 ~ plant.species,                              ## COMPLETE ##
     sample.id == 15 & Family %in% c('Onagraceae', 'Rosaceae')  ~ 'Potentilla pulcherrima',
-    
+    sample.id == 15 & Genus == 'Hydrophyllum' ~ 'Hydrophyllum fendleri',
     sample.id == 15 & Genus %in% c('Cirsium', 'Pseudognaphalium') ~ 'Senecio.integerrimus',
     sample.id == 15 ~ plant.species,                              ## COMPLETE ## 
+    
+    
     sample.id == 18 & Family == 'Ericaceae' ~ 'Ericaceae', # ONLY TO FAMILY
     sample.id == 18 & Genus == 'Cynoglossum' ~ 'Mertensia.fusiformis', 
     sample.id == 18 & Family == 'Asteraceae' ~ 'Senecio.integerrimus',
     sample.id == 18 ~ plant.species,                              ## COMPLETE ##
     
     sample.id == 19 & Family == 'Onagraceae' ~ 'Epilobium',
-    sample.id == 19 & Genus == 'Pseudognaphalium' ~ 'Senecio.integerrimus',
+    sample.id == 19 & Family == 'Asteraceae' ~ 'Senecio.integerrimus',
     sample.id == 19 & Genus == 'Nemophila' ~ 'Hydrophyllum.fendleri',
     sample.id == 19 ~ plant.species,                              ## COMPLETE ##
-    sample.id == 20 & TAXON_NEW == 'Hydrophyllum canadense' ~ 'Hydrophyllum fendleri',
+    sample.id == 20 & Genus == 'Hydrophyllum' ~ 'Hydrophyllum fendleri',
     sample.id == 20 & Family == 'Asteraceae' ~ 'Senecio.integerrimus',
     sample.id == 20 ~ plant.species,                              ## COMPLETE ##
     sample.id == 21 & Family == 'Asteraceae' ~ 'Senecio.integerrimus',
+    sample.id == 21 & Genus == 'Nemophila' ~ 'Hydrophyllum.capitatum',
     sample.id == 21 ~ plant.species,                              ## COMPLETE ##
-    sample.id == 23 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
+    sample.id == 23 & Genus == 'Delphinium' ~ 'Delphinium barbeyi',
+    sample.id == 23 & Genus %in% ranunc_splash ~ 'Delphinium barbeyi',
     sample.id == 23 ~ plant.species,                              ## COMPLETE ##
     sample.id == 24 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
     sample.id == 24 ~ plant.species,                              ## COMPLETE ##
@@ -152,7 +166,9 @@ blst_reclass_expert <- blst_expert %>%
     sample.id == 27 ~ plant.species,                              ## COMPLETE ##
     sample.id == 28 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
     sample.id == 28 ~ plant.species,                              ## COMPLETE ##
+    sample.id == 30 & Genus == 'Campanula' ~ 'Campanula.rotundifolia', 
     sample.id == 29 ~ plant.species,                              ## COMPLETE ##
+    sample.id == 30 & Genus == 'Lupinus' ~ 'Lupinus.sericeus', 
     sample.id == 30 & Genus == 'Cynoglossum' ~ 'Mertensia.fusiformis', 
     sample.id == 30 ~ plant.species,                              ## COMPLETE ##
     sample.id == 30 & Genus == 'Erigeron' ~ 'Erigeron elatior',
@@ -167,10 +183,12 @@ blst_reclass_expert <- blst_expert %>%
     sample.id == 36 ~ plant.species,                              ## COMPLETE ##
     sample.id == 39 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
     sample.id == 39 ~ plant.species,                              ## COMPLETE ##
+    sample.id == 41 & Genus == 'Taraxacum' ~ 'Taraxacum officinale',
     sample.id == 40 ~ plant.species,                              ## COMPLETE ##
     sample.id == 41 & Genus == 'Cynoglossum' ~ 'Mertensia.ciliata', 
     sample.id == 41 & Genus == 'Viola' ~ 'Viola adunca',          ## COMPLETE ##
     sample.id == 41 ~ plant.species,                              ## COMPLETE ##
+    sample.id == 42 & Genus == 'Mertensia' ~ 'Mertensia.ciliata', 
     sample.id == 42 ~ plant.species,
     sample.id == 43 & Genus == 'Epilobium' ~ 'Geranium richardsonii',
     sample.id == 43 ~ plant.species,                              ## COMPLETE ##
@@ -197,24 +215,27 @@ blst_reclass_expert <- blst_expert %>%
     sample.id == 56 ~ plant.species,                              ## COMPLETE ##
     sample.id == 60 & Genus == 'Viola' ~ 'Viola.adunca',          ## COMPLETE ##
     sample.id == 60 ~ plant.species,
+    sample.id == 65 & Genus == 'Cynoglossum' ~ 'Mertensia.ciliata',       ## COMPLETE ##
     sample.id == 65 & Genus == 'Viola' ~ 'Viola.praemorsa',       ## COMPLETE ##
     sample.id == 65 ~ plant.species, 
     
-    TRUE ~ as.character(TAXON_NEW)
+    TRUE ~ as.character(plant.species)
   ))  %>% 
   mutate( 
     TAXON_EXPERT = str_replace_all(TAXON_EXPERT, '[.]', ' '),
     TAXON_EXPERT = if_else(is.na(TAXON_EXPERT), TAXON_NEW, TAXON_EXPERT),
     
     # all of these are unequivocal remaps. 
-    TAXON_EXPERT = str_replace(TAXON_EXPERT, 'Holodiscus argenteus', 'Potentilla pulcherrima'),
+    
+    TAXON_EXPERT = str_replace(TAXON_EXPERT, 'Holodiscus dumosus|Sorbus scopulina', 'Potentilla pulcherrima'),
+    TAXON_EXPERT = str_replace(TAXON_EXPERT, 'Paxistima myrsinites', 'Parnassia palustris'),
     TAXON_EXPERT = str_replace(TAXON_EXPERT, 'Scabrethia scabra', 'Wyethia arizonica'),
-    TAXON_EXPERT = str_replace(TAXON_EXPERT, 'Geum ternatum', 'Geum triflorum'),
+    TAXON_EXPERT = str_replace(TAXON_EXPERT, 'Geum', 'Geum triflorum'),
     TAXON_EXPERT = str_replace(TAXON_EXPERT, 'Erigeron grandiflorus', 'Erigeron elatior'),
-    TAXON_EXPERT = str_replace(TAXON_EXPERT, 'Agastache pallidiflora', 'Pedicularis'),
+    TAXON_EXPERT = str_replace(TAXON_EXPERT, 'Agastache.*', 'Pedicularis bracteosa'),
     TAXON_EXPERT = str_replace(TAXON_EXPERT, 'Lithophragma parviflorum', 'Lithophragma glabrum'),
     TAXON_EXPERT = str_replace(
-      TAXON_EXPERT, 'Arenaria globiflora|Minuartia recurva|Sagina procumbens', 'Eremogone congesta'),
+      TAXON_EXPERT, 'Arenaria congesta|Arenaria|Minuartia recurva|Sagina procumbens', 'Eremogone congesta'),
     TAXON_EXPERT = if_else(doy <= 171 & Genus == 'Cynoglossum', 
                            'Mertensia fusiformis', TAXON_EXPERT), 
     TAXON_EXPERT = if_else(doy < 190 & TAXON_EXPERT == 'Lupinus argenteus', 
@@ -281,14 +302,14 @@ rm(s55)
 ## we will split the reads between them
 
 blst_reclass_expert <- blst_reclass_expert %>% 
-  filter(sample.id == 3 & TAXON_EXPERT == 'Cynoglossum pringlei') %>% 
-  slice(rep(1:n(), each=2)) %>% 
-  mutate(Prcnt_seqs_Reclass = Prcnt_seqs_Reclass/2,
-         dummyID = 1:n(),
+    filter(sample.id == 3 & TAXON_EXPERT == 'Cynoglossum officinale') %>% 
+    slice(rep(1:n(), each=2)) %>% 
+    mutate(Prcnt_seqs_Reclass = Prcnt_seqs_Reclass/2,
+          dummyID = 1:n(),
          TAXON_EXPERT = if_else(dummyID == 1, 'Mertensia fusiformis', 'Mertensia cilita')) %>% 
   select(-dummyID) %>% 
   bind_rows(., filter(
-    blst_reclass_expert, sample.id == 3 & TAXON_EXPERT != 'Cynoglossum pringlei'),
+    blst_reclass_expert, sample.id == 3 & TAXON_EXPERT != 'Cynoglossum officinale'),
     filter(blst_reclass_expert, sample.id != 3)) 
 
 ## we will reclassify the original amounts of the classified sequence reads to 
@@ -358,35 +379,66 @@ morpho_lkp <- data.frame(
 
 rm(a, b, c, d, assorted, Asteraceae_1, Asteraceae_2)
 
+
+## read in the sample collection csv, for species not noted add them. 
+
+p <- c('Delphinium barbeyi', 'Delphinium nuttallianum',  'Mertensia fusiformis',
+       'Hydrophyllum fendleri', 'Erythrocoma triflora', 'Lathyrus leucanthus', 
+       'Distegia involucrata',  'Mertensia ciliata', 'Frasera speciosus', 'Hydrophyllum capitatum',
+       'Dodecatheon pulchellum', 'Vicia americana', 'Lupinus bakeri', 'Pedicularis bracteosa')
+
+samp <- read.csv('../data/Corbiculae_collections.csv', header = F)
+pollen_samp <- data.frame(
+  sample.id = as.numeric(str_extract(samp$V1, '^[0-9]{1,2}')), 
+  Plant = str_extract(samp$V1, paste(p, collapse="|"))
+) %>% 
+  mutate(Plant = str_replace(Plant, 'Erythrocoma triflora', 'Geum triflorum'), 
+         Plant = str_replace(Plant, 'Distegia involucrata', 'Lonicer involucrata'),
+         Plant = str_replace(Plant, 'Lupinus bakeri', 'Lupinus sericeus')) %>% 
+  filter(sample.id %in% unique(blst_reclass_expert$sample.id))
+
 blr_sub <- blst_reclass_expert %>% 
-  select(Genus, TAXON_EXPERT, Prcnt_seqs_Reclass) 
+  select(Genus, TAXON_EXPERT, Prcnt_seqs_Reclass, sample.id) 
+
+# how many of the samples which the bees were on are noted as such?
+
+missing <- right_join(blr_sub, pollen_samp, 
+          by = c('sample.id', 'TAXON_EXPERT' = 'Plant')) %>% 
+  filter(is.na(Genus)) %>% 
+  mutate(Genus = str_extract(TAXON_EXPERT, '^.* ')) %>% 
+  mutate(Prcnt_seqs_Reclass = 2.5) # step 3 begins here
+
+blr_sub <- blr_sub %>% 
+  bind_rows(., missing) # step 3 ; not in order
 
 pmorpho <- pmorpho %>% 
   select(sample.id, morphotype, Percent_Morph = Percent) %>% 
+  
  # Each Morphotype which is present in trace amounts will be standardized at 0.5 % of reads for Presence
   mutate(Percent_Morph = if_else(Percent_Morph < 0.5, 0.5, Percent_Morph)) # step 1
+
   
-quant_read <- left_join(blr_sub, morpho_lkp, by = 'Genus', multiple = "all") %>% 
-  left_join(., pmorpho, by = c('sample.id', 'morphotype'), multiple = "all") %>%  # step 2
+quant_read <- left_join(blr_sub, morpho_lkp, by = 'Genus', multiple = "all") %>% # step 2
+  left_join(., pmorpho, by = c('sample.id', 'morphotype'), multiple = "all") %>%  
   group_by(sample.id, morphotype) %>% 
   mutate(
-    Adjusted_Percent = ifelse(is.na(Percent_Morph), 0.5, NA)) %>% # step 3
+    Adjusted_Percent = ifelse(is.na(Percent_Morph), 0.5, NA)) %>% # step 4
   ungroup() %>% 
-  
-  # step 4 & 5 - 
+
+  # step 5 & 6 - 
   group_by(sample.id, morphotype) %>% 
   mutate(Adjusted_Percent = (Prcnt_seqs_Reclass / sum(Prcnt_seqs_Reclass)) * Percent_Morph  ) %>% 
   
-  # step 6 - part 1, grab the morphotype which has material
+  # step 7 - part 1, grab the morphotype which has material
   group_by(sample.id, TAXON_EXPERT) %>% 
   slice_max(order_by = Percent_Morph, with_ties = T, n = 1) %>%
   slice_max(order_by = Percent_Morph, with_ties = F, n = 1)  %>% # grab a random one
   ungroup() %>% # this marks the end of step 5. 
   
-  # step 7 
+  # step 8
   mutate(Adjusted_Percent = replace_na(Adjusted_Percent, 0.5)) %>% 
   
-  # Step 8
+  # Step 9
   group_by(sample.id) %>% 
   mutate(GREATER_SUM = 100 - sum(Adjusted_Percent) ) 
 
@@ -440,13 +492,14 @@ write.csv(quant_read_final, '../data/Fully_Integrated_Corbiculae.csv', row.names
 
 # 1) Round up all counted morphotypes from < 0.5 to 0.5 to serve as TRACE quantities
 # 2) Join Pollen count data with sequence data
-# 3) For all Sequence data which does not have count information, mark it as 0.5% TRACE
-# 4 & 5) If number of morphotypes per sample is 1, assign pollen count data to the taxon , 
+# 3) Add in the species on which the bee was found at 2.5%
+# 4) For all Sequence data which does not have count information, mark it as 0.5% TRACE
+# 5 & 6) If number of morphotypes per sample is 1, assign pollen count data to the taxon , 
 # for morphotypes with many sequence classes, multiple the total count by the relative
 # prop of each sequence class in it (same operation)
-# 6) if Taxon_Expert > 1 per sample.id, drop the one which has na morphotype count values
-# 7) now all records are suffused with a 0.5% for trace
-# 8) Subtract the trace values from the larger values to get all values add up to 100$
+# 7) if Taxon_Expert > 1 per sample.id, drop the one which has na morphotype count values
+# 8) now all records are suffused with a 0.5% for trace
+# 9) Subtract the trace values from the larger values to get all values add up to 100$
 
 packageVersion("dplyr") == '1.1.0' # # note ensure your dplyr is up to date . TRUE IS GOOD
 data.frame( #  OR YOU CAN JUST DO THIS !!! this should return 3 rows
