@@ -44,8 +44,7 @@
 15,"Mertensia","Mertensia fusiformis",0.72289156626506
 15,"Potentilla","Potentilla pulcherrima",0.5
 15,"Senecio","Senecio integerrimus",0.5
-17,"Lupinus","Lupinus",67.9700836597964
-17,"Lupinus","Lupinus sericeus",28.5756819518374
+17,"Lupinus","Lupinus sericeus",96.5457656116339
 17,"Taraxacum","Taraxacum officinale",0.76988879384089
 17,"Hydrophyllum","Hydrophyllum fendleri",0.684345594525235
 17,"Astragalus","Astragalus",0.5
@@ -89,7 +88,7 @@
 25,"Dasiphora","Dasiphora fruticosa",0.5
 25,"Parnassia","Parnassia palustris",0.5
 26,"Mertensia","Mertensia fusiformis",55.4
-26,"Delphinium","Delphinium nuttallianum",25.6858368472639
+26,"Delphinium","Delphinium nuttallianum",43.3176070165444
 26,"Taraxacum","Taraxacum officinale",0.759493670886076
 26,"Hydrophyllum","Hydrophyllum capitatum",0.47986133788603
 27,"Delphinium","Delphinium nuttallianum",97.7849848353512
@@ -112,17 +111,16 @@
 30,"Erigeron","Erigeron",0.5
 30,"Lupinus","Lupinus sericeus",0.5
 30,"Mertensia","Mertensia fusiformis",0.5
-31,"Lupinus","Lupinus argenteus",68.1484525218698
-31,"Lupinus","Lupinus sericeus",28.8168995533272
+31,"Lupinus","Lupinus argenteus",68.3984525218698
+31,"Lupinus","Lupinus sericeus",29.0668995533272
 31,"Campanula","Campanula rotundifolia",0.5
-31,"Delphinium","Delphinium",0.5
 31,"Delphinium","Delphinium barbeyi",0.5
 31,"Lithophragma","Lithophragma glabrum",0.5
 31,"Mertensia","Mertensia ciliata",0.5
 31,"Viola","Viola",0.5
 31,"Vicia","Vicia americana",0.0346479248029678
-32,"Delphinium","Delphinium nuttallianum",76.3760835040741
-32,"Hydrophyllum","Hydrophyllum fendleri",22.6239164959259
+32,"Delphinium","Delphinium nuttallianum",97.330019067535
+32,"Hydrophyllum","Hydrophyllum fendleri",1.66998093246498
 32,"Mertensia","Mertensia fusiformis",0.5
 32,"Salix","Salix",0.5
 33,"Mertensia","Mertensia fusiformis",46.7282051282051
@@ -134,22 +132,22 @@
 33,"Symphyotrichum","Symphyotrichum eatonii",0.5
 33,"Viola","Viola canadensis",0.5
 33,"Viola","Viola praemorsa",0.5
-35,"Delphinium","Delphinium nuttallianum",76.2956178290974
-35,"Hydrophyllum","Hydrophyllum fendleri",21.1667477623005
+35,"Delphinium","Delphinium nuttallianum",97.207409335399
 35,"Mertensia","Mertensia fusiformis",0.537634408602151
 35,"Dasiphora","Dasiphora fruticosa",0.5
-35,"Lonicer ","Lonicer involucrata",0.5
+35,"Lonicera ","Lonicera involucrata",0.5
 35,"Viola","Viola adunca",0.5
 35,"Viola","Viola praemorsa",0.5
+35,"Hydrophyllum","Hydrophyllum fendleri",0.254956255998802
 36,"Delphinium","Delphinium nuttallianum",75.4294365100997
 36,"Hydrophyllum","Hydrophyllum fendleri",12.2950875660481
 36,"Lupinus","Lupinus sericeus",10.7155655095185
 36,"Mertensia","Mertensia fusiformis",0.559910414333707
 36,"Erigeron","Erigeron",0.5
 36,"Salix","Salix",0.5
-39,"Delphinium","Delphinium nuttallianum",70.0120562513401
-39,"Hydrophyllum","Hydrophyllum capitatum",14.4939718743299
-39,"Hydrophyllum","Hydrophyllum fendleri",14.4939718743299
+39,"Delphinium","Delphinium nuttallianum",96.5744292912493
+39,"Hydrophyllum","Hydrophyllum capitatum",1.21278535437534
+39,"Hydrophyllum","Hydrophyllum fendleri",1.21278535437534
 39,"Dasiphora","Dasiphora fruticosa",0.5
 39,"Taraxacum","Taraxacum officinale",0.5
 40,"Aquilegia","Aquilegia coerulea",63.6432858250791
@@ -162,8 +160,8 @@
 41,"Mertensia","Mertensia ciliata",99
 41,"Erigeron","Erigeron speciosus",0.5
 41,"Lupinus","Lupinus sericeus",0.5
-42,"Delphinium","Delphinium nuttallianum",58.4850523638257
-42,"Mertensia","Mertensia ciliata",38.5149476361743
+42,"Delphinium","Delphinium nuttallianum",73.059686888454
+42,"Mertensia","Mertensia ciliata",23.940313111546
 42,"Eremogone","Eremogone congesta",0.5
 42,"Potentilla","Potentilla pulcherrima",0.5
 42,"Rhodiola","Rhodiola",0.5
@@ -193,9 +191,9 @@
 49,"Eremogone","Eremogone congesta",0.5
 49,"Vicia","Vicia americana",0.5
 49,"Viola","Viola adunca",0.5
-51,"Delphinium","Delphinium nuttallianum",64.1515317440901
-51,"Lithophragma","Lithophragma glabrum",17.3177936146276
-51,"Dasiphora","Dasiphora fruticosa",17.0306746412823
+51,"Delphinium","Delphinium nuttallianum",95.6224554947398
+51,"Lithophragma","Lithophragma glabrum",1.58233173930277
+51,"Dasiphora","Dasiphora fruticosa",1.29521276595745
 51,"Helianthella","Helianthella parryi",0.5
 51,"Viola","Viola canadensis",0.5
 51,"Viola","Viola praemorsa",0.5

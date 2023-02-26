@@ -718,8 +718,61 @@ While the spatial results were used to declare the taxonomic composition of the 
 
 For example a many sequences which mapped to the Asteraceae family, but which was flagged by temporal filters and is present in both *B. nevadensis* Cresson and *B. rufocinctus* Cresson pollen is most likely *Frasera* Walter, which failed extractions for the reference library failed (APPENDIX XX). A similar likely mismatch could be between what was fide molecular evidence as *Agastache pallidiflora* (A. Heller) Rydb. but where feeding was infrequently observed on *Pedicularis* L., likely due to this entire order being represented by only a single molecular reference species. 
 
-```{r Build reference dataset for reclassification process}
-reclassified <- read.csv('../data/Fully_Integrated_Corbiculae.csv')
+```{r compare results}
+
+blast <- read.csv('../data/tally_blast_classifications.csv') %>% 
+  group_by(Sample) %>% 
+  slice_max(Prcnt_seqs, n = 10) %>% 
+  select(Sample, Taxon = taxid, Percent_Sample = Prcnt_seqs) %>% 
+  mutate(
+    Taxon = str_replace(Taxon, 'Arenaria', 'Eremogone'),
+    Genus = str_remove(str_extract(Taxon, '^.* '), ' '),
+    Method = 'BLAST')
+
+automated <- read.csv('../data/Post_Classified_BLAST_sqs.csv') %>% 
+  group_by(Sample, TAXON_NEW) %>%
+  mutate(Prcnt_seqs = sum(Prcnt_seqs)) %>% 
+  drop_na() %>% 
+  distinct(Sample, TAXON_NEW, .keep_all = T) %>% 
+  ungroup(TAXON_NEW) %>% 
+  slice_max(Prcnt_seqs, n = 10) %>% 
+  select(Sample, Genus = GENUS, Taxon = TAXON_NEW, Percent_Sample = Prcnt_seqs) %>% 
+  mutate(across(where(is.character), ~ str_replace(., 'Arenaria', 'Eremogone')),
+         Method = 'Automated')
+
+expert <- read.csv('../data/Fully_Integrated_Corbiculae.csv') %>% 
+  rename(Sample = sample.id) %>% 
+  mutate(across(where(is.character), ~ str_trim(.)), 
+         Method = 'Expert') %>% 
+  drop_na() %>% 
+  relocate()
+
+genera2query <- na.omit(unique(c(blast$Genus, automated$Genus, expert$Genus))) 
+genera2query <- genera2query[genera2query != 'Ericaceae'] 
+genera2query <- taxizedb::name2taxid(genera2query, out_type = 'summary') 
+
+genera_out <- taxizedb::classification(genera2query$id, db='ncbi', rank = 'family') 
+genera_out <- map(genera_out, ~ 
+                    data.frame( 
+                      'Family' = filter(.x, rank == "family") %>% select(name), 
+                      'Genus' = filter(.x, rank == 'genus') %>%  select(name) 
+                      )) %>% 
+  bind_rows() %>% 
+  rename(Family = 1, Genus = 2) 
+
+all_classifications <- bind_rows(
+  automated, blast, expert
+) %>% 
+  left_join(., genera_out, by = 'Genus') %>% 
+  mutate(Rank = case_when(
+    is.na(Family) ~ 'Family',
+    Taxon == Family ~ 'Family',
+    Taxon == Genus ~ 'Genus',
+    TRUE ~ 'Species'
+  ),
+  Family = if_else(Taxon == 'Ericaceae', 'Eriaceae', Family))
+
+rm(genera2query, genera_out, automated, blast, expert)
 ```
 
 Situations where SDM's led to incorrect results at the species level are evident with classification to *Scabrethia Scabra* (Hooker) W.A. Weber, this match almost certainly representing *Wyethia arizonica* A. Gray (@weber1998new), a taxon known to be visited by Queen bee's via our floral observations. An expected inaccuracy of the classification scheme is in genus level placements, e.g. were *Epilobium* L. (Onagraceae Juss.) spp. were classified. However, given the small size of their flowers in the study area, these results more likely indicate that a species of *Chamaenerion* Seg. (a segregate genus) such as *C. angustifolium* (L.) Scop.  or *latifolium* (L.) Sweet is occasionally utilized, as it supported by limited palynology data. An issue with reclassification within the family level in combination with time included reclassifying *Parnassia palustris* L. to *Paxistima myrsinites* (Pursh) Rafinesque. However, based on flower size it is more likely that the visited taxon was *P. palustris*. 

@@ -137,6 +137,7 @@ blst_reclass_expert <- blst_expert %>%
     sample.id == 15 & Genus %in% c('Cirsium', 'Pseudognaphalium') ~ 'Senecio.integerrimus',
     sample.id == 15 ~ plant.species,                              ## COMPLETE ## 
     
+    sample.id == 17 & Genus == 'Lupinus' ~ 'Lupinus.sericeus',
     
     sample.id == 18 & Family == 'Ericaceae' ~ 'Ericaceae', # ONLY TO FAMILY
     sample.id == 18 & Genus == 'Cynoglossum' ~ 'Mertensia.fusiformis', 
@@ -156,6 +157,7 @@ blst_reclass_expert <- blst_expert %>%
     sample.id == 23 & Genus == 'Delphinium' ~ 'Delphinium barbeyi',
     sample.id == 23 & Genus %in% ranunc_splash ~ 'Delphinium barbeyi',
     sample.id == 23 ~ plant.species,                              ## COMPLETE ##
+    sample.id == 23 & Genus == 'Delphinium' ~ 'Delphinium.nuttallianum',
     sample.id == 24 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
     sample.id == 24 ~ plant.species,                              ## COMPLETE ##
     sample.id == 25 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
@@ -172,6 +174,10 @@ blst_reclass_expert <- blst_expert %>%
     sample.id == 30 & Genus == 'Cynoglossum' ~ 'Mertensia.fusiformis', 
     sample.id == 30 ~ plant.species,                              ## COMPLETE ##
     sample.id == 30 & Genus == 'Erigeron' ~ 'Erigeron elatior',
+    
+    sample.id == 31 & Genus == 'Delphinium' ~ 'Delphinium barbeyi',
+    sample.id == 31 ~ plant.species,                              ## COMPLETE ##
+    
     sample.id == 32 & Genus %in% ranunc_splash ~ 'Delphinium.nuttallianum',
     sample.id == 32 ~ plant.species,                              ## COMPLETE ##
     
@@ -256,6 +262,9 @@ blst_reclass_expert <- blst_expert %>%
 
 rm(ranunc_splash)
 
+# now hold the 
+
+
 # now we split up the reads assigned to conflicted groups  # e.g. Cynoglossum amplifolium in sample 65
 b <- blst_reclass_expert %>% 
   filter(sample.id %in% dupe_samples) %>% 
@@ -322,6 +331,15 @@ blst_reclass_expert <- blst_reclass_expert %>%
          TAXON_EXPERT = str_replace(TAXON_EXPERT, '[.]', " "),
          Genus = str_trim(str_extract(TAXON_EXPERT, '^.* ')),
          Genus = ifelse(is.na(Genus), TAXON_EXPERT, Genus))
+
+
+## combine all reads from the same species in each sample
+
+blst_reclass_expert <- blst_reclass_expert %>% 
+  group_by(sample.id, TAXON_EXPERT) %>% 
+  mutate(Prcnt_seqs_Reclass = sum(Prcnt_seqs_Reclass)) %>% 
+  distinct(sample.id, TAXON_EXPERT, .keep_all = T)
+
 
 ## we used 'YARGH' to be able to evaluate each sample one at a time without
 ## becoming overwhelmed, this worked on occasion.
@@ -393,7 +411,7 @@ pollen_samp <- data.frame(
   Plant = str_extract(samp$V1, paste(p, collapse="|"))
 ) %>% 
   mutate(Plant = str_replace(Plant, 'Erythrocoma triflora', 'Geum triflorum'), 
-         Plant = str_replace(Plant, 'Distegia involucrata', 'Lonicer involucrata'),
+         Plant = str_replace(Plant, 'Distegia involucrata', 'Lonicera involucrata'),
          Plant = str_replace(Plant, 'Lupinus bakeri', 'Lupinus sericeus')) %>% 
   filter(sample.id %in% unique(blst_reclass_expert$sample.id))
 
