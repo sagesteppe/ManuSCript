@@ -1,0 +1,124 @@
+---
+title: "Conceptual Boxes"
+author: "steppe"
+date: "2023-03-01"
+output: html_document
+---
+
+
+Here we create three text boxes for the adjacent manuscript. These serve to illustrate three main ideas which we found difficult to incorporate into the written text. We also produce one diagram, which serves to outline the entirety of the process we engaged in. 
+
+1) The Applications of Meta-barcoding with Plants
+
+```{r Applications of metabarcoding in plants}
+
+applications <- data.frame(
+  'Application' = c(
+    'Plant-Animal Interactions',
+    'Noxious Weed Detection',
+    'Detection of Rare Species', 
+    'Forensic Science',
+    'Pharmaceutical/Nutraceutical'
+  ),
+  'Example' = c(
+
+    'Dietary Preferences of herbivores',
+    'Presence of species by hydrologic Basin',
+    'Presence of Rare Aquatic Species',
+    'Identifying the provenance of materials found at crime scene',
+    'Identifying adulterants in wholesale products'
+  ),
+  'Citation' = c(
+    'Soininen et al. 2009',
+    'Coghlan et al. 2021',
+    'Tsukamoto et al. 2021',
+    'Allwood et al. 2020',
+    'Bell et al. 2022'
+  )
+)
+```
+
+
+2) Major Issues and bottlenecks currently related to plant Meta-barcoding.  
+
+
+```{r Major Issues}
+
+bottlenecks <- tibble(
+  
+  'Issue' = c(
+    'Taxonomic Resolution',
+    'Reference Library Coverage - Phylogenetic',
+    'Reference Library Coverage - Spatial',
+    'Reference Library Generation', 
+    'Uncertainty with Matches',
+    'Species Surrogates',
+    'False Positives'
+  ),
+  
+  'Approach' = c(
+    'A353', 
+    'Kew PAFTOL, no phylogenetic biases', 
+    'Some bias persists towards Europe, North America',
+    'Spatial Modelling; Code within', 
+    'Temporal Filter System',
+    'Temporal Filter System',
+    'Spatial & Temporal Modelling, Jaccard Index, high quality reference loci'
+  ),
+  
+  'Citation' = c(
+    c('Coissoc et al. 2016, Kress 2017'),  #taxonomic resolution
+    c('Kress 2017, Bell et al. 2022'),  # reference library phylogenetic
+    c('Cheng et al. 2018, Darwin Tree of Life 2022, Lewin et al. 2020, Bell et al. 2021'),  # 'Reference Library spatial
+    c('Bell et al. 2022'), #  'Reference Library Generation', 
+    c('Bell et al. 2022'), #   'Uncertainty with Matches',
+    c('?'), #   'Species Surrogates',
+    c('Bell et al. 2021') #   'False Positives'
+  )
+  
+)
+
+```
+
+
+3) The Summary of Limitations which each method we utilized contains
+
+
+```{r Summary of Limitations}
+
+limitations <- data.frame(
+  
+  'Component' = c(
+    'Stage 1 Species Filter',
+    'Species Distribution Modelling',
+    'Phenological Modelling',
+    'Database Generation',
+    'Read Re-assignment',
+    'False Positives',
+    'Semi-Quantitative Inference'
+  ), 
+  
+  'Limitation' = c(
+    'Test Data', # stage 1 species filter
+    'Number of Records; Taxonomically Difficult Groups', # SDM generation
+    'Post-Initiation of Climate Change Records', # phenological modelling
+    'Adequate Phylogenetic/Spatial Representation', # database generation
+    'Discrete Frequentist Data', # read re-assignment
+    'Which True Species?', # false positives
+    'Genome Size, Pollen Grain Size?' # semi-quantitative inference
+  ),
+  
+  'Paths_Forward' = c(
+    'Flash Plant Species Surveys on Plot', 
+    'Develop and Disseminate Education Materials; Herbaria Collections', 
+    'Advocate Herbarium Collections', 
+    'Plant and Fungal Tree of Life; ', 
+    'Posterior-Probabilities; Floral Abundance, Nectar/Pollen Nutrition', 
+    'Jaccard Index, Plot Abundance',
+    'Spike Samples with Reference Materials; Several Genome Sizes'
+  )
+)
+```
+
+
+4) Diagram of Major conceptual 'filtering steps'
