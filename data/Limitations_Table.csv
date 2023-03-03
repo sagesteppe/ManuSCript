@@ -1,0 +1,8 @@
+"Component","Limitation","Paths_Forward"
+"Stage 1 Species Filter","Test Data","Flash Plant Species Surveys on Plot"
+"Species Distribution Modelling","Number of Records; Taxonomically Difficult Groups","Develop and Disseminate Education Materials; Herbaria Collections"
+"Phenological Modelling","Post-Initiation of Climate Change Records","Advocate Herbarium Collections"
+"Database Generation","Adequate Phylogenetic/Spatial Representation","Plant and Fungal Tree of Life; 10kP"
+"Read Re-assignment","Discrete Frequentist Data","Posterior-Probabilities; Floral Abundance, Nectar/Pollen Nutrition"
+"False Positives","Which True Species?","Jaccard Index, Plot Abundance"
+"Semi-Quantitative Inference","Genome Size, Pollen Grain Size?","Spike Samples with Reference Materials; Several Genome Sizes"
