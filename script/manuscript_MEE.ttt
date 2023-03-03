@@ -1,5 +1,53 @@
 \begin{table}
 
+\caption{\label{tab:Applications of Metabarcoding}Applications of Plant Metabarcoding}
+\centering
+\begin{tabular}[t]{l|l|l}
+\hline
+Application & Example & Citations\\
+\hline
+Plant-Animal Interactions & Dietary Preferences of herbivores & Soininen et al. 2009\\
+\hline
+Noxious Weed Detection & Presence of species by hydrologic Basin & Coghlan et al. 2021\\
+\hline
+Detection of Rare Species & Presence of Rare Aquatic Species & Tsukamoto et al. 2021\\
+\hline
+Forensic Science & Identifying the provenance of materials found at crime scene & Allwood et al. 2020\\
+\hline
+Pharmaceutical & Identifying adulterants in wholesale products & Bell et al. 2022\\
+\hline
+\end{tabular}
+\end{table}
+\efloatseparator
+ 
+\begin{table}
+
+\caption{\label{tab:Current Bottlenecks in Plant Metabarcoding}Current Issues Facing Plant Metagenomics}
+\centering
+\begin{tabular}[t]{l|l|l}
+\hline
+Issue & Our Approach & Issue Citation\\
+\hline
+Stage 1 Species Filter & Test Data & Flash Plant Species Surveys on Plot\\
+\hline
+Species Distribution Modelling & Number of Records; Taxonomically Difficult Groups & Develop and Disseminate Education Materials; Herbaria Collections\\
+\hline
+Phenological Modelling & Post-Initiation of Climate Change Records & Advocate Herbarium Collections\\
+\hline
+Database Generation & Adequate Phylogenetic/Spatial Representation & Plant and Fungal Tree of Life; 10kP\\
+\hline
+Read Re-assignment & Discrete Frequentist Data & Posterior-Probabilities; Floral Abundance, Nectar/Pollen Nutrition\\
+\hline
+False Positives & Which True Species? & Jaccard Index, Plot Abundance\\
+\hline
+Semi-Quantitative Inference & Genome Size, Pollen Grain Size? & Spike Samples with Reference Materials; Several Genome Sizes\\
+\hline
+\end{tabular}
+\end{table}
+\efloatseparator
+ 
+\begin{table}
+
 \caption{\label{tab:Results for SA Logistic Regression Metrics}Logistic regression assessing accuracy of SDMs}
 \centering
 \begin{tabular}[t]{lrlr}
@@ -53,6 +101,32 @@ G & 29 & 4.3 & 7.8 & Species\\
 \cellcolor{gray!10}{H} & \cellcolor{gray!10}{280} & \cellcolor{gray!10}{41.2} & \cellcolor{gray!10}{47.9} & \cellcolor{gray!10}{Genus}\\
 \hline
 None met & 18 & 2.6 & 1.4 & Multiple\\
+\hline
+\end{tabular}
+\end{table}
+\efloatseparator
+ 
+\begin{table}
+
+\caption{\label{tab:Table of Limitations Faced}Limitations Faced and Possible Solutions}
+\centering
+\begin{tabular}[t]{l|l|l}
+\hline
+Method Component & Limitations & Paths Forward\\
+\hline
+Stage 1 Species Filter & Test Data & Flash Plant Species Surveys on Plot\\
+\hline
+Species Distribution Modelling & Number of Records; Taxonomically Difficult Groups & Develop and Disseminate Education Materials; Herbaria Collections\\
+\hline
+Phenological Modelling & Post-Initiation of Climate Change Records & Advocate Herbarium Collections\\
+\hline
+Database Generation & Adequate Phylogenetic/Spatial Representation & Plant and Fungal Tree of Life; 10kP\\
+\hline
+Read Re-assignment & Discrete Frequentist Data & Posterior-Probabilities; Floral Abundance, Nectar/Pollen Nutrition\\
+\hline
+False Positives & Which True Species? & Jaccard Index, Plot Abundance\\
+\hline
+Semi-Quantitative Inference & Genome Size, Pollen Grain Size? & Spike Samples with Reference Materials; Several Genome Sizes\\
 \hline
 \end{tabular}
 \end{table}
