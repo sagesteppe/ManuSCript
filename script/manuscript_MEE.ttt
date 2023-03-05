@@ -6,11 +6,11 @@
 \hline
 Application & Example & Citations\\
 \hline
-Plant-Animal Interactions & Dietary Preferences of herbivores & Soininen et al. 2009\\
+Plant-Animal Interactions & Dietary Preferences of herbivores & Soininen et al. 2009; reviewed in Banerjee et al. 2022\\
 \hline
-Noxious Weed Detection & Presence of species by hydrologic Basin & Coghlan et al. 2021\\
+Noxious Weed Detection & Presence of species by hydrologic Basin & Coghlan et al. 2021; Xu et al. 2018\\
 \hline
-Detection of Rare Species & Presence of Rare Aquatic Species & Tsukamoto et al. 2021\\
+Detection of Rare Species & Presence of Rare Aquatic Species; Others & Tsukamoto et al. 2021, reviewed in Banerjee et al. 2022\\
 \hline
 Forensic Science & Identifying the provenance of materials found at crime scene & Allwood et al. 2020\\
 \hline
@@ -28,19 +28,19 @@ Pharmaceutical & Identifying adulterants in wholesale products & Bell et al. 202
 \hline
 Issue & Our Approach & Possible Advances\\
 \hline
-Stage 1 Species Filter & Test Data & Flash Plant Species Surveys on Plot\\
+Taxonomic Resolution & A353 & Coissoc et al. 2016, Kress 2017, Johnson et al. 2023\\
 \hline
-Species Distribution Modelling & Number of Records; Taxonomically Difficult Groups & Develop and Disseminate Education Materials; Herbaria Collections\\
+Reference Library - Phylogenetic & Kew PAFTOL, no phylogenetic biases & Kress 2017, Bell et al. 2022, Johnson et al. 2023\\
 \hline
-Phenological Modelling & Post-Initiation of Climate Change Records & Advocate Herbarium Collections\\
+Reference Library - Spatial & Some bias persists towards Europe & Cheng et al. 2018, Darwin Tree of Life 2022, Lewin et al. 2020, Bell et al. 2021\\
 \hline
-Database Generation & Adequate Phylogenetic/Spatial Representation & Plant and Fungal Tree of Life; 10kP\\
+Reference Library Generation & Spatial Modelling; Code within & Bell et al. 2022\\
 \hline
-Read Re-assignment & Discrete Frequentist Data & Posterior-Probabilities; Floral Abundance, Nectar/Pollen Nutrition\\
+Uncertainty with Matches & Temporal Filter System & Bell et al. 2022\\
 \hline
-False Positives & Which True Species? & Jaccard Index, Plot Abundance\\
+Species Surrogates & Temporal Filter System & ?\\
 \hline
-Semi-Quantitative Inference & Genome Size, Pollen Grain Size? & Spike Samples with Reference Materials; Several Genome Sizes\\
+False Positives & Spatial \& Temporal Modelling, Jaccard Index, high quality reference loci & Bell et al. 2021\\
 \hline
 \end{tabu}
 \end{table}

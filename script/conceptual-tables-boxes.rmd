@@ -4,11 +4,10 @@ author: "steppe"
 date: "2023-03-01"
 output:
   pdf_document: default
-  html_document: default
 ---
 
 
-Here we create three text boxes for the adjacent manuscript. These serve to illustrate three main ideas which we found difficult to incorporate into the written text. We also produce one diagram, which serves to outline the entirety of the process we engaged in. 
+Here we create three text boxes for the adjacent manuscript. These serve to illustrate three main ideas which we found difficult to incorporate into the written text. 
 
 1) The Applications of Meta-barcoding with Plants
 
@@ -26,14 +25,14 @@ applications <- data.frame(
 
     'Dietary Preferences of herbivores',
     'Presence of species by hydrologic Basin',
-    'Presence of Rare Aquatic Species',
+    'Presence of Rare Aquatic Species; Others',
     'Identifying the provenance of materials found at crime scene',
     'Identifying adulterants in wholesale products'
   ),
   'Citation' = c(
-    'Soininen et al. 2009',
-    'Coghlan et al. 2021',
-    'Tsukamoto et al. 2021',
+    'Soininen et al. 2009; reviewed in Banerjee et al. 2022',
+    'Coghlan et al. 2021; Xu et al. 2018',
+    'Tsukamoto et al. 2021, reviewed in Banerjee et al. 2022',
     'Allwood et al. 2020',
     'Bell et al. 2022'
   )
@@ -76,8 +75,8 @@ bottlenecks <- data.frame(
   ),
   
   'Citation' = c(
-    c('Coissoc et al. 2016, Kress 2017'),  #taxonomic resolution
-    c('Kress 2017, Bell et al. 2022'),  # reference library phylogenetic
+    c('Coissoc et al. 2016, Kress 2017, Johnson et al. 2023'),  #taxonomic resolution
+    c('Kress 2017, Bell et al. 2022, Johnson et al. 2023'),  # reference library phylogenetic
     c('Cheng et al. 2018, Darwin Tree of Life 2022, Lewin et al. 2020, Bell et al. 2021'),  # 'Reference Library spatial
     c('Bell et al. 2022'), #  'Reference Library Generation', 
     c('Bell et al. 2022'), #   'Uncertainty with Matches',
@@ -143,5 +142,3 @@ read.csv('../data/Limitations_Table.csv') |>
 
 rm(limitations)
 ```
-
-4) Diagram of Major conceptual 'filtering steps'
