@@ -1,5 +1,5 @@
 --- 
-title: Metagenomic Barcoding of Pollen Loads Offers Insights on the Foraging Patterns of Queen Bumble Bees
+title: Plant Metagenomic Barcoding using Angiosperms353 of Corbiculae from Queen Bumble Bees
 author:  |
     | Reed Clark Benkendorf$^1$$^,$$^2$^[Correspondence: reedbenkendorf2021@u.northwestern.edu], Jane E. Ogilive$^3$, Emily J. Woodworth$^1$$^,$$^2$, 
     |  Sophie Taddeo$^1$$^,$$^2$, Paul J. CaraDonna$^1$$^,$$^2$$^,$$^3$, Jeremie B. Fant$^1$$^,$$^2$  
@@ -68,7 +68,8 @@ The inability to reliably identify plants to terminal taxon can limit our unders
 ```{r Applications of Metabarcoding}
 read.csv('../data/Applications_Table.csv') |>
   knitr::kable(caption = 'Applications of Plant Metabarcoding',
-             col.names = c('Application', 'Example', 'Citations'))
+             col.names = c('Application', 'Example', 'Citations')) |>
+  kable_styling(full_width = TRUE)
 ```
 
   Currently the largest plant systematic endeavor ever undertaken,by the Royal Botanic Gardens Kew, the Plant and Fungal Tree of Life (PAFTOL) is approaching completion (@baker2021PAFTOL).  This data set will contain hybridization capture (Hyb-Seq) data from at least one species in each genus of the plant kingdom,14,000 represented species, using the popular Angiosperms353 (A353) probes, which includes 353 single-copy orthologous loci, (@baker2021PAFTOL, @johnson2019universal). These publicly available data serve to provide a taxonomically comprehensive backbone for plant metabarcoding. The A353 probes are currently being used in many other plant phylogenetic studies increasing the sampling depth of many clades  (@baker2021exploring). Data from the 10kP project, which seeks to develop reference genomes from a phylogenetically diverse suite of plants, will contribute many more species by 2030 (@cheng2018tenkp). Similar projects such as the ‘Darwin Tree of Life’ which will sequence all described taxa in Britain and Ireland, seek to sequence high numbers of genomes in geographic regions will contribute data sets applicable to enormous spatial domains (@darwin2022project, @lewin2022biogenome). These data will promote the ability to apply metabarcoding to resolve a diverse array of questions relevant to theoretical and applied ecology (@kress2017plant, @hollingsworth2016telling). However, the application of metabarcoding still faces challenges relating to the enormity of the genomic data sets and the computational power required to process sequence data.
@@ -78,10 +79,16 @@ read.csv('../data/Applications_Table.csv') |>
 ```{r Current Bottlenecks in Plant Metabarcoding}
 read.csv('../data/Bottlenecks_Table.csv') |>
   knitr::kable(caption = 'Current Issues Facing Plant Metagenomics',
-             col.names = c('Issue', 'Our Approach', 'Issue Citation'))
+             col.names = c('Issue', 'Our Approach', 'Possible Advances')) |>
+  kable_styling(full_width = TRUE)
 ```
   
-  As species interactions vary both in space and time (@thompson1994coevolutionary, @caradonna2021seeing). Contrasts in the flowering periods of many plant species, can provide an additional filter for increasing the accuracy of identifying material in certain types of metagenomic samples (@janzen1967synchronization, @Newstrom1994ANC). In high elevation temperate regions, pollination interactions vary temporally and are characterized by high turnover in active periods of species (@caradonna2017interaction), however the overall shorter extent of the active growing season in these systems results in the presence of few to any natural breaks, which reduces the utility of these to operate as filters in the post-processing of sequence matches. Nonetheless, we work develop a general approach which seems applicable to many areas which utilize the temporal dimension for classifying sequences in metagenomic samples (but see @davis2022new).
+  As species interactions vary both in space and time (@thompson1994coevolutionary, @caradonna2021seeing). Contrasts in the flowering periods of many plant species, can provide an additional filter for increasing the accuracy of identifying material in certain types of metagenomic samples (@janzen1967synchronization, @Newstrom1994ANC). In high elevation temperate regions, pollination interactions vary temporally and are characterized by high turnover in active periods of species (@caradonna2017interaction), however the overall shorter extent of the active growing season in these systems results in the presence of few to any natural breaks, which reduces the utility of these to operate as filters in the post-processing of sequence matches. Nonetheless, we work develop a general approach which seems applicable to many areas which utilize the temporal dimension for classifying sequences in metagenomic samples (but see @davis2022new, Figure 1).
+  
+```{r Filter Diagram, out.width = "35%", fig.cap="Simplified Conceptual Diagram of three approaches leading towards classification of sequencing results, and the number of species associated with them in our area. The upper three boxes indicate a common coarse approach, assuming one has a digitizewd Flora, which is not always the case. The center two boxes indicate the computational approach illustrated here. The final box indicates the use of the expert field data in the case study. The stem of the final applies to both Computational and Expert Survey results, and should be thought of as using time ala chromatography, in the post-classification process."}
+knitr::include_graphics('../graphics/plots/filter_diagram.png')
+```
+  
   
   We tested this metagenomic and informatics approach to determine to examine the foraging of queen bumblebee, and compare this approach with direct observations and the pollen record, which has shown some incongruency in several floral visitation networks involving smaller bodied fauna (@barker2021pollen, @zhao2019topology, @alarcon2010congruence). The assessment of the plant species compositions from pollen is a desirable approach, with several potential applications, despite numerous potential complications (@pornon2017dna, @bell2017applying, @sickel2015increased, @bell2019quantitative, @suchan2019pollen,  @johnson2021airborne). The two foraging phases of the queen bumblebee life cycle are essential to 1) increase their weight before diapause, and 2) increase their ovary weights while establishing their recently found nests. Both of these time periods represent potential demographic bottlenecks in bumble bee populations (@sarro2022bumble). Bumblebees are one of the only groups of insects with unequivocal quantitative evidence for numerous population declines, while simultaneously serving as the most effective pollinators in many temperate montane ecosystems (@cameron2020global, @goulson2008decline, @williams1982distribution, @colla2012assessing, @bergman1996micrometeorological, @bingham1998efficient, @grixti2009decline). These areas often represent the most diverse areas in the temperate and often offer the sole potential refugia for multiple dimensions of biodiversity under climate change, whilst simultaneously experiencing the greatest proportional changes in mean annual temperature (@brito2018climate, @pepin2022climate). An immediate understanding of how to manage previously overlooked keystone insect species, such as bumble bees, is essential if the refugial potential of the temperate mountains are to be incorporated into their current diversity (@loarie2009velocity, @dobrowski2016climate). 
 
@@ -159,8 +166,7 @@ Sequences were processed using Trimmomatic, which removed sequence adapters, cli
 
 #### 2.6.2 | Sequence Identification
 
-A custom Kraken2 database was created by downloading representative species indicated as being present in the study area by the spatial analyses from the Sequence Read Archive (SRA) NCBI (@wood2019improved). These sequences were processed in the same manner as our novel sequences. The Kraken2 database was built using default parameters. Kraken2 was run on sequences using default parameters (Appendix 9). 
-  Following Kraken2, Bracken was used to classify sequences to terminal taxa (@lu2017bracken). Results from both Kraken2 and Bracken, results were reclassified manually to identify terminal taxa. For example, when only a single species of a genus was known in the study area, but our database used a representative of another taxon in the genus, this species was coded as the result.
+A custom Kraken2 database was created by downloading representative species indicated as being present in the study area by the spatial analyses from the Sequence Read Archive (SRA) NCBI (@wood2019improved). These sequences were processed in the same manner as our novel sequences. The Kraken2 database was built using default parameters. Kraken2 was run on sequences using default parameters (Appendix 9).  Following Kraken2, Bracken was used to classify sequences to terminal taxa (@lu2017bracken). FInally all reads which could be classified by these databases were passed to a local BLAST database.
 
 #### 2.6.3 | Identification of Sequence Matching Loci
 
@@ -496,7 +502,6 @@ aster_samples <- pmorph %>%
 aster_detected <- aster_samples %>% 
   mutate(DETECTED = if_else(sample.id %in% blst_aster$sample.id, 1, 0)) 
 
-
 aa <- prcnt_detect(mertensia_detected, Lprop = 0.01, Hprop = 1)
 bb <- prcnt_detect(aster1_detected, Lprop = 0.001, Hprop = 0.01)
 cc <- prcnt_detect(aster2_detected, Lprop = 0.001, Hprop = 0.01)
@@ -707,9 +712,9 @@ To ascertain the extent to which records of multiple species in a family, which 
 
 While the spatial results were used to declare the taxonomic composition of the sequence database, temporal results were used in consideration with plant phylogeny to retroactively, reassign the assignment of sequences to taxa. Essentially, if a sequence was identified to a taxon which was not known from the field site 
 
-For example a many sequences which mapped to the Asteraceae family, but which was flagged by temporal filters and is present in both *B. nevadensis* Cresson and *B. rufocinctus* Cresson pollen is most likely *Frasera* Walter, which failed extractions for the reference library failed (Appendix 11). A similar likely mismatch could be between what was fide molecular evidence as *Agastache pallidiflora* (A. Heller) Rydb. but where feeding was infrequently observed on *Pedicularis* L., likely due to this entire order being represented by only a single molecular reference species. 
+For example many sequences which mapped to the Asteraceae family, but which was flagged by temporal filters and is present in both *B. nevadensis* Cresson and *B. rufocinctus* Cresson pollen is most likely *Frasera* Walter, which failed extractions for the reference library failed (Appendix 11). A similar likely mismatch could be between what was fide molecular evidence as *Agastache pallidiflora* (A. Heller) Rydb. but where feeding was infrequently observed on *Pedicularis* L., likely due to the Lamiales order being represented by only a single molecular reference species. 
 
-```{r compare results, out.width="50%"}
+```{r compare results, out.width="50%", fig.cap= 'Comparision of Accuracy between the initial output data from BLAST, and these same data subjected to the post-classification process which removes surrogate, and temporally restricted species'}
 
 blast <- read.csv('../data/tally_blast_classifications.csv') %>% 
   group_by(Sample) %>% 
@@ -987,15 +992,16 @@ rm(n_corbiculae, prop_obs)
 We have demonstrated how the Angiosperms533 hyb-seq probes may be used for plant barcoding in a metagenomic context (@johnson2019universal, @hollingsworth2016telling). This was exemplified in an ecologically relevant scenario, where the results have immediate implications for natural history guided fundamental science and land management. The test pollen loads contained a number of closely related taxa, some in notoriously morphologically difficult clades with rapid rates of diversification (e.g. *Mertensia*, *Lupinus* L.), at naturally occurring proportions (@nevado2016widespread, @nazaire2014phylogenetic). We incorporated spatial and temporal approaches for creating custom sequence databases an approach which is readily applicable to any lab group with the capacity to perform next-generation sequencing across the entirety of multiple continents, and which we expect to be highly beneficial in many study areas. By combining insights from these novel approaches with an extensive observational field based study we show how these methods may be applied to test a variety of hypotheses related to ecological interactions. 
 
   The SDM's which we generated, with relatively few occurrence records and few modelling iterations, performed beyond expectations, likely due to the utility of the predictor variables and strong alignment of vegetation by orographic precipitation in the study area. However, we had difficulties in evaluating our predictions in an operational context. We utilized the database query approach, to only model species with a high probability of not being dispersal limited to the focal area, and focused on a relevant subset of many of these species ranges to reduce the contributions of range wide adaptions on habitat (@sork2018genomic, @joshi2001local). While the models worked well compared to both test, and validation with external point data, moving from points to polygon features was more difficult. We were able to compare our results to 1) a Flora, 2) lists of plants used by Bumble Bees at plots; the former inappropriate in that it contained a great number of species which we sought to use modelling to reduce *e.g.* all strictly alpine species, and the latter inappropriate in that it contained only species relevant to *Bombus* but had no official 'absence' data. Further given the, size of the minimum spanning tree  which we extracted points to, a formal floristic inventory would still be a time intensive process. Accordingly, we expect the real results of our data lay somewhere in between these two evaluations; with an excess of species predicted present (@dubuis2011predicting, @calabrese2014stacking, @pinto2021predicting), but few enough that they lend themselves to metabarcoding. We observe that our models seemed very capable of effectively identifying alpine species and removing them in binomial contexts. 
-  Difficulties in temporal models related to variability in drivers of flowering phenology. AND SMALL SAMPLE SIZE
+  Difficulties in temporal models related to variability in drivers of flowering phenology, and relatively small appropriate sample sizes per species. 
 
-These results show that the overall results between **Bumble Bee ecology** observational and barcoding are largely congruent. But that ... We analyzed pollen loads from all of the most common bumble bee species in the area (@pyke1982local)
-Future analyses of the long term data set... 
+Based on our results, we believe the overall results between observations of queen Bumble Bee and barcoding are largely congruent. Which relaxes concerns regarding differences between the insights gleaned from observational, as compared to data derived from the pollen records (@barker2021pollen, @zhao2019topology, @alarcon2010congruence). This indicates that results from fine resolution survey's, may serve as calibration standards to projects which expand geographically outward from them, and seek to make inference to larger areas.  We analyzed pollen loads from all of the most common bumble bee species in the area and were able to ... (@pyke1982local). The species which appeared most often in loads via the molecular records, yet seldom noted via observations, mostly had affinities to wetlands or stream banks. These habitats are not often sampled by terrestrial ecologists due to logistics and concerns regarding degrading them. This indicates that metabarcoding may be applied in studies where areas, or administrative units, prohibit the disturbances associated sampling. 
+
 
 ```{r Table of Limitations Faced}
 read.csv('../data/Limitations_Table.csv') |>
   knitr::kable(caption = 'Limitations Faced and Possible Solutions',
-             col.names = c('Method Component', 'Limitations', 'Paths Forward')) 
+             col.names = c('Method Component', 'Limitations', 'Paths Forward')) |>
+  kable_styling(full_width = TRUE)
 ```
 
 Results from palynological analyses show that several species of bee show near perfect fidelity to the genus *Mertensia* on a per visit basis... General results show high congruence between foraging and molecular results, indicating that concerns regarding mismatch between observational networks need not persist with *Bombus* studies...
@@ -1010,7 +1016,7 @@ Results from palynological analyses show that several species of bee show near p
   
 # 5 | CONCLUSION 
 
-We believe that the combination of spatial and temporal models, united and guided by localized natural history knowledge, provides the essential components of a bayesian framework for approaching the coarse elucidation of ecological interactions using DNA Barcoding. Herein we crudely utilized this thinking via binary outcomes, should a species predicted be predicted present or not? Is it unequivocally flowering or not? Myriad data show biological systems and ecological interactions have more variance than can be reasonably discretely parsed. We expect that within a bayesian framework studies of pollinator behavior may be enacted via this approach at a landscape level, e.g. the scale of an entire drainage basin such as the Gunnison which is quickly becoming one of the worlds few model ecosystems (. We hope that the promise of A353 probes as tools for metabarcoding play a role in these endeavors. 
+We believe that the combination of spatial and temporal models, united and guided by localized natural history knowledge, provides the essential components of a bayesian framework for approaching the coarse elucidation of ecological interactions using DNA Barcoding. Herein we crudely utilized this thinking via binary outcomes, should a species predicted be predicted present or not? Is it unequivocally flowering or not? Myriad data show biological systems and ecological interactions have more variance than can be reasonably discretely parsed. We expect that within a bayesian framework studies of pollinator behavior may be enacted via this approach at a landscape level, e.g. the scale of an entire drainage basin such as the Gunnison which is quickly becoming one of the worlds few model ecosystems. We hope that the A353 probes as tools for metabarcoding play a role in these endeavors. 
 
 **AUTHOR CONTRIBUTIONS:**  R.C.B conducted botanical collections, conducted all molecular lab work, lead all analyses, and writing. J.E.O conceived, designed, and conducted all ecological fieldwork, assisted with analyses, and writing. E.J.W. prepared, imaged, and collected trait data on pollen reference slides, and assisted with analysis of trait data and writing a dichotomous key. S.T. assisted with spatial analyses and writing. P.J.C assisted with ecological analyses and writing. J.B.F. conceived, and designed all lab work, analyses, and integration of approaches, assisted with writing, and secured funding for molecular work. 
 
@@ -1280,7 +1286,7 @@ knitr::include_graphics('../graphics/tables/bombus_samples.pdf')
 
 Appendix 18 - Overview of the Whole Process
 
-```{r Overview of entire process, out.height="125%"}
+```{r Overview of entire process, out.height="90%"}
 knitr::include_graphics('../graphics/plots/flowchart.png')
 ```
 

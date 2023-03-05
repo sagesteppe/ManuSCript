@@ -2,7 +2,7 @@
 
 \caption{\label{tab:Applications of Metabarcoding}Applications of Plant Metabarcoding}
 \centering
-\begin{tabular}[t]{l|l|l}
+\begin{tabu} to \linewidth {>{\raggedright}X>{\raggedright}X>{\raggedright}X}
 \hline
 Application & Example & Citations\\
 \hline
@@ -16,7 +16,7 @@ Forensic Science & Identifying the provenance of materials found at crime scene 
 \hline
 Pharmaceutical & Identifying adulterants in wholesale products & Bell et al. 2022\\
 \hline
-\end{tabular}
+\end{tabu}
 \end{table}
 \efloatseparator
  
@@ -24,9 +24,9 @@ Pharmaceutical & Identifying adulterants in wholesale products & Bell et al. 202
 
 \caption{\label{tab:Current Bottlenecks in Plant Metabarcoding}Current Issues Facing Plant Metagenomics}
 \centering
-\begin{tabular}[t]{l|l|l}
+\begin{tabu} to \linewidth {>{\raggedright}X>{\raggedright}X>{\raggedright}X}
 \hline
-Issue & Our Approach & Issue Citation\\
+Issue & Our Approach & Possible Advances\\
 \hline
 Stage 1 Species Filter & Test Data & Flash Plant Species Surveys on Plot\\
 \hline
@@ -42,7 +42,7 @@ False Positives & Which True Species? & Jaccard Index, Plot Abundance\\
 \hline
 Semi-Quantitative Inference & Genome Size, Pollen Grain Size? & Spike Samples with Reference Materials; Several Genome Sizes\\
 \hline
-\end{tabular}
+\end{tabu}
 \end{table}
 \efloatseparator
  
@@ -110,7 +110,7 @@ None met & 18 & 2.6 & 1.4 & Multiple\\
 
 \caption{\label{tab:Table of Limitations Faced}Limitations Faced and Possible Solutions}
 \centering
-\begin{tabular}[t]{l|l|l}
+\begin{tabu} to \linewidth {>{\raggedright}X>{\raggedright}X>{\raggedright}X}
 \hline
 Method Component & Limitations & Paths Forward\\
 \hline
@@ -128,5 +128,5 @@ False Positives & Which True Species? & Jaccard Index, Plot Abundance\\
 \hline
 Semi-Quantitative Inference & Genome Size, Pollen Grain Size? & Spike Samples with Reference Materials; Several Genome Sizes\\
 \hline
-\end{tabular}
+\end{tabu}
 \end{table}

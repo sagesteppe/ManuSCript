@@ -1,4 +1,9 @@
 \begin{figure}
+\includegraphics[width=0.35\linewidth]{../graphics/plots/filter_diagram} \caption{Simplified Conceptual Diagram of three approaches leading towards classification of sequencing results, and the number of species associated with them in our area. The upper three boxes indicate a common coarse approach, assuming one has a digitizewd Flora, which is not always the case. The center two boxes indicate the computational approach illustrated here. The final box indicates the use of the expert field data in the case study. The stem of the final applies to both Computational and Expert Survey results, and should be thought of as using time ala chromatography, in the post-classification process.}\label{fig:Filter Diagram}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
 \includegraphics[width=0.45\linewidth]{manuscript_MEE_files/figure-latex/Most used resources by species-1} \caption{Number of the ten most commonly visited plants which are also in the top ten most common sequences}\label{fig:Most used resources by species}
 \end{figure}
 \efloatseparator
@@ -15,4 +20,9 @@
  
 \begin{figure}
 \includegraphics[width=1\linewidth]{../graphics/plots/phenology_estimates-jeo_10_90} \caption{Modelled dates of when major flowering events occurred compared between 2015 and modelled data}\label{fig:plot phenology estimates JEO}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+\includegraphics[width=0.5\linewidth]{manuscript_MEE_files/figure-latex/compare results-1} \caption{Comparision of Accuracy between the initial output data from BLAST, and these same data subjected to the post-classification process which removes surrogate, and temporally restricted species}\label{fig:compare results}
 \end{figure}
