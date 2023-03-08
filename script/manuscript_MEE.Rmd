@@ -653,7 +653,7 @@ rm( krak, brack, blast, loci, no_loci, aa, bb, cc, dd, fa_total_seqs, j, byhand,
     sp_total_seqs, seqs_sp, seqs_ge, seqs_fa, pp_seqs_t, spp)
 ```
 
-```{r Correlation between Number of Grains and Number of Sequences}
+```{r Correlation between Number of Grains and Number of Sequences, fig.cap = 'Relationship between morphological count data and sequence reads', out.height="50%", out.width="50%"}
 
 pol_p <- pollen_props %>% 
   mutate(sequenceProp = sequenceProp/100, 
@@ -835,7 +835,6 @@ computer_correct <- left_join(true_species_computer, true_genus_computer, by = '
 
 rm(true_species_computer, true_genus_computer, true_family_computer)
 
-
 # FALSE records second
 
 false_species_blast <- anti_join(blast, expert,  by = c('Sample', 'Taxon')) %>% 
@@ -885,7 +884,7 @@ rm(false_species_computer, false_genus_compuer, false_family_computer,
 
 ### calculate accuracy
 
-# number of assignemnts
+# number of assignments
 
 automated_cnts <- automated %>% 
   group_by(Sample) %>% 
@@ -983,6 +982,41 @@ It is not unlikely that much of the difference in the results between the observ
 
 Accordingly, combining the results of floral observations, and palynology, molecular sequencing - both pre and post processing, we subjectively developed re-classifications of the contents of pollen grains...
 
+
+```{r Most Used Floral Resources Table}
+
+fam <- all_classifications %>% 
+  ungroup() %>% 
+  select(Family, Genus) %>% 
+  distinct()
+
+expert %>% 
+  group_by(Taxon) %>% 
+  add_count(name = 'No.Corb') %>% 
+  mutate(median_percent_corb = round( mean(Percent_Sample), 1), 
+         Taxon = str_remove(Taxon, '^.* '), 
+         Taxon = if_else(Taxon %in% c('Salix', 'Erigeron'), 'sp.', Taxon)) %>% 
+  select(Genus, Species = Taxon, Percent_Sample, No.Corb, median_percent_corb) %>% 
+  left_join(., fam, by = 'Genus') %>% 
+  select(-Percent_Sample) %>% 
+  relocate(Family, .before = Genus) %>% 
+  filter(No.Corb > 4) %>% 
+  distinct() %>% 
+  arrange(Family, Genus)  %>% 
+  knitr::kable(
+    escape = F,
+    align = c('l', 'l', 'l', 'c', 'c'),
+    caption = 'Plant species detected in five or more corbiculae loads',
+    col.names = c('Family', 'Genus', 'Species', 'No. Samples', 'Mean Prop.\\textsuperscript{a}')
+  ) %>% 
+  add_footnote(
+    'The mean only calculated across the samples where the species was detected') %>% 
+  collapse_rows()
+
+```
+
+
+
 ```{r}
 rm(n_corbiculae, prop_obs)
 ```
@@ -1002,7 +1036,7 @@ read.csv('../data/Limitations_Table.csv') |>
   kable_styling(full_width = TRUE)
 ```
 
-  Some foraging preferences of *Bombus*, both at this field site and across a great many localities globally emerge from this work, which reiterates the needs for land managers to maintain relatively high amounts of members of the famillies Fabaceae, Boraginaceae, and Ranunculaceae, in Western North American montane landscapes (@goulson2005causes, @goulson2010bumblebees, @liang2021evolutionary, @bontvsutvsnaja2021bumble). Numerous historic, and some ongoing, land management practices reduce the ability of many landscapes to support stable populations of *Bombus*. Historic livestock grazing was often associated with the targeted removal of many species of plants which are known to have compounds toxic to cattle. In particular, the removal of locoweeds (Fabaceae: *Astragalus* L. & *Oxytropis* DC.) and larkspurs (Ranunculaceae: *Delphinium*) were common across public lands administered by the United States Forest Service (@ralphs1988herbicide, @aldous1919eradicating, @ralphs2003mechanism). Further actions, generally initiated by early settlers, involved the channelization and incising of streams, culling of beavers, and leaving cattle concentrated on higher order stream banks for significant periods of time, all processes which lower the water tables and reduced the extent of stream-associated [riverine] wetlands and the mesic meadows fringes which provide habitat for many species of tall *Mertensia* (Boraginaceae, e.g. *M. ciliata* Torr. G. Don.) widely distributed across Western North America, and to an extent *Delphinium barbeyi*  and many species of native *Trifolium* L. (@dahl1990wetlands, @naiman1988alteration, @belsky1999survey, @cooke1976arroyos). Fire suppression further resulted in the succession of many Aspen (*Populus tremuloides* Michx.) groves to Conifer stands, decreasing the mosaic of age structured habitats in many landscapes, adversely effects habitat for tall *Mertensia* species and several species of *Delphinium* (@brewen202176, @keane2002cascading). Finally the effects of Nitrogen deposition, especially given the West's rapidly growing population still pose adverse effects on the abundance of a variety of species of Fabaceae at Urban-Rural interfaces (see @stevens2018atmospheric, @fenn2003ecological). Current solutions to these issues, involve targeted burns, reintroduction of beavers and beaver habitat analogs, and the possibility of re-seeding a variety of 'locoweeds' and 'larkspurs' in areas now seldom used, or only used for early, grazing. The highly enthusiastic response of land managers, and homeowners, to plant *Ascelpias* L., using genetically appropriate materials, to improve Monarch Butterfly (*Danaus plexippus* L.) habitat provides an effective framework for the latter (@oberhauser2015monarchs, @basey2015producing). 
+  Some foraging preferences of *Bombus*, both at this field site and across a great many localities globally emerge from this work, which reiterates the needs for land managers to maintain relatively high amounts of members of the famillies Fabaceae, Boraginaceae, and Ranunculaceae, in Western North American montane landscapes (@goulson2005causes, @goulson2010bumblebees, @liang2021evolutionary, @bontvsutvsnaja2021bumble). Numerous historic, and some ongoing, land management practices reduce the ability of many landscapes to support stable populations of *Bombus*. Historic livestock grazing was often associated with the targeted removal of many species of plants which are known to have compounds toxic to cattle. In particular, the removal of locoweeds (Fabaceae: *Astragalus* L. & *Oxytropis* DC.) and larkspurs (Ranunculaceae: *Delphinium*) were common across public lands administered by the U.S. Forest Service (@ralphs1988herbicide, @aldous1919eradicating, @ralphs2003mechanism). Further actions, generally initiated by early settlers, involved the channelization and incising of streams, culling of beavers, and leaving cattle concentrated on higher order stream banks for significant periods of time, all processes which lower the water tables and reduced the extent of stream-associated [riverine] wetlands and the mesic meadows fringes which provide habitat for many species of tall *Mertensia* (Boraginaceae, e.g. *M. ciliata* Torr. G. Don.) widely distributed across Western North America, and to an extent *Delphinium barbeyi*  and many species of native *Trifolium* L. (@dahl1990wetlands, @naiman1988alteration, @belsky1999survey, @cooke1976arroyos). Fire suppression further resulted in the succession of many Aspen (*Populus tremuloides* Michx.) groves to Conifer stands, decreasing the mosaic of age structured habitats in many landscapes, adversely effects habitat for tall *Mertensia* species and several species of *Delphinium* (@brewen202176, @keane2002cascading). Finally the effects of Nitrogen deposition, especially given the West's rapidly growing population still pose adverse effects on the abundance of a variety of species of Fabaceae at Urban-Rural interfaces (see @stevens2018atmospheric, @fenn2003ecological). Current solutions to these issues, involve targeted burns, reintroduction of beavers and beaver habitat analogs, and the possibility of re-seeding a variety of 'locoweeds' and 'larkspurs' in areas now seldom used, or only used for early, grazing. The highly enthusiastic response of land managers, and homeowners, to plant *Ascelpias* L., using genetically appropriate materials, to improve Monarch Butterfly (*Danaus plexippus* L.) habitat provides an effective framework for the latter (@oberhauser2015monarchs, @basey2015producing). 
 
   We have concerns regarding the number of persons training to become and practice botany, and grave concerns regarding the funding mechanisms for floristic and field based botanical research and for centralized authorities to produce consensus opinions on alpha taxonomy (@prather2004decline, @kramer2015report, @prather2004implications, @crisci2020end, @manzano2021flippant, @stroud2022botanical). To reduce the effects of a low population density of botanists on the maintenance of and production of Flora's and to foster meta-genomics across landscapes without field stations we utilized Species Distribution Modelling to generate predictive species lists. In this proof-of-concept example we performed several iterations of modelling runs, and several approaches (i.e. the 'linear models', and the 'machine learning'), which took notable amounts of compute power. We suspect the possible deleterious nature of this endeavor may be reduced by: 1) more field surveying by crews will reduce the need to generate as many species 2) fewer runs of models, 3) only running machine learning models which do not require an explicit process to reduce spatial autocorrelation. However, given the time required to perform all aspects of a study, even our amount of computation was negligible. Further, we are very optimistic about the possibility for persons to perform these tasks, as mentioned we utilized roughly only one quarter of the records which were digitally available for presence, and we suspect others will have enough records to perform this process nearly anywhere else in the temperate. In certain scenarios modelling of predicted species via more formally tailored S(tacked)-SDM or J(oint)-SDM approaches may be beneficial (@wilkinson2021defining, @pinto2021predicting, @schmitt2017ssdm). 
   

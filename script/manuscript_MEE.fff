@@ -24,5 +24,10 @@
 \efloatseparator
  
 \begin{figure}
+\includegraphics[width=0.5\linewidth,height=0.5\textheight]{manuscript_MEE_files/figure-latex/Correlation between Number of Grains and Number of Sequences-1} \caption{Relationship between morphological count data and sequence reads}\label{fig:Correlation between Number of Grains and Number of Sequences}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
 \includegraphics[width=0.5\linewidth]{manuscript_MEE_files/figure-latex/compare results-1} \caption{Comparision of Accuracy between the initial output data from BLAST, and these same data subjected to the post-classification process which removes surrogate, and temporally restricted species}\label{fig:compare results}
 \end{figure}

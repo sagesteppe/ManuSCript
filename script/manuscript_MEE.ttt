@@ -108,6 +108,49 @@ None met & 18 & 2.6 & 1.4 & Multiple\\
  
 \begin{table}
 
+\caption{\label{tab:Most Used Floral Resources Table}Plant species detected in five or more corbiculae loads}
+\centering
+\begin{tabular}[t]{l|l|l|c|c}
+\hline
+Family & Genus & Species & No. Samples & Mean Prop.\textsuperscript{a}\\
+\hline
+ & Erigeron & sp. &  & \\
+\cline{2-3}
+ & Senecio & integerrimus & \multirow{-2}{*}{\centering\arraybackslash 6} & \\
+\cline{2-4}
+ & Symphyotrichum & eatonii & 5 & \multirow{-3}{*}{\centering\arraybackslash 0.5}\\
+\cline{2-5}
+\multirow{-4}{*}{\raggedright\arraybackslash Asteraceae} & Taraxacum & officinale & 11 & 6.9\\
+\cline{1-5}
+ &  & fusiformis & 22 & 23.7\\
+\cline{3-5}
+\multirow{-2}{*}{\raggedright\arraybackslash Boraginaceae} & \multirow{-2}{*}{\raggedright\arraybackslash Mertensia} & ciliata & 7 & 39.9\\
+\cline{1-5}
+Celastraceae & Parnassia & palustris & 5 & 0.5\\
+\cline{1-5}
+Fabaceae & Lupinus & sericeus & 23 & 15.5\\
+\cline{1-5}
+ &  & fendleri & 22 & 15.1\\
+\cline{3-5}
+\multirow{-2}{*}{\raggedright\arraybackslash Hydrophyllaceae} & \multirow{-2}{*}{\raggedright\arraybackslash Hydrophyllum} & capitatum & 6 & 32.7\\
+\cline{1-5}
+ &  & barbeyi & 7 & 45.9\\
+\cline{3-5}
+\multirow{-2}{*}{\raggedright\arraybackslash Ranunculaceae} & \multirow{-2}{*}{\raggedright\arraybackslash Delphinium} & nuttallianum & 21 & 70.0\\
+\cline{1-5}
+Rosaceae & Dasiphora & fruticosa & 7 & 0.6\\
+\cline{1-5}
+Salicaceae & Salix & sp. & 9 & 8.3\\
+\cline{1-5}
+Violaceae & Viola & praemorsa & 6 & 0.5\\
+\hline
+\multicolumn{5}{l}{\textsuperscript{a} The mean only calculated across the samples where the species was detected}\\
+\end{tabular}
+\end{table}
+\efloatseparator
+ 
+\begin{table}
+
 \caption{\label{tab:Table of Limitations Faced}Limitations Faced and Possible Solutions}
 \centering
 \begin{tabu} to \linewidth {>{\raggedright}X>{\raggedright}X>{\raggedright}X}
@@ -126,7 +169,7 @@ Read Re-assignment & Discrete Frequentist Data & Posterior-Probabilities; Floral
 \hline
 False Positives & Which True Species? & Jaccard Index, Plot Abundance\\
 \hline
-Semi-Quantitative Inference & Genome Size, Pollen Grain Size? & Spike Samples with Reference Materials; Several Genome Sizes\\
+Semi-Quantitative Inference & Genome Size, Pollen Grain Size? & Spike Samples with Reference Materials; Several C Sizes\\
 \hline
 \end{tabu}
 \end{table}

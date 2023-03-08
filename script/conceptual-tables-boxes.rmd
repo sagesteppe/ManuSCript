@@ -130,7 +130,7 @@ limitations <- data.frame(
     'Plant and Fungal Tree of Life; 10kP', 
     'Posterior-Probabilities; Floral Abundance, Nectar/Pollen Nutrition', 
     'Jaccard Index, Plot Abundance',
-    'Spike Samples with Reference Materials; Several Genome Sizes'
+    'Spike Samples with Reference Materials; Several C Sizes'
   )
 )
 
