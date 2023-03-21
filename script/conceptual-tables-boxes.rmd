@@ -142,3 +142,44 @@ read.csv('../data/Limitations_Table.csv') |>
 
 rm(limitations)
 ```
+
+
+4) Summary of errors from the framework approach
+
+```{r}
+
+errors <- data.frame(
+  
+  'Component' = c(
+    'Spatial', 'Molecular (Reference Library)',
+    'Molecular Reference (Loci)', 'DNA difficult to extract',
+    'Reclassification (Genus)', 'Reclassification (Family)'
+  ), 
+  
+  'Example' = c(
+    '"Scabrethia Scabra" (false postiive)', '"Asteraceae" (wrong order)',
+    '"Trollium" (false positives, same family as target)', '"Agastache" (Hemiparasites)',
+    '"Epilobium"', '"Paxistima myrsinites"'
+  ), 
+  
+  'Correction'  = c(
+    'Wyethia arizonica', 'Frasera', 
+    'Lupinus sp.', 'Pedicularis',
+    'Chamaenerion latifolium?', 'Parnassia palustris'
+  )
+)
+
+write.csv(errors, '../data/Errors_Table.csv', row.names = F)
+
+read.csv('../data/Errors_Table.csv') |>
+  knitr::kable(caption = 'Errors faced with components of the framework',
+             col.names = c('Component', 'Example', 'Correction')) 
+
+rm(errors)
+```
+
+
+For example many sequences which mapped to the Asteraceae family, but which was flagged by temporal filters and is present in both *B. nevadensis* Cresson and *B. rufocinctus* Cresson pollen is most likely *Frasera* Walter, which failed extractions for the reference library failed (Appendix 11). A similar likely mismatch could be between what was fide molecular evidence as *Agastache pallidiflora* (A. Heller) Rydb. but where feeding was infrequently observed on *Pedicularis* L., likely due to the Lamiales order being represented by only a single molecular reference species. 
+
+Situations where SDM's led to incorrect results at the species level are evident with classification to *Scabrethia Scabra* (Hooker) W.A. Weber, this match almost certainly representing *Wyethia arizonica* A. Gray (@weber1998new), a species known to be visited by queen bee's via our floral observations. An expected inaccuracy of the classification scheme is in genus level placements, e.g. were *Epilobium* L. (Onagraceae Juss.) spp. were classified. However, given the small size of their flowers in the study area, these results more likely indicate that a species of *Chamaenerion* Seg. (a segregate genus) such as *C. angustifolium* (L.) Scop.  or *latifolium* (L.) Sweet is occasionally utilized, as it supported by limited palynology data. An issue with reclassification within the family level in combination with time included reclassifying *Parnassia palustris* L. to *Paxistima myrsinites* (Pursh) Rafinesque. However, based on flower size it is more likely that the visited taxon was *P. palustris*. 
+

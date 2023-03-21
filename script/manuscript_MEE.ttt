@@ -173,3 +173,27 @@ Semi-Quantitative Inference & Genome Size, Pollen Grain Size? & Spike Samples wi
 \hline
 \end{tabu}
 \end{table}
+\efloatseparator
+ 
+\begin{table}
+
+\caption{\label{tab:unnamed-chunk-5}Errors faced with components of the framework}
+\centering
+\begin{tabular}[t]{l|l|l}
+\hline
+Component & Example & Correction\\
+\hline
+Spatial & "Scabrethia Scabra" (false postiive) & Wyethia arizonica\\
+\hline
+Molecular (Reference Library) & "Asteraceae" (wrong order) & Frasera\\
+\hline
+Molecular Reference (Loci) & "Trollium" (false positives, same family as target) & Lupinus sp.\\
+\hline
+DNA difficult to extract & "Agastache" (Hemiparasites) & Pedicularis\\
+\hline
+Reclassification (Genus) & "Epilobium" & Chamaenerion latifolium?\\
+\hline
+Reclassification (Family) & "Paxistima myrsinites" & Parnassia palustris\\
+\hline
+\end{tabular}
+\end{table}

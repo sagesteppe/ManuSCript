@@ -1,0 +1,7 @@
+"Component","Example","Correction"
+"Spatial","""Scabrethia Scabra"" (false postiive)","Wyethia arizonica"
+"Molecular (Reference Library)","""Asteraceae"" (wrong order)","Frasera"
+"Molecular Reference (Loci)","""Trollium"" (false positives, same family as target)","Lupinus sp."
+"DNA difficult to extract","""Agastache"" (Hemiparasites)","Pedicularis"
+"Reclassification (Genus)","""Epilobium""","Chamaenerion latifolium?"
+"Reclassification (Family)","""Paxistima myrsinites""","Parnassia palustris"
