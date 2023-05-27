@@ -89,11 +89,69 @@ knitr::include_graphics('../graphics/plots/filter_diagram.png')
 
 # 2 | METHODS
 
-To improve metabarcoding reliability and efficiency, we suggest creating a regional list of candidate species using digital collections gleaned from herbaria, survey work, and community science  (Figure 1). This list can further be refined using species distribution models and temporal filtering to limit the impact of spatial and taxonomic biases in the species list and account for spatial variations in niche availability throughout the study area. The final list is then used to inform collection of plant samples to create a library and inform metabarcoding . We apply this methodological framework to the metabarcoding of corbiculae pollen loads of bumble bees and compare the accuracy of our metabarcoding approach both prior and after applying a spatial and temporal filtering to pollen identification conducted by experts and field observations.
+To improve metabarcoding reliability and efficiency, we suggest creating a regional list of candidate species using digital collections gleaned from herbaria, survey work, and community science  (Figure 1). This list can further be refined using species distribution models and temporal filtering to limit the impact of spatial and taxonomic biases in the species list and account for spatial variations in niche availability throughout the study area. The final list is then used to inform collection of plant samples to create a library and inform metabarcoding . We apply this methodological framework to the metabarcoding of corbiculae pollen loads of bumble bees and compare the accuracy of our metabarcoding approach both prior and after applying a spatial and temporal filtering to pollen identification conducted by experts and field observations (@pereira2006towards, )
 
-## 2.1 Case Study: Bee-Flower Observations and Pollen Load Collection
+## Create Species List
 
-Bee and flower observations and bee corbiculae pollen collection was conducted around the Rocky Mountain Biological Laboratory (RMBL; 38°57.5” N, 106°59.3” W (WGS 84), 2900 m.a.s.l.), Colorado, USA (Appendix 1 for site information). The area is characterized by subalpine meadow vegetation communities. Pollinator observations of Bombus Latreille spp. (Apidae Latreille) were conducted from May 29th – July 23rd of 2015 in six study sites as a part of a larger study (described in Ogilvie and CaraDonna 2022). Observations of Bombus foraging took place for one hour at each field site, with equal time spent searching for bee in the major vegetation types (dry, and wet meadows, and aspen forest). Corbiculae pollens loads were, non-lethally, collected from queens encountered by capturing them in an insect net and transferring them into a restraining device ("bee squeezer", @kearns2001natural). We then collected a single pollen load (i.e., from one leg) from the bee and then released it. At weekly intervals at each site, we also recorded the abundances of flowers visited by bumble bees within belt transects spread over the three vegetation types (0.5 x 40 m transects in each vegetation type, 60 m^2^ total area per site). 
+### Survey Databases
+
+The first step of our methodological approach consists in collating existing species occurrence data to create  a preliminary list of candidate species likely to occur in the study area. Such occurrence data can be retrieved from databases including the Botanical Information and Ecology Network ‘BIEN’ (Maitner (2022)) or the Global Biodiversity Information Facility (GBIF; REF) which aggregate occurrence records from various sources including community science datasets (e.g., iNaturalist) and herbarium records. These databases can be queried to extract a list of ecologically relevant vascular plant species with occurrence records in the administrative (e.g. county, region) or ecological unit (e.g. ecoregion) including the study site or within a search radius surrounding the cite. Focusing on a broader geographic region than the study area alone can account for inconsistent sampling effort and undetected species, which are both common in herbarium records and community science datasets
+
+###  Distribution modeling to see which taxa are likely to be within his area
+
+While increasingly used in biodiversity assessments (REFs), datasets like BIEN and GBIF can nonetheless include occurrence records with erroneous taxonomic identification, geographic inaccuracies, or historical records (@freitas2020reliable, SMITH????) Hence additional filtering might be needed to develop a more robust list of candidate species. Once a regional list of potential species is established, Species Distribution Models can be used to further reduce the species list to only keep species with ecological requirements found within study sites (Figure 1). This step can also help filter for species adapted to the local ecological condition of the study sites, which can be particularly useful in highly heterogeneous landscapes in which a simple survey of databases  may overestimate the list of potential species or when limited taxonomic expertise is available to filter the preliminary species list. Species Distribution Models examine relationships between known species occurrences data and a set of environmental variables to identify potentially suitable habitats with similar ecological conditions elsewhere in the landscape (@guisan2000predictive, ... ). They are often used to inform conservation strategies, evaluate invasion risks, or estimate species richness (@thuiller2006using; @pineda2009assessing). Environmental variables used as predictors in SDMs typically describe the fundamental ecological niche of the species (e.g., climate, elevation, soil types) or constraints to its distribution (e.g., land uses/land covers, canopy openness) and commonly rely on publicly available geospatial datasets (see Table 1 for examples). Once relationships between known occurrence records and these environmental variables are established, SDM algorithms then score remaining portions of the study area on a suitability scale ranging from 0 (highly unsuitable) to 1 (highly suitable) on the basis of their similarity to habitats currently sheltering species populations. Once SDMs are generated for the entire pool of species identified through a database search (section 2.3), these suitability maps can be aggregated to refine the list of species likely to occur in study sites.
+
+### Temporal filtering
+
+When studying species interactions, a potentially helpful additional step is to query the candidate species list to retain plant species with phenology that aligns with the study species preferences. For example, when studying plant-pollinator interactions, considering that plant flowering varies over space and time, the project may want to focus only on the species flowering during the pollinators’ active period,. These contrasts in the phenological periods can thus provide an additional filter for identifying material in certain types of metagenomic samples (@janzen1967synchronization, @Newstrom1994ANC, @thompson1994coevolutionary, @caradonna2017interaction). Community science efforts focusing on plant phenology can provide helpful information on the phenology of commonly observed species. Examples of such datasets include: the National Phenology Network in the United States (Denny et al. 2014), SeasonWatch in India, PlantWatch in Canada, and the Pan European Phenology Project. Local Floras can also provide useful information on the phenological characteristics of species.
+
+### Collecting representative samples for reference library 
+
+GOES HERE
+
+
+### Using baits to pull out specific regions (barcode) of the genome
+
+For barcoding the environmental samples and leaf samples collected from candidate taxa, we are proposing using a Next generation sequencing approach which incorporates a target capture probes (@jones2016targeted).  There are several approaches available for preparing genomic libraries that vary in cost, ease of use (CITE), and the quality and quantity of sample DNA required that are all appropriate for target capture approach. The choice of best library preparation approach will depend on the type of samples, the lab and sequencing platform preferred. Once a library has been generated, and size selected to generate appropriate sized fragments, and appropriately barcoded to distinguish individuals, a synthetic probes, often referred to as baits, is used to preferably retain fragments within the library which contain sequences associated with desired loci, while remainder of fragments which do not are washed away, maximizing sequencing efficiency.  There are a number of probe sets which have been developed, some are taxon specific, but a handful are more general and appropriate for barcoding multiple taxa, including Angiosperms353 probe set (@johnson2019universal), which is appropriate for most flowering species, and goFlag (@breinholt2021target) might be more appropriate for non-flowering species. These approaches  capture data from multiple loci across genome, which are both expressed, therefore have lower mutation rates, and are found to occur in single copies in most taxa, making them appropriate for taxonomic studies.
+
+### Compare barcode to reference library
+
+The data generated is filtered and trimmed using pipelines such as TRIMMOMATIC @bolger2014trimmomatic to identify and remove sequences added during library preparation process and not associated with sample. These sequence fragments (contigs) are then compared back to the reference probe sequences to sort them by loci of origin @johnson2016hybpiper. For libraries which contain only a single taxa, the contigs from the same loci then be aligned to generates a consensus sequence @katoh2013mafft. This consensus sequence can then be used as a reference for which to compare the multiple species samples and identify taxa. 
+
+
+## Case Study: Measuring bumblebee visitation based on corbiculae load
+
+### 2.5.1 Bee-Flower Observations and Pollen Load Collection
+
+To test this metagenomic and informatics approach, we used the identification of plant species within corbiculae pollen loads of bumble bees collected at the Rocky Mountain Biological Laboratory (RMBL; 38°57.5” N, 106°59.3” W (WGS 84), 2900 m.a.s.l.), Colorado, USA (Appendix 1 for site information). Bumblebees are one of the only groups of insects with unequivocal quantitative evidence for numerous population declines. They are also the most effective pollinators in many temperate montane ecosystems ( @cameron2020global, @goulson2008decline, @williams1982distribution, @colla2012assessing, @bergman1996micrometeorological, @bingham1998efficient, @grixti2009decline), which are experiencing steep changes in annual temperature under climate change (@brito2018climate, @pepin2022climate). As such, the effective management of these ecosystems relies on the study of keystone species, such as bumble bees, that play a critical role in maintaining their current diversity (@loarie2009velocity, @dobrowski2016climate). The queen bumblebees emerge early in the season to identify nesting sites. Floral resources are essential at these foraging stages for increasing their weight before diapause and increasing their ovary weights while establishing their found nests, and therefore this period represent potential demographic bottlenecks in bumble bee populations (@sarro2022bumble). 
+
+
+### Species list
+
+content goes here
+
+
+### Pollen and plant material collection
+
+Observations of visitation and bee corbiculae pollen collection was conducted at the Rocky Mountain Biological Laboratory (RMBL; 38°57.5” N, 106°59.3” W, 2900 m.a.s.l.), Colorado, USA (Appendix 1 for site information). Pollinator observations of Bombus Latreille spp. (Apidae Latreille) were conducted from May 29th – July 23rd of 2015 in six study sites as a part of a larger study (described in @ogilvie2022shifting). Observations of Bombus foraging took place for one hour at each field site. Corbiculae pollens loads were non-lethally collected from queens encountered by capturing them in an insect net and transferring them into a restraining device (@kearns2001natural). We then collected a single pollen load (i.e., from one leg) from the bee and then released it. At weekly intervals at each site, we also recorded the abundances of flowers visited by bumble bees within belt transects spread over three vegetation types (0.5 x 40 m transects in each vegetation type, 60 m2 total area per site). Using five years (2015-2020) of observational data on Bombus queen interactions with flowering plants at these studies sites, we identified the plant taxa most frequently visited by queens across all years. In order to capture more variability inherit in the 353 loci we sampled the 12 most visited taxa twice using samples collected from one site within the Gunnison Basin River Drainage and one individual collected from another more distal population. In addition, we included a congener - or a species from a closely related genus to serve as an outgroup for all 12 taxa to confirm the efficiency of 353 baits for species level identification. We also sequenced another 15 taxa of plants commonly visited by Bombus workers, based on the abundances, and immediate access to plant tissue, in the aforementioned data set (Appendix 3). Plant collections were identified typically using a combination, of dichotomous keys and primary literature as required (@flora1993flora, @hitchcock2018flora,  @ackerfield2015flora, @lesica2012manual,  @cronquist1977intermountain, @allred2012flora, @jepson2022online, @mohlenbrock2002vascular).
+
+
+
+### Validation process
+
+To precisely classify the contents of each corbiculae load, the sequences classified by molecular methods were compared with the fieldwork which recorded the presence and absence of species and their duration of flowering at a very fine resolution, . The quantitative counts of grains from microscopy were combined with the semi-quantitative sequencing results to estimate the abundance of each identified species in each corbiculae load.
+
+
+### Validation using morphological pollen identification
+
+
+Five years of observational data on Bombus Queen Bee foraging at these studies sites @ogilvie2022shifting was used as baseline of what we should expect for visitation within this system. This was supplemented with the RMBL Vascular Plant Checklist (@fraser2007vpc). Microscopy was use to qualitatively identify, and quantitatively note, the plant species present in corbiculae loads. A pollen reference library of know taxa visited by Bumbleebees and therefore expected to be present in the corbiculae loads was made using a fuchsin-jelly stained grains from slides previously prepared by the authors (n = 21), and other researchers (n = 38) (@beattie1971technique, @brosi2013single). A total of 62 voucher slides for species were prepared and imaged at 400x (Leica DMLB, Leica MC170 HD Camera, Leica Application Suite V. 4.13.0) from previously prepared slides and both non-accessioned and RMBL herbarium collections to supplement the number of species and clades covered (Appendix 3). To prepare the pollen slides from corbiculae, all corbiculae loads were broken apart and rolled using dissection needlepoints to increase heterogeneity of samples. Circa 0.5mm2 of pollen was placed onto a ~4mm2 fuchsin jelly cube @beattie1971technique atop a graticulated microscope slide, with 20 transects and 20 rows (400 quadrants) (EMS, Hartfield, PA). The jelly was melted, with stirring, until pollen grains were homogeneously spread across the microscope slide. Slides were sealed with Canada Balsam (Rublev Colours, Willits, CA) followed by sealing with clear nail polish to prevent oxidation; all samples are noted in Appendix 4. 
+
+To identify the pollen present in corbiculae loads, light microscopy at 400x (Zeiss Axioscope A1) was used. In initial sampling in three transects, each pollen grain was identified to morphotype and counted; an additional two transects were scanned for morphotypes unique to that slide, if either transect contained a unique morphotype then all grains in that transect were also identified and counted. We used clustering techniques to supplement our subjective opinions of which plant taxa were distinguishable via light microscopy, and to develop a dichotomous key to pollen morphotypes. Ten readily discernible categorical traits were collected from each specimen in the image collection. These traits were transformed using Gower distances, and clustered using Divisive Hierarchical clustering techniques (@cluster2022). Using the cluster dendrogram, elbow plot, and heatmaps @fpc2022, of these results morphological groups of pollen which could not be resolved via microscopy were delineated, and a dichotomous key was prepared (Appendix 6). This key was then used to identify the pollen grains sampled from corbiculae loads to morphotypes in a consistent manner.
+
+Subsequent to the first round of sampling, non-parametric species richness rarefaction curves (@vegans2022), and non-parametric species diversity rarefaction curves were used to assess the completeness of sampling (@inextArticle, @inextPackage). Slides not approaching the asymptote of the rarefaction curve were then re-sampled, and analysed iteratively for up to a total of seven transects (Appendix 7 & 8). 
+
+To reclassify the sequence reads, these data were combined with the floral observation data, and mapped by genus. If more than one species in the genus was flowering at that time and site, then the reads were split evenly between the taxa. For sequence data which did not match at the genus level, a user subjectively scored them based on the species composition and phenological activity at each site, the queen interaction data, and pollen assignments. To estimate the abundance of each of these species in the corbiculae loads, these data were combined with the microscopy data. For each morphotype detected in pollen, and each classified sequence read which was not detected via microscopy, they were given a value of 0.5% to indicate their trace presences. When more than a single species belonged to a morphotype group in a single sample, the quantitative values from the morphological work were multiplied by the relative sequence abundance of each species in the load. All final compositions were standardized to a sum of 100%, by adding or subtracting the differences (induced by classifying records as ‘trace’) to all species with abundances > 1%.
 
 ## 2.3 | Pollen Morphological identification
 
@@ -176,6 +234,86 @@ To precisely classify the contents of each corbiculae load the sequences classif
 To reclassify the sequence reads, these data were combined with the flora observation data, and mapped by genus. If more than one species in the genus was flowering at that time and site, than the reads were split evenly between the taxa. For sequence data which did not match at the genus level, a user subjectively scored them based on the species composition and phenological activity at each site, the queen interaction data, and pollen assignments. To estimate the abundance of each of these species in the corbiculae loads, these data were combined with the microscopy data. For each morphotype detected in pollen, and each classified sequence read which was not detected via microscopy, they were given a value of 0.5% to indicate their trace presences. When more than a single species belonged to a morphotype group in a single sample, the quantitative values from the morphological work were multiplied by the relative sequence abundance of each species in the load. All final compositions were standardized to a sum of 100%, by adding or subtracting the differences (induced by classifying records as 'trace') to all species with abundances > 1%. 
 
 # 3 | RESULTS
+
+### Spatial Analyses
+
+```{r Results for SA Modelling}
+
+files <- list.files('/hdd/MS_SDM_RMBL/SDMS_RMBL/results/maps', pattern = 'tif$')
+ml <- files[grep( '_ml_', files)]
+ml <- unique(sub('_ml.*$', '', ml)) # ensure we do not have dupes
+linear <- files[grep('_glm_', files)]
+linear <- unique(sub('_glm.*$', '', linear))
+
+# setdiff(linear, ml) # Barbarea vulgaris, epilobium lactiflorum not modelled with ml
+# setdiff(ml, linear) # ericameria parryi not modelled with 'linear regression'
+
+rm(files, ml, linear)
+```
+
+```{r Results for SA Logistic Regression Metrics}
+
+logR_dat <- read.csv('../data/PA_records_logistic_regression.csv')[,2:4] %>% 
+  filter(occurrence == 0) 
+
+dat <- read.csv('../data/evaluation_table.csv')[,2:3]
+data.frame(Metric  = dat[1:5,1],
+                   Value   = dat[1:5,2],
+                   Metric1 = dat[6:10,1],
+                   Value1  = dat[6:10,2]
+                   ) %>% 
+  knitr::kable(caption = "Logistic regression assessing accuracy of SDMs",
+    col.names = c('Metric', 'Value', 'Metric', 'Value'),
+    booktabs = T) #%>% 
+  #kableExtra::kable_styling(position = "float_right")
+```
+
+```{r Results for SA Logistic Regression Contingency table}
+read.csv('../data/Pa_conting_table.csv') %>% 
+    knitr::kable(caption = "Species Distribution Modeling evaluation contingency table",
+    col.names = c('', ' Absence ', '  Presence  ', ' Absence ', ' Presence '), align = "lrrrr",
+    booktabs = T) %>%
+    add_header_above(c(" " = 1, "Training" = 2, "Testing" = 2))
+
+rm(logR_dat, dat)
+```
+
+The threshold distance under which a species would undergo species distribution modelling was the median (25.009 km) of the logistic regression assessing the probability of occurrence of a species record as a function of distance from the study area. A 2-sample test for equality of proportions with continuity correction (X-squared = 13.254, df = 1, p-value = 0.000136, 95% CI 0.04-1.00) was used to test whether more of the records located in the broad ecological sites present at the field station, between the distance of the median (25.009 km) to the third quantile (ca 43.830 km) of the regression distance, were true presences at the field station. Including these records would have resulted in modelling an additional 222 species distributions of which 30 are true presences, these taxa were not modelled.  
+
+Across the entire spatial domain of modelling all ensembled models (n = 968) had an accuracy of 0.84 (95% CI 0.8356 - 0.8443), kappa = 0.68, p-value < 0.001, sensitivity = 0.80, specificity = 0.87, AUC = 0.92.
+
+Across the entire spatial domain of modelling, all ensembled models (n = 968) had an accuracy of 0.84 (95% CI 0.8356 - 0.8443), kappa = 0.68, p-value < 0.001, sensitivity = 0.80, specificity = 0.87, AUC = 0.92. The 493 ML ensembles accurately predicted the presence of 362 occurrences (65.3%), incorrectly predicted the presence of 64 (11.6%), incorrectly predicted 34 true presences (6.1%) as being absent, and correctly predicted the true absence of 33 (6.0%). Of the 554 vascular plants with biotic pollination, the 475 LM ensembles accurately predicted the presence of 286 (51.6%), incorrectly predicted the presence of 41 (14.3%), incorrectly predicted 93 true presences (16.8%) as being absent, and correctly predicted the true absence of 55 (9.9%). The balanced accuracy of the ensembled models is 0.664 (Sensitivity = 0.573, Specificity 0.754). Of the 117 plant species identified to the species level across the spatial extents of all plots and duration of queen bee activity, the ML ensembles predicted the presence of 105 (89.7%) of them, and LM ensembles 102 (87.2%). Of the missing species two (1.7%) are Orchids, six (5.1%) are non-native, and one (0.85%) is of contested taxonomic standing, all of which (7.65%) are restricted from the initial query database.
+
+
+### Temporal Analysis
+
+The first date of modeled snow melt in the Gothic area (n = 17, $\bar{x}$ = 137.9, Mdn = 135, 3^rd^ quartile = 151), and the first date of a consistent winter snow base (n = 17, $\bar{x}$ = 299.9, Mdn = 300, 1^st^ quartile = 291) from 2000-2017, were used as delimiters for the inclusions of herbarium records in modelling. Of the 439 species predicted likely present in the area via logistic regression, 332 species (64.4%) with more than 10 records in the focal level 4 ecoregions ($\bar{x}$ = 35.016, Mdn = 35, max = 96) had Weibull estimates calculated, an additional 56 species (11.2%) with enough contributing records from the "Sedimentary Mid-Elevation Forests", a large ecoregion generally just beneath the elevation bands occupied by the five ecoregions around the study area had Weibull estimates also calculated ($\bar{x}$ = 13.868, Mdn = 13, max = 24). We could only compare 58 of these 388 species to plot based observational data from the long term (1974–2012) data set (@caradonna2014shifts), but this revealed high accord between the long-term ground truthed data set and the modelled species. There was very strong evidence that the Weibull estimates were positively associated with the observed onset. There was very strong evidence that the Weibull estimates were positively associated with the observed onset (p < 0.0001, tau = 0.61), peak (p < 0.0001, tau = 0.65), and cessation of flowering (p < 0.0001, tau = 0.49). There was moderate evidence that the Weibull estimates had a weak positive association with the observed duration of flowering (p = 0.58, tau = 0.17).
+
+Of the previous 58 species compared, 47 of these could be compared to transect based data from the six sites observed in 2015. There was very strong evidence that the Weibull estimates were positively associated with the observed onset (p < 0.0001, tau = 0.58), and cessation of flowering (p < 0.0001, tau = 0.40).
+
+```{r plot phenology estimates, echo=F, fig.cap="Modelled dates of when major flowering events occurred compared between long term and modelled data", out.width = '100%'}
+knitr::include_graphics("../graphics/plots/phenology_estimates_10_90.png")
+# these are the tenth and nintey  percent non-parametric confidence intervals. 
+```
+
+```{r plot phenology estimates JEO, echo=F, fig.cap="Modelled dates of when major flowering events occurred compared between 2015 and modelled data", out.width = '100%'}
+knitr::include_graphics("../graphics/plots/phenology_estimates-jeo_10_90.png")
+```
+
+
+### Molecular analysis 
+### Plant data
+
+Need some text here… how well did plant capture go?
+
+### Corbiculae loads
+
+The 54 corbiculae loads had DNA extracted and underwent various steps towards hyb-seq, in the end a total of `r toString(length(raw_seqs))` corbiculae samples were sequenced, `r pNumC(sum(raw_seqs))` reads were recovered from sequencing. The number of reads per sequence varied widely (range = `r pNumC(min(raw_seqs))` - `r pNumC(max(raw_seqs))`, $\bar{x}$ = `r pNumC(round(mean(raw_seqs),1))`, Mdn = `r pNumC(median(raw_seqs))`). Of the possible 353 loci, the number which were recovered from each sample, and informative to BLAST were range = `r toString(min(no_loci$no_loci))` - `r toString(max(no_loci$no_loci))`, $\bar{x}$ = `r toString(round(mean(no_loci$no_loci), 1))`, Mdn = `r toString(median(no_loci$no_loci))`. The number of reads per loci from across all samples had a range of `r min(no_reads$readsLoci)` - `r pNumC(max(no_reads$readsLoci))`, $\bar{x}$ = `r pNumC(round(mean(no_reads$readsLoci), 1))`, Mdn = `r pNumC(median(no_reads$readsLoci))` (Appendix 11). After trimming `r pNumC(sum(trimmed_seqs))` sequences remained. `r pNumC(sum(krak[krak$Classified == 'C',]$n))` reads were matched using Kraken, of the reads classified by Kraken `r pNumC(sum(brack$reads))` reads were matched using Bracken, of the reads classified by Kraken `r pNumC(sum(blast$Total_seqs))` reads were matched using BLAST. Based upon subjective review of the three classifiers (Appendix 12) BLAST was chosen as the classification method which yielded the most probable results by the field ecologist, and its values were used for all subsequent analyses. 
+
+
+
+
+
 
 ## 3.1 | Floral Observations 
 
@@ -384,56 +522,20 @@ prop_obs <- obs %>%
 rm(bee_cols, correct, family, genus, tblist, oblist, gf_lkp, gf_lkp2)
 ```
 
-## 3.2 | Spatial Analyses
 
-```{r Results for SA Modelling}
 
-files <- list.files('/hdd/MS_SDM_RMBL/SDMS_RMBL/results/maps', pattern = 'tif$')
-ml <- files[grep( '_ml_', files)]
-ml <- unique(sub('_ml.*$', '', ml)) # ensure we do not have dupes
-linear <- files[grep('_glm_', files)]
-linear <- unique(sub('_glm.*$', '', linear))
 
-# setdiff(linear, ml) # Barbarea vulgaris, epilobium lactiflorum not modelled with ml
-# setdiff(ml, linear) # ericameria parryi not modelled with 'linear regression'
 
-rm(files, ml, linear)
-```
 
-```{r Results for SA Logistic Regression Metrics}
 
-logR_dat <- read.csv('../data/PA_records_logistic_regression.csv')[,2:4] %>% 
-  filter(occurrence == 0) 
 
-dat <- read.csv('../data/evaluation_table.csv')[,2:3]
-data.frame(Metric  = dat[1:5,1],
-                   Value   = dat[1:5,2],
-                   Metric1 = dat[6:10,1],
-                   Value1  = dat[6:10,2]
-                   ) %>% 
-  knitr::kable(caption = "Logistic regression assessing accuracy of SDMs",
-    col.names = c('Metric', 'Value', 'Metric', 'Value'),
-    booktabs = T) #%>% 
-  #kableExtra::kable_styling(position = "float_right")
-```
 
-```{r Results for SA Logistic Regression Contingency table}
-read.csv('../data/Pa_conting_table.csv') %>% 
-    knitr::kable(caption = "Species Distribution Modeling evaluation contingency table",
-    col.names = c('', ' Absence ', '  Presence  ', ' Absence ', ' Presence '), align = "lrrrr",
-    booktabs = T) %>%
-    add_header_above(c(" " = 1, "Training" = 2, "Testing" = 2))
 
-rm(logR_dat, dat)
-```
 
-The threshold distance under which a species would undergo species distribution modelling was the median (25.009 km) of the logistic regression assessing the probability of occurrence of a species record as a function of distance from the study area. A 2-sample test for equality of proportions with continuity correction (X-squared = 13.254, df = 1, p-value = 0.000136, 95% CI 0.04-1.00) was used to test whether more of the records located in the broad ecological sites present at the field station, between the distance of the median (25.009 km) to the third quantile (ca 43.830 km) of the regression distance, were true presences at the field station. Including these records would have resulted in modelling an additional 222 species distributions of which 30 are true presences, these taxa were not modelled.  
 
-Across the entire spatial domain of modelling all ensembled models (n = 968) had an accuracy of 0.84 (95% CI 0.8356 - 0.8443), kappa = 0.68, p-value < 0.001, sensitivity = 0.80, specificity = 0.87, AUC = 0.92.
 
-In the area of the minimum-spanning tree encompassing the field sites, of the 554 vascular plants with biotic pollination, the 493 ML ensembles accurately predicted the presence of 362 (65.3%), incorrectly predicted the presence of 64 (11.6%), incorrectly predicted 34 true presences (6.1%) as being absent, and correctly predicted the true absence of 33 (6.0%). The balanced accuracy of the ensembled models is 0.627 (Sensitivity = 0.340, Specificity 0.914). Of the 554 vascular plants with biotic pollination, the 475 LM ensembles accurately predicted the presence of 286 (51.6%), incorrectly predicted the presence of 41 (14.3%), incorrectly predicted 93 true presences (16.8%) as being absent, and correctly predicted the true absence of 55 (9.9%). The balanced accuracy of the ensembled models is 0.664 (Sensitivity = 0.573, Specificity 0.754). Of the 554 vascular plants with biotic pollination syndromes in the flora 13 (2.3%) were in the Orchid family and 41 (7.4%) are non-natives, both of which are restricted from the database, and can only reduce the number of true predicted presences by roughly 10%. 
 
-Of the 117 plant species identified to the species level across the spatial extents of all plots and duration of queen bee activity, the ML ensembles predicted the presence of 105 (89.7%) of them, and LM ensembles 102 (87.2%). Of the missing species two (1.7%) are Orchids, six (5.1%) are non-native, and one (0.85%) is of contested taxonomic standing, all of which (7.65%) are restricted from the initial query database. 
+
 
 ## 3.2 | Microscopic Pollen identification
 
@@ -539,24 +641,6 @@ knitr::include_graphics("../graphics/plots/rmbl_draft_tree.png")
 
 ### 3.3 | Metabarcoding Pollen Identification
 
-### 3.3.2 | Temporal Analysis
-
-The first date of modeled snow melt in the Gothic area (n = 17, $\bar{x}$ = 137.9, Mdn = 135, 3^rd^ quartile = 151), and the first date of a consistent winter snow base (n = 17, $\bar{x}$ = 299.9, Mdn = 300, 1^st^ quartile = 291) from 2000-2017, were used as delimiters for the inclusions of herbarium records in modelling. Of the 439 species predicted likely present in the area via logistic regression, 332 species (64.4%) with more than 10 records in the focal level 4 ecoregions ($\bar{x}$ = 35.016, Mdn = 35, max = 96) had Weibull estimates calculated, an additional 56 species (11.2%) with enough contributing records from the "Sedimentary Mid-Elevation Forests", a large ecoregion generally just beneath the elevation bands occupied by the five ecoregions around the study area had Weibull estimates also calculated ($\bar{x}$ = 13.868, Mdn = 13, max = 24).
-
-Only 58 of these 388 species (n = 34.6, Mdn = 31) were able to be compared to plot based observational data from the long term (1974–2012) data set (@caradonna2014shifts). Of these species relatively high accord was observed between the long-term ground truthed data set, and the modelled species. There was very strong evidence that the Weibull estimates were positively associated with the observed onset (p < 0.0001, tau = 0.61), peak (p < 0.0001, tau = 0.65), and cessation of flowering (p < 0.0001, tau = 0.49). There was moderate evidence that the Weibull estimates had a weak positive association with the observed duration of flowering (p = 0.58, tau = 0.17).
-
-Of the previous 58 species compared, 47 of these could be compared to transect based data from the six sites observed in 2015. Due to methodological differences, the peak flowering was not compared, and due to the low performance of attempts to model 'duration' in the previous step it was also not compared. There was very strong evidence that the Weibull estimates were positively associated with the observed onset (p < 0.0001, tau = 0.58),  and cessation of flowering (p < 0.0001, tau = 0.40).
-
-```{r plot phenology estimates, echo=F, fig.cap="Modelled dates of when major flowering events occurred compared between long term and modelled data", out.width = '100%'}
-knitr::include_graphics("../graphics/plots/phenology_estimates_10_90.png")
-# these are the tenth and nintey  percent non-parametric confidence intervals. 
-```
-
-```{r plot phenology estimates JEO, echo=F, fig.cap="Modelled dates of when major flowering events occurred compared between 2015 and modelled data", out.width = '100%'}
-knitr::include_graphics("../graphics/plots/phenology_estimates-jeo_10_90.png")
-```
-
-
 ```{sh Get number of raw and trimmed reads for metagenome samples, eval = F}
 
 cd ~/sequenceData/Original_zip
@@ -605,11 +689,6 @@ no_loci <- loci %>% group_by(Sample) %>% count(name = 'no_loci')
 no_reads <- loci %>% group_by(loci) %>% summarize(readsLoci = sum(n))
 ```
 
-## 3.3.1 | Molecular analysis of corbiculae loads
-
-The 54 corbiculae loads had DNA extracted and underwent various steps towards hyb-seq, in the end a total of `r toString(length(raw_seqs))` corbiculae samples were sequenced, `r pNumC(sum(raw_seqs))` reads were recovered from sequencing. The number of reads per sequence varied widely (range = `r pNumC(min(raw_seqs))` - `r pNumC(max(raw_seqs))`, $\bar{x}$ = `r pNumC(round(mean(raw_seqs),1))`, Mdn = `r pNumC(median(raw_seqs))`). Of the possible 353 loci, the number which were recovered from each sample, and informative to BLAST were range = `r toString(min(no_loci$no_loci))` - `r toString(max(no_loci$no_loci))`, $\bar{x}$ = `r toString(round(mean(no_loci$no_loci), 1))`, Mdn = `r toString(median(no_loci$no_loci))`. The number of reads per loci from across all samples had a range of `r min(no_reads$readsLoci)` - `r pNumC(max(no_reads$readsLoci))`, $\bar{x}$ = `r pNumC(round(mean(no_reads$readsLoci), 1))`, Mdn = `r pNumC(median(no_reads$readsLoci))` (Appendix 11).
-
-After trimming `r pNumC(sum(trimmed_seqs))` sequences remained. `r pNumC(sum(krak[krak$Classified == 'C',]$n))` reads were matched using Kraken, of the reads classified by Kraken `r pNumC(sum(brack$reads))` reads were matched using Bracken, of the reads classified by Kraken `r pNumC(sum(blast$Total_seqs))` reads were matched using BLAST. Based upon subjective review of the three classifiers (Appendix 12) BLAST was chosen as the classification method which yielded the most probable results by the field ecologist, and its values were used for all subsequent analyses. 
 
 ```{r Read Post Processing}
 
