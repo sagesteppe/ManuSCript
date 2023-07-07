@@ -401,7 +401,6 @@ rm(a, b, c, d, assorted, Asteraceae_1, Asteraceae_2)
 ###      write out file detailing pollen percentages for JBF July 6th       ###
 ###############################################################################
 write.csv(morpho_lkp, '../data/pollen_morphotype_grp_lookup.csv', row.names = F)
-write.csv()
 
 ## read in the sample collection csv, for species not noted add them. 
 
