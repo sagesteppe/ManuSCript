@@ -56,6 +56,7 @@ all_classifications <- bind_rows(
   ), 
   Family = if_else(Taxon == 'Ericaceae', 'Eriaceae', Family))
 
+
 rm(genera2query, genera_out, automated, blast, expert)
 
 expert <- all_classifications %>% filter(Method == 'Expert')
@@ -210,12 +211,35 @@ ACC_sens_Spec <- bind_rows(
   mutate(
     Species_false = NO_Species - Species_T,
     
-    Sp_Acc = (Species_T / NO_Species) * 100,
-    Gen_Acc = (Genera_T / sum(NO_Genus, NO_Species, na.rm = T) ) * 100,
-    Sp_Sens = (Species_T)  / (Species_T + (Spp_No - Species_T)) * 100
-  )
+    Sp_Sens = (Species_T / Spp_No) * 100, 
+    Sp_Prec = (Species_T / (Species_T + Species_F)) * 100,
+    FDR = (Species_F / (Species_F + Species_T)) * 100, 
+    F1 = ((2*Species_T) / (2*Species_T + Species_F + FN)) * 100
+  ) #%>% 
+  select(Sample, Method, NO_Species, Species_T, Sp_Acc )
 
 rm(spp_count, gen_count, fam_count, blast_results, computer_results, cnts)
+
+
+#or# Sensitivity
+Sensitivity = (TP / P)  * 100
+Sensitivty = (TP / (TP + FN)) * 100
+
+# Precision
+Precision = (TP / (TP + FP)) * 100
+
+# False Discovery Rate
+FDR = (FP / (FP + TP)) * 100
+
+# F1 Score
+F1 = ((2*TP) / (2*TP + FP + FN)) * 100
+  
+# Condition Positive P = the number of species in the 'expert' list
+# True Positive TP = The number of species in the target 'naive|reclass' which are in the 'expert' list
+# False Positive FP = The # of species in the target 'naive|reclass' which are NOT in the 'expert' list
+# False Negative FN = The # of species in the 'expert' list which are NOT in the 'naive|reclass' list
+# True Negative TN = 
+
 # Spp_No - Species_match is my TRUE NEGATIVE
 # species_false is MY FALSE POSITIVE
 
@@ -223,8 +247,8 @@ write.csv(ACC_sens_Spec, '../data/AccuracyOfPostClassification.csv', row.names =
 
 
 wilcox.test(
-  pull(ACC_sens_Spec[ACC_sens_Spec$Method == 'COMP', 'Sp_Acc']) , 
-  pull(ACC_sens_Spec[ACC_sens_Spec$Method == 'BLAST', 'Sp_Acc']),
+  pull(ACC_sens_Spec[ACC_sens_Spec$Method == 'COMP', 'FDR']) , 
+  pull(ACC_sens_Spec[ACC_sens_Spec$Method == 'BLAST', 'FDR']),
   alternative = "greater"
 ) # a weird thing, i oftentimes compare values from different fns. 
 
@@ -246,7 +270,7 @@ min_v <- dplyr::summarise(ACC_sens_Spec, mean_mpg = floor(min(Sp_Acc))) |>
   pull() |> min() # this is the lowest value of accuracy which is found in the data set.
 # we are grabbing this value here, so that we can extend the Y axis downwards, in order to include the sample sizes 'on' the plot. 
 
-ggplot(ACC_sens_Spec, aes(y = Sp_Acc,  x = Method, color = Method), alpha = 0.5) + 
+ggplot(ACC_sens_Spec, aes(y = FDR,  x = Method, color = Method), alpha = 0.5) + 
   stat_boxplot(notch = T, notchwidth = 0.75, 
                varwidth = T, 
                outlier.shape = F, outlier.alpha = 0.8, outlier.colour = 'black') +
@@ -272,3 +296,9 @@ ggplot(ACC_sens_Spec, aes(y = Sp_Acc,  x = Method, color = Method), alpha = 0.5)
 ggsave( '../graphics/plots/Accuracy_BLAST.png')
 
 rm(my_means, sample_sizes, my_comparisons, min_v, ACC_sens_Spec)
+
+
+ggplot(data = ACC_sens_Spec) + 
+  geom_point(aes(x = Sample, y = Sp_Acc, color = Method))
+
+

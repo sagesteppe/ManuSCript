@@ -1,0 +1,93 @@
+--- 
+title: Protocol to increase accuracy and fidelity of Pollen Meta-genomic Barcoding using Angiosperms353; Case study using Corbiculae loads from wild Bumble Bees
+author:  pizzaT
+output:
+  word_document: default
+csl: "../citations/methods-in-ecology-and-evolution.csl"
+bibliography: ../citations/citations.bib
+link-citations: yes
+fig_caption: yes
+always_allow_html: yes
+--- 
+
+@pimm2014biodiversity
+@socolar2016should
+@cardinale2012biodiversity
+@futuyma2009macroevolution
+@voje2015role
+@lindenmayer2009adaptive
+@westgate2013adaptive
+@yoccoz2001monitoring
+@collen2008tropical
+@meyer2015global
+@ruete2015displaying
+@tylianakis2010conservation
+@ruppert2019past
+@kress2017plant
+@hollingsworth2016telling
+@liu2014identification
+@china2011comparative
+@coissac2012bioinformatic
+@baker2021exploring
+@baker2021PAFTOL
+@johnson2019universal
+@lewin2022biogenome
+@darwin2022project
+@pereira2006towards
+@geldmann2016determines
+@freitas2020reliable
+@caradonna2020temporal
+@caradonna2021seeing
+@weitemier2014hyb
+@johnson2016hybpiper
+@katoh2013mafft
+@pyke1982local
+@kearns2001natural
+@ogilvie2022shifting
+@barbet2012selecting
+@sdmPackage
+@wilson2016remotely
+@hengl2017soilgrids250m
+@robinson2014earthenv
+@usdm2014
+@araujo2007ensemble
+@belitz2020accuracy
+@pearse2017statistical
+@tran2019cloud
+@beattie1971technique
+@brosi2013single
+@vegans2022
+@inextArticle
+@inextPackage
+@doylesCTAB
+@bolger2014trimmomatic
+@tange_2022_6377950
+@mclay2021new
+@lu2017bracken
+@camacho2009blast
+@caradonna2014shifts
+@sadeghian2015molecular
+@sennikov2017phylogenetic
+@rabeler2016new
+@pusalkar2015taxonomic
+@moore2003its
+@weber1998new
+@coissac2016barcodes
+@johnson2023environmental
+@bell2021comparing
+@ashman2013toward
+@brosi2016pollinator
+@genissel2002influence
+@tasei2008nutritive
+@hanley2008breeding
+@goulson2005causes
+@goulson2008diet
+@collen2008tropical
+@meyer2015global
+@pornon2017dna
+@sickel2015increased
+@suchan2019pollen
+@johnson2021airborne
+@bell2019quantitative
+
+
