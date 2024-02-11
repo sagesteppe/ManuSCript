@@ -24,7 +24,7 @@ blst <- read.csv('../data/Post_Classified_BLAST_sqs.csv') %>%
 # use inner join to drop the unmatched records
 
 
-queen_obs <- read.csv('../data/Bombus_queen_observations_2015.csv') #%>% 
+queen_obs <- read.csv('../data/Bombus_queen_observations_2015.csv') %>% 
   select(Bee_spp = species, Site = site, Date = date,
          Plant_spp_morpho = plant.species ) %>% 
   mutate(Bee_spp = str_remove(Bee_spp, '[.]orange|[.]dark'), 
