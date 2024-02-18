@@ -1304,7 +1304,6 @@ knitr::include_graphics('../graphics/assorted/pollen_ctab.pdf')
 knitr::include_graphics('../graphics/assorted/pollen_ctab-1.pdf')
 ```
 
-
 \newpage
 
 Appendix 17 Samples Per Bee
