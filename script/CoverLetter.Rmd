@@ -1,0 +1,46 @@
+---
+output: pdf_document
+---
+
+\begin{flushleft}
+Dr. Aaron Ellison \newline
+Executive Editor \newline
+Methods in Ecology and Evolution \newline
+\end{flushleft} 
+
+March 17^th^, 2024  
+
+Attached is our standard article submission "*Protocol to increase accuracy and fidelity of pollen meta-genomic barcoding using Angiosperms353: a case study using pollen loads from wild bumble bees*". 
+
+In this paper, we combine Hyb-Seq to generate *de novo* sequence databases, informed by museum records, and species distribution modelling. 
+Further we use the results of phenological modelling to interpret our sequence alignment results to increase the likelihood of accurate results.
+
+Given the rising popularity of metabarcoding and metagenomics, especially for projects over large spatial domains and with multiple seasonal time points, we believe that our method provides a framework for meaningfully assessing and contextualizing results. 
+We have observed that many studies utilizing metabacoding generate spurious results, which are precluded due to spatial or temporal incongruities with the focal animal species and plants. 
+However, a simple and intuitive framework for programmatically assessing and rectifying these issues are lacking. 
+
+We believe that the use of the Angiosperms353 probes was novel at the inception of the study, and that several manuscripts utilizing them will be forthcoming to a variety of journals.
+
+Our submission contains X supplementary materials, X figures and X tables. It unfortunately is currently at roughly 9,300 words. 
+However *circa* 900 words are dedicated to a plain text overview of the methods, a section which we believe elucidates the integration of the various approaches, and clarifies adoption by subsequent users. 
+Considerable length is dedicated to the methods, which contain five years of field work, and similarly thorough microscopy, and molecular work; but which we have cut by nearly 500 words.
+
+We have no conflicts of interest to disclose. Additionally, this work - nor any part of it - has been submitted to any other journal. 
+
+Please address all correspondence regarding this manuscript to me at rbenkendorf@chicagobotanic.org 
+
+Thank you for considering this work.
+
+\begin{flushleft}
+Reed Clark Benkendorf \newline
+Senior (Field) Botanist \& Senior Spatial Data Specialist  \newline
+The Chicago Botanic Garden  \newline
+rbenkendorf@chicagobotanic.org
+\end{flushleft} 
+
+\begin{flushleft}
+Jeremie B. Fant, Ph.D \newline
+Medard and Elizabeth Welch Director of Conservation \newline
+The Chicago Botanic Garden  \newline
+jfant@chicagobotanic.org
+\end{flushleft} 
