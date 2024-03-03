@@ -5,11 +5,8 @@ output: pdf_document
 ---
 
 ```{r, include=FALSE}
-knitr::opts_chunk$set(
-  comment = "#>", echo = FALSE, fig.width = 6
-)
+knitr::opts_chunk$set(echo = F, warning = F, message = F)
 ```
-
 
 ```{r Create Table 1}
 
@@ -67,9 +64,15 @@ df <- data.frame(variable, dataSrc, coverage)
 info <- 'Example of environmental variables and data sources commonly used in species distribution models that could be used during the spatial filtering step of our approach.'
 ```
 
-# Table S1
 ```{r}
-knitr::kable(df, caption = info, col.names = c('Variable', 'Data Source', 'Geographic Extent'), booktabs = TRUE) |> 
+knitr::kable(
+  df, 
+  caption = info, 
+  col.names = c('Variable', 'Data Source', 'Geographic Extent'),
+  booktabs = TRUE, 
+  format  = "latex",
+  longtable = FALSE
+  ) |> 
   kableExtra::row_spec(0,bold=TRUE) |>
   kableExtra::collapse_rows(1) |>
   kableExtra::kable_styling(latex_options="scale_down") |>
@@ -154,15 +157,8 @@ Wilson AM, Jetz W (2016) Remotely Sensed High-Resolution Global Cloud Dynamics f
 Appendix 3 - Molecular Reference Specimen Table
 
 ```{r Voucher Reference Specimen table 1, echo = F}
-knitr::include_graphics('../graphics/tables/specimen_tables-1.pdf')
+knitr::include_graphics('../graphics/tables/specimen_table_v2.png')
 ```
-
-\newpage
-
-```{r Voucher Reference Specimen table 2, echo = F}
-knitr::include_graphics('../graphics/tables/specimen_tables-2.pdf')
-```
-
 
 Appendix 6 - Pollen Key
 

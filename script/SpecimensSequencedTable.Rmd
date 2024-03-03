@@ -1,0 +1,40 @@
+---
+output: pdf_document
+classoption: landscape
+geometry: "left=1cm,right=1cm,top=1cm,bottom=1cm"
+header-includes:
+  - \usepackage{titlesec}
+  - \pagenumbering{gobble}
+  - \titlespacing{\title}{0pt}{\parskip}{-\parskip}
+---
+
+\vspace{-25truemm}
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, warning = F, message = F)
+```
+
+```{r Required Libraries, message=F, warning=F, results='hide'}
+library(knitr)
+library(kableExtra)
+library(tidyverse)
+```
+
+
+```{r}
+dat <- read.csv('../data/Reference_library_for_appendix.csv') %>% 
+  arrange(Family, Taxon) %>% 
+  unite('Locality', Country:County, sep = ', ') %>% 
+  mutate(Locality = str_replace(Locality, 'U[.]S[.]A[.]', 'USA')) %>% 
+  select(-Coordinates) %>% 
+  rename(Herbarium = 'Herb.', Preservation = 'Pres.')
+
+kable(
+  dat, 
+  caption = 'Samples Used to Supplement the Sequence Reference Library',
+  scaledown = T, 
+  booktabs = TRUE, 
+  format  = "latex") %>% 
+  kableExtra::kable_styling(latex_options="scale_down") 
+  
+```
+
