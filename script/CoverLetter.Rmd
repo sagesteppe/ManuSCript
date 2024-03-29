@@ -1,50 +1,29 @@
 ---
-output: pdf_document
+output:
+  pdf_document: default
+  word_document: default
 ---
 
 \begin{flushleft}
 Dr. Aaron Ellison \newline
 Executive Editor \newline
 Methods in Ecology and Evolution \newline
-Senior Research Fellow in Ecology \textit{Emeritus} \newline
-Harvard Forest \newline
 \end{flushleft} 
 
-March 17^th^, 2024  
+\hfill March 17^th^, 2024  
 
-Attached is our standard article submission "*Protocol to increase accuracy and fidelity of pollen meta-genomic barcoding using Angiosperms353: a case study using pollen loads from wild bumble bees*". 
+Dear Dr. Ellison, 
 
-In this paper we develop an intuitive approach to generate plant reference sequence databases tailored to specific areas for metabarcoding projects, as well as a lens to critically evaluate metagenomic results using phenological data.
-This spatio-temporal approach utilizes, among other sources - museum and citizen science records, species distribution modelling, and the weibull distribution, to create baseline environmental data in an approach which is globally applicable.
-Further we use bait-capture, via the popular Angiosperms 353 probes, as our method to generate sequence reads for metabarcoding.  
+We are writing to propose an original research article entitled  "*Protocol to increase accuracy and fidelity of pollen meta-genomic barcoding using Angiosperms353: a case study using pollen loads from wild bumble bees*".
+ 
+Many meta-barcoding studies that include plant material are limited due to lack of reliable universal barcodes and the extensive potential candidate list (~350,000 plant species) that requires extensive computational and resource to identify best matches.
+In this paper we develop an intuitive approach to generate plant reference sequence databases tailored to specific areas for metabarcoding projects, as well as a lens to critically evaluate metagenomic results using phenological data. 
+This spatio-temporal approach utilizes, among other sources - museum and citizen science records, species distribution modelling, and the weibull distribution -  to create baseline environmental data in an approach which is globally applicable
 
-Given the rising popularity of metabarcoding and metagenomics, especially for projects over large spatial domains and with multiple seasonal time points, we believe that our method provides a framework for meaningfully assessing and contextualizing results. 
-We have observed that many studies utilizing metabacoding generate spurious results, which are precluded due to spatial or temporal incongruities with the focal animal species and plants. 
-However, a simple and intuitive framework for programmatically assessing and rectifying these issues are lacking. 
-
+Further, we use bait-capture, via the popular Angiosperms 353 probes, to generate multiple sequence reads to increase the accuracy of species identification.
 We believe that the use of the Angiosperms353 probes was novel at the inception of the study, and are aware of several manuscripts utilizing them which will be forthcoming in a variety of journals.
 
-Our submission contains X supplementary materials, X figures and X tables. It unfortunately is currently at roughly 8,900 words. 
-However *circa* 900 words are dedicated to a plain text overview of the methods, a section which we believe elucidates the integration of the various approaches, and clarifies adoption by subsequent users. 
-Considerable length is dedicated to the methods, which contain five years of field work, and similarly thorough microscopy, and molecular work; but which we have cut by nearly 1000 words.
-The full details or our methods are provided as supplementary materials. 
+Finally, many studies utilizing metabacoding generate spurious results, which are spatially or temporally incongruities with the focal animal species and plants/ There are few simple and intuitive framework for programmatically assessing and rectifying these issues are lacking. 
+In this study, we also provide a framework for meaningfully assessing and contextualizing the meta-barcoding results. 
 
-We have no conflicts of interest to disclose. Additionally, this work - nor any part of it - has been submitted to any other journal. Although, it is cited and discussed in our Grimes Review which is currently in review for *Journal of Ecology*. 
-
-Please address all correspondence regarding this manuscript to me at rbenkendorf@chicagobotanic.org 
-
-Thank you for considering this work.
-
-\begin{flushleft}
-Reed Clark Benkendorf \newline
-Senior (Field) Botanist \& Senior Spatial Data Specialist  \newline
-The Chicago Botanic Garden  \newline
-rbenkendorf@chicagobotanic.org
-\end{flushleft} 
-
-\begin{flushleft}
-Jeremie B. Fant, Ph.D \newline
-Medard and Elizabeth Welch Director of Conservation \newline
-The Chicago Botanic Garden  \newline
-jfant@chicagobotanic.org
-\end{flushleft} 
+We have no conflicts of interest to disclose.

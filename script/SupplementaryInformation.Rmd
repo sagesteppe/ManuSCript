@@ -1,7 +1,8 @@
 ---
 title: "Supplemental Information"
 author: "steppe"
-output: pdf_document
+output:
+  pdf_document: default
 ---
 
 ```{r, include=FALSE}
@@ -80,18 +81,17 @@ knitr::kable(
 
 ```
 
+\newpage 
 
-\newpage
-
-# Site Info
+Figure 1 - Site Info
 
 ```{r Site Maps, echo = F}
 knitr::include_graphics('../graphics/plots/siteMaps.png')
 ```
 
-\newpage
+\newpage 
 
-# Table S2 - Models used for Species Distribution Model Ensembles
+Table 2 - Models used for Species Distribution Model Ensembles
 
 The two machine learning models utilize Ensemble learning.
 
@@ -110,7 +110,7 @@ In general, Random Forest  models have high bias and low variance, where boosted
 
 \newpage
 
-Table S3 - Species Distribution Models Predictors
+Table 3 - Species Distribution Models Predictors
 
 Layer   LM                     Description                              Name                    Source
 ----   ----      ------------------------------------------    -------------------------     ----------------
@@ -154,13 +154,13 @@ Wilson AM, Jetz W (2016) Remotely Sensed High-Resolution Global Cloud Dynamics f
 
 \newpage
 
-Appendix 3 - Molecular Reference Specimen Table
+Table 4 - Molecular Reference Specimen Table
 
 ```{r Voucher Reference Specimen table 1, echo = F}
 knitr::include_graphics('../graphics/tables/specimen_table_v2.png')
 ```
 
-Appendix 6 - Pollen Key
+Figure 2 - Pollen Key
 
 ```{r Pollen Key 1, echo = F}
 knitr::include_graphics('../graphics/assorted/RMBL_pollen_key-1.pdf')
@@ -175,7 +175,7 @@ knitr::include_graphics('../graphics/assorted/RMBL_pollen_key-2.pdf')
 
 \newpage
 
-Appendix 9 - All Species in the Sequence Databases 
+Table 5 - All Species in the Sequence Databases 
 
 ```{r Seq DB 1, echo = F}
 knitr::include_graphics('../graphics/assorted/kraken_db_spp_table-1.pdf')
@@ -201,22 +201,48 @@ knitr::include_graphics('../graphics/assorted/kraken_db_spp_table-4.pdf')
 
 \newpage
 
-Appendix 11 - Reads Per Loci
+Figure 3 - Reads Per Loci
 
 ```{r READS PER LOCI - REFERENCE, echo = F, out.width = '98%'}
 knitr::include_graphics('../graphics/plots/Loci_Reference_Samples.png')
 ```
 
+\newpage 
+
+Figure 4 - Percent Loci Matched by Sample 
 ```{r READS PER LOCI - METAGENOMICS, echo = F, out.width = '98%'}
 knitr::include_graphics('../graphics/plots/Percent_loci_matched_by_sample.png')
 ```
 
 \newpage 
 
-Appendix 12 - Comparison of Kraken2, Bracken, and BLAST
+Figure 5 - Comparison of Kraken2, Bracken, and BLAST
 
 ```{r Molecular Networks, echo = F, out.width="110%"}
 knitr::include_graphics('../graphics/plots/Molecular_nets-crop.pdf')
 ```
 
 \newpage
+
+Figure 6 - Microscopy Rarefaction, Abundance
+
+```{r, echo = F, out.width="90%"}
+knitr::include_graphics('../graphics/plots/SppAbundance.png')
+```
+
+\newpage 
+
+Figure 7 - Microscopy Rarefaction, Richness
+
+```{r, echo = F, out.width="90%"}
+knitr::include_graphics('../graphics/plots/species_richness_rarefaction.png')
+```
+
+\newpage 
+
+Table 6 - Binary reclassification process
+
+```{r, echo = F, out.width="90%"}
+knitr::include_graphics('../graphics/tables/reclassify_reads_table.pdf')
+```
+

@@ -132,4 +132,8 @@ Following Kraken2, Bracken was used to classify sequences to terminal taxa (@lu2
 Finally all reads which could be classified by these databases were passed to a local BLAST database.
 A local NCBI database was built using the same processed novel and downloaded sequences as the previous database (@camacho2009blast). 
 
+### Comparision of Sequence classifications pre and post processing
+
+Using wilcox_effsize, with a one-sided hypothesis of greater, we have strong evidence of (p < 1e-04, wilcoxsign_test) an effect size of 0.732 95% CI [0.57, 0.84, n = 40, bootstrap replicates = 1000] (@kassambara2023rstatix, @Hothorn2006coin). 
+
 \newpage
