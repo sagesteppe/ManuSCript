@@ -1,6 +1,6 @@
 ---
 title: "pollen_countR"
-author: "Reed & Emily"
+author: "steppe & EJW"
 date: "4/9/2021"
 output: 
   pdf_document:

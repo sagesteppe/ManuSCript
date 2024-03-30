@@ -4,10 +4,12 @@ classoption: landscape
 geometry: "left=1cm,right=1cm,top=1cm,bottom=1cm"
 header-includes:
   - \usepackage{titlesec}
+  - \usepackage{caption}
   - \pagenumbering{gobble}
   - \titlespacing{\title}{0pt}{\parskip}{-\parskip}
 ---
 
+\captionsetup[table]{labelformat=empty}
 \vspace{-25truemm}
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = F, warning = F, message = F)

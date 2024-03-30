@@ -21,6 +21,11 @@ mean(plant_spp_by_bee)
 median(plant_spp_by_bee)
 max(plant_spp_by_bee)
 
+dat %>% 
+  separate(plant.species, c('pl_genus', 'pl_species'), remove = F) %>% 
+  select(pl_genus, species) %>% 
+  distinct() 
+
 pl_stats <- dat %>% 
   select(plant.species) %>% 
   separate(plant.species, c('genus', 'species'), remove = F) 
